@@ -1,0 +1,53 @@
+%&subfile
+\begin{document}
+\chapter{Introduction}
+
+The price of a stock is not a smooth function of time, and standard calculus tools can not be used to effectively model it.
+A commonly used technique is to model the price $S$ as a \emph{geometric Brownian motion}, given by the \emph{stochastic differential equation (SDE)}
+\begin{equation*}
+  dS(t) = \alpha S(t) \, dt + \sigma S(t) \, dW(t)\,,
+\end{equation*}
+where $\alpha$ and $\sigma$ are parameters, and $W$ is a Brownian motion.
+If $\sigma = 0$, we will have $S(t) = S(0) e^{\alpha t}$, which is simply the price at a fixed interest rate $\alpha$.
+The $\sigma \, dW$ term models \emph{noisy fluctuations} and the first goal of this course is to understand what this means.
+The mathematical tools required for this are Brownian motion, and It\^o integrals, which we will develop and study.
+
+An important point to note is that the above model can not be used to \emph{predict} the price of $S$, because randomness is built into the model.
+Instead, we will use this model is to \emph{price securities}.
+Consider a \emph{call option} for a stock $S$ with strike prices $K$ and maturity $T$ (i.e.\ this is the right to buy the asset $S$ at price $K$ at time $T$).
+Given the stock price $S(t)$ at some time $t \leq T$, what is a fair price for this option?
+
+Seminal work of Black and Scholes computes the fair price of this option in terms of the time to maturity $T - t$, the stock price $S(t)$, the strike price $K$, the model parameters $\alpha, \sigma$ and the interest rate~$r$.
+For notational convenience we suppress the explicit dependence on $K, \alpha, \sigma$ and let $c(t, x)$ represent the price of the option at time $t$ given that the stock price is $x$.
+Clearly $c(T, x) = (x - K)^+$.
+For $t \leq T$, the Black-Scholes formula gives
+\begin{equation*}
+  c(t, x) = x N( d_+(T - t, x) ) - Ke^{-r (T-t)} N( d_-(T-t, x) )
+\end{equation*}
+where
+\begin{equation*}
+  d_\pm( \tau, x ) \defeq
+    \frac{1}{\sigma \sqrt{\tau}}\paren[\Big]{
+	\ln\paren[\Big]{\frac{x}{K}}
+	+ \paren[\Big]{ r \pm \frac{\sigma^2}{2} } \tau
+      }\,.
+\end{equation*}
+Here $r$ is the interest rate at which you can borrow or lend money.
+(It might come as a surprise to you that the formula above is independent of~$\alpha$, the mean return rate of the stock.)
+
+The second goal of this course is to understand the derivation of this formula.
+The main idea is to find a \emph{replicating strategy}.
+If you've sold the above option, you hedge your bets by investing the money received in the underlying asset, and in an interest bearing account.
+Let $X(t)$ be the value of your portfolio at time $t$, of which you have $\Delta(t)$ invested in the stock, and $X(t) - \Delta(t)$ in the interest bearing account.
+If we are able to choose $X(0)$ and $\Delta$ in a way that would guarantee $X(T) = (S(T) - K)^+$ almost surely, then $X(0)$ must be the fair price of this option.
+In order to find this strategy we will need to understand SDEs and the It\^o formula, which we will develop subsequently.
+
+The final goal of this course is to understand \emph{risk neutral measures}, and use them to provide an elegant derivation of the Black-Scholes formula.
+If time permits, we will also study the \emph{fundamental theorems of asset pricing}, which roughly state:
+\begin{enumerate}
+  \item
+    The \emph{existence} of a risk neutral measure implies no arbitrage (i.e.\ you can't make money without taking risk).
+  \item
+    \emph{Uniqueness} of a risk neutral measure implies all derivative securities can be hedged (i.e. for every derivative security we can find a replicating portfolio).
+\end{enumerate}
+\end{document}

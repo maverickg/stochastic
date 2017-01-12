@@ -1,0 +1,11 @@
+%&preamble
+\newif\ifstandalonechapter\standalonechapterfalse
+\begin{document}
+\subfile{preface}
+\subfile{ch1-intro}
+\subfile{ch2-prob}
+\end{document}
+% This part is included in subfiles. Precompiled headers are not recognized by
+% the subfiles package, so input them here.
+\input{preamble.tex}
+\standalonechaptertrue

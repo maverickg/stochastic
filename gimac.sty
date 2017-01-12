@@ -1,0 +1,261 @@
+\ProvidesPackage{gimac}
+% Misc. macros for Gautam Iyer.
+% Last modified: Fri 14 Oct 2016 09:09:21 PM EDT
+
+\newif\ifGI@exam
+\@ifclassloaded{exam}{\GI@examtrue}{\GI@examfalse}
+\newif\ifGI@amsbook
+\@ifclassloaded{amsbook}{\GI@amsbooktrue}{\GI@amsbookfalse}
+
+% If's for options
+\newif\ifGI@draft\GI@draftfalse
+\newif\ifGI@twocolumn\GI@twocolumnfalse
+\newif\ifGI@tablet\GI@tabletfalse
+\newif\ifGI@minimal\GI@minimalfalse
+
+\DeclareOption{draft}{\GI@drafttrue}
+\DeclareOption{twocolumn}{\GI@twocolumntrue}
+\DeclareOption{tablet}{\GI@tablettrue}
+\DeclareOption{minimal}{\GI@minimaltrue}
+\ProcessOptions
+
+% Fonts and fixes
+\ifGI@minimal\else
+  \RequirePackage{lmodern}
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[final]{microtype}
+\fi
+\RequirePackage{xcolor}
+\selectcolormodel{rgb}
+
+% Math
+\RequirePackage[leqno]{amsmath}
+\RequirePackage{amssymb,amsopn,amsthm,bm,mathrsfs}
+\RequirePackage{mathtools}
+
+% Convenience
+\ifGI@minimal\else
+  \RequirePackage{cite,indentfirst}
+  \RequirePackage{enumerate,xspace,centernot,paralist}
+  \RequirePackage{etoolbox}
+\fi
+\RequirePackage{suffix}
+
+\ifGI@exam\else
+  \ifGI@draft\setlength{\overfullrule}{1mm}\fi
+  \ifGI@twocolumn
+    % 2 Column mode to save trees. Margins chosen so that linewidth here is the
+    % same as amsart, one column with default margins on US letter paper, so
+    % that no overfull hboxes are created / destroyed.
+    \RequirePackage{geometry}
+    \@ifclassloaded{amsart}{
+      \setlength{\columnsep}{24.98999pt} % amsart,  10pt, letter (lw=360pt)
+    }{
+      \setlength{\columnsep}{34.98999pt} % article, 10pt, letter (lw=345pt)
+    }
+    \geometry{landscape,includehead,headheight=12pt,headsep=10pt,left=\columnsep,right=\columnsep,top=12.98999pt,bottom=\columnsep}
+    \twocolumn
+
+    \ifGI@amsbook\ifGI@minimal\else
+      % Don't force a new double page for every chapter.
+      \patchcmd{\chapter}{\clearpage}{\newpage}{}{\error}
+
+      % Make vertical space at start of chapter on one column only.
+      \patchcmd{\@makechapterhead}{\global\topskip 7.5pc\relax\begingroup}{\begingroup\topskip 7.5pc\relax}{}{\error}
+
+      % No newpage after title
+      %\patchcmd{\@maketitle}{\newpage}{}{}{}
+    \fi\fi
+  \else\ifGI@tablet%ifGI@twocolumn
+    \RequirePackage{geometry}
+    \geometry{paperheight=638pt,paperwidth=400pt,left=20pt,right=20pt,top=10pt,bottom=10pt,includehead,includefoot}
+  \else%ifGI@tablet
+    %\usepackage[body={16.65cm,22.65cm}]{geometry}
+    \ifGI@draft
+      % Should be done before loading showkeys
+      \providecommand*{\showkeyslabelformat}[1]{%
+	\fcolorbox{blue!50!black}{cyan!5!white}{%
+	  \itshape\fontfamily{\rmdefault}%
+	  %\fontsize{4.5pt}{5.4pt}\selectfont%
+	  \tiny%
+	  #1%
+	}
+      }
+      \RequirePackage[notref,notcite]{showkeys}
+    \fi%ifGI@draft
+    \ifGI@minimal\else
+      % Make AMS section titles less ugly
+      \@ifclassloaded{amsart}{%
+	\patchcmd{\section}{\scshape\centering}{\bfseries\large}{}{}
+      }
+      {}
+    \fi
+  \fi\fi%else ifGI@tablet, ifGI@twocolumn
+\fi%else ifGI@exam
+
+\RequirePackage{hyperref}% put this last...
+%\usepackage{wrapfig}
+
+\definecolor{link1}{rgb}{0,0,.7}
+\definecolor{link2}{rgb}{0,0.25,0.5}
+\@ifpackagelater{hyperref}{2012/05/28}{
+  % Link colors
+  \hypersetup{final,colorlinks,allcolors=link1,citecolor=link2}
+}{
+  \@ifpackagelater{hyperref}{2009/10/09}{
+    \hypersetup{final,colorlinks,linkcolor=link1,anchorcolor=link1,filecolor=link1,menucolor=link1,runcolor=link1,urlcolor=link1,citecolor=link2,linktocpage=false,breaklinks=true}
+  }{
+    % Really old version of hyperref. No options for maximum compatibility.
+    \hypersetup{final}
+  }
+}
+
+%
+% Styles etc.
+%
+%\renewcommand{\figurename}{\scriptsize Fig.}
+\allowdisplaybreaks
+
+%
+% Theorems, Lemmas etc.
+%
+\newif\ifGI@numwithin
+\GI@numwithinfalse
+\ifcsname c@section\endcsname\GI@numwithintrue\fi
+\ifGI@exam\GI@numwithinfalse\fi
+\ifGI@numwithin\numberwithin{equation}{section}\fi
+
+\ifcsname theorem\endcsname\else
+  % Some document classes define their own theorems.
+  % Only do these if no theorem environment is present.
+  \theoremstyle{plain}
+  \ifGI@numwithin
+    \newtheorem{theorem}{Theorem}[section]
+  \else
+    \newtheorem{theorem}{Theorem}
+  \fi
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{proposition}[theorem]{Proposition}
+  \newtheorem{corollary}[theorem]{Corollary}
+  \newtheorem{conjecture}[theorem]{Conjecture}
+  %\@ifclassloaded{exam}{}{\newtheorem{question}[theorem]{Question}}
+
+  \newtheorem*{theorem*}{Theorem}
+  \newtheorem*{lemma*}{Lemma}
+  \newtheorem*{proposition*}{Proposition}
+  \newtheorem*{corollary*}{Corollary}
+
+  \theoremstyle{definition}
+  \newtheorem{definition}[theorem]{Definition}
+
+  \theoremstyle{remark}
+  \newtheorem{remark}[theorem]{Remark}
+  \newtheorem*{remark*}{Remark}
+  \newtheorem{example}[theorem]{Example}
+\fi
+
+% Misc. theorems. (Uses optional argument as name.)
+\newtheoremstyle{misc}
+  {}%      Space above, empty = `usual value'
+  {}%      Space below
+  {\itshape}% Body font
+  {}%         Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font
+  {.}%        Punctuation after thm head
+  { }%     Space after thm head: " " = normal interword space; \newline = linebreak
+  {\thmname{#3}\thmnumber{ #2}}% Thm head spec
+\theoremstyle{misc}
+\newtheorem{miscthm}[theorem]{Misc}
+\newtheorem*{miscthm*}{Misc}
+\theoremstyle{plain}%Reset default for new definitions in main file
+
+%
+% References.
+%
+\providecommand{\cites}[1]{\cite{#1}}
+
+
+%
+% Proof steps
+%
+\newcounter{GICase}\setcounter{GICase}{0}
+\newenvironment{proofcases}{\setcounter{GICase}{0}}{}
+\newcommand{\case}[1]{\smallskip\par\noindent\stepcounter{GICase}\emph{Case \Roman{GICase}: #1.}\xspace}
+
+\newcounter{GIStep}\setcounter{GIStep}{0}
+\newenvironment{proofsteps}{\setcounter{GIStep}{0}}{}
+\newcommand{\step}[1]{\smallskip\par\noindent\stepcounter{GIStep}\emph{Step \arabic{GIStep}: #1.}\xspace}
+
+%
+% Symbols and notation
+%
+\newcommand{\lap}{\Delta}
+\newcommand{\laplacian}{\lap}
+\newcommand{\grad}{\nabla}
+\newcommand{\gradperp}{\grad^\perp}
+\newcommand{\dv}{\grad \cdot}
+\newcommand{\curl}{\grad \times}
+\newcommand{\varmin}{\wedge}
+\newcommand{\varmax}{\vee}
+\newcommand{\E}{\bm{E}}
+\renewcommand{\P}{\bm{P}}
+
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\var}{Var}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\trace}{tr}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\supp}{supp}
+
+\newcommand{\eps}{\varepsilon}
+\renewcommand{\epsilon}{\eps}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+
+% Indicator functions
+\newcommand{\Chi}[1]{\Chi*{\{#1\}}}
+\WithSuffix\newcommand\Chi*[1]{\chi_{\raise-.5ex\hbox{$\scriptstyle#1$}}}
+
+%
+% Spaces & sets
+%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\T}{\mathbb{T}}
+
+
+%
+% Test if we're in a display or not
+%
+\newif\ifGI@textstyle
+\GI@textstyletrue
+\everydisplay\expandafter{\the\everydisplay\GI@textstylefalse}
+
+%
+% Norms and parenthesis
+%
+\DeclarePairedDelimiter{\paren}{(}{)}
+\DeclarePairedDelimiter{\brak}{[}{]}
+\DeclarePairedDelimiter{\set}{\{}{\}}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\qv}{\langle}{\rangle}
+\DeclarePairedDelimiter{\av}{\langle}{\rangle}
+
+\newcommand{\ip}[3][]{\av[#1]{#2,#3}}
+\WithSuffix\newcommand\ip*[2]{\av{#1,#2}}
+\newcommand{\given}[1][\big]{\;\ifGI@textstyle|\else#1|\fi\;}
+\WithSuffix\newcommand\given*{\;\middle|\;}
+\newcommand{\st}[1][\big]{\given[#1]}
+\WithSuffix\newcommand\st*{\given*}
+\newcommand{\at}[2][\Bigr]{\ifGI@textstyle|\else#1|_{#2}\fi}
+\WithSuffix\newcommand\at*[1]{\middle|_{#1}}
+
+\newcommand{\defeq}{\stackrel{\scriptscriptstyle\textup{def}}{=}}
