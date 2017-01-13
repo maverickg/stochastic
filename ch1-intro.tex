@@ -8,7 +8,13 @@ A commonly used technique is to model the price $S$ as a \emph{geometric Brownia
   dS(t) = \alpha S(t) \, dt + \sigma S(t) \, dW(t)\,,
 \end{equation*}
 where $\alpha$ and $\sigma$ are parameters, and $W$ is a Brownian motion.
-If $\sigma = 0$, we will have $S(t) = S(0) e^{\alpha t}$, which is simply the price at a fixed interest rate $\alpha$.
+If $\sigma = 0$, this is simply the ordinary differential equation
+\begin{equation*}
+  dS(t) = \alpha S(t) \, dt
+  \quad\text{or}\quad
+  \partial_t S = \alpha S(t)\,.
+\end{equation*}
+This is the price assuming it grows at a rate $\alpha$.
 The $\sigma \, dW$ term models \emph{noisy fluctuations} and the first goal of this course is to understand what this means.
 The mathematical tools required for this are Brownian motion, and It\^o integrals, which we will develop and study.
 

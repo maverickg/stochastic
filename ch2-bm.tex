@@ -1,0 +1,193 @@
+%&subfile
+\begin{document}
+\ifstandalonechapter\setcounter{chapter}{1}\fi
+\chapter{Brownian motion}
+\section{Scaling limit of random walks.}
+Our first goal is to understand \emph{Brownian motion}, which is used to model ``noisy fluctuations'' of stocks, and various other objects.
+This is named after the botanist Robert Brown, who observed that the microscopic movement of pollen grains appears random.
+Intuitively, Brownian motion can be thought of as a process that performs a random walk in continuous time.
+
+We begin by describing Brownian motion as the scaling limit of discrete random walks.
+Let $X_1$, $X_2$, \dots, be a sequence of i.i.d.\ random variables which take on the values $\pm 1$ with probability $1/2$.
+Define the time interpolated random walk $S(t)$ by setting $S(0) = 0$, and
+\begin{gather}
+  S(t) = S(n) + (t - n) X_{n+1}
+  \quad\text{when } t \in (n, n+1]\,.
+\end{gather}
+Note $S(n) = \sum_{1}^n X_i$, and so at integer times $S$ is simply a symmetric random walk with step size $1$.
+
+Our aim now is to rescale $S$ so that it takes a random step at shorter and shorter time intervals, and then take the limit.
+In order to get a meaningful limit, we will have to compensate by also scaling the step size.
+Let $\epsilon > 0$ and define
+\begin{equation*}
+  S_\epsilon(t) = \alpha_\epsilon S\paren[\Big]{ \frac{t}{\epsilon} }\,,
+\end{equation*}
+where $\alpha_\epsilon$ will be chosen below in a manner that ensures convergence of $S_\epsilon(t)$ as $\epsilon \to 0$.
+Note that $S_\epsilon$ now takes a random step of size $\alpha_\epsilon$ after every $\epsilon$ time units.
+
+To choose $\alpha_\epsilon$, we compute the variance of $S_\epsilon$.
+Note first
+\begin{equation*}
+  \var S(t) = \floor{t} + (t - \floor{t})^2,
+\end{equation*}
+and consequently
+\begin{equation*}
+  \var S_\epsilon(t)
+    = \alpha_\epsilon^2 \paren[\Big]{
+	\floor[\Big]{\frac{t}{\epsilon}}
+	+ \paren[\Big]{\frac{t}{\epsilon} - \floor[\Big]{\frac{t}{\epsilon}}}^2
+    }\,.
+\end{equation*}
+In order to get a ``nice limit'' of $S_\epsilon$ as $\epsilon \to 0$, one would at least expect that $\var S_\epsilon(t)$ converges as $\epsilon \to 0$.
+From the above, we see that choosing
+\begin{equation*}
+  \alpha_\epsilon = \sqrt{\epsilon}
+\end{equation*}
+immediately implies
+\begin{equation*}
+  \lim_{\epsilon \to 0} \var S_\epsilon(t) = t\,.
+\end{equation*}
+
+\begin{theorem}
+  The processes $S_\epsilon(t) \defeq \sqrt{\epsilon} S( t / \epsilon )$ ``converge'' as $\epsilon \to 0$.
+  The limiting process, usually denoted by $W$, is called a (standard, one dimensional) \emph{Brownian motion}.
+\end{theorem}
+
+The proof of this theorem uses many tools from the modern theory of probability, and is beyond the scope of this course.
+The important thing to take away from this is that Brownian motion can be well approximated by a random walk that takes steps of variance $\epsilon$ on a time interval of size $\epsilon$.
+ 
+
+\section{A crash course in measure theoretic probability.}
+
+Each of the random variables $X_i$ can be adequately described by finite probability spaces.
+The collection of all $X_i$'s can not be, but is still ``intuitive enough'' to to be understood using the tools from discrete probability.
+The limiting process $W$, however, can not be adequately described using tools from ``discrete'' probability: For each $t$, $W(t)$ is a continuous random variable, and the collection of all $W(t)$ for $t \geq 0$ is an \emph{uncountable} collection of \emph{correlated} random variables.
+This process is best described and studied through measure theoretic probability, which is very briefly described in this section.
+
+\begin{definition}
+  The \emph{sample space} $\Omega$ is simply a non-empty set.
+\end{definition}
+
+\begin{definition}
+  A \emph{$\sigma$-algebra} $\Sigma \subseteq \mathcal P(\Omega)$ is a \emph{non-empty} collection of \emph{subsets} of $\Omega$ which is:
+  \begin{enumerate}
+    \item closed under compliments (i.e. if $A \in \Sigma$, then $A^c \in \Sigma$),
+    \item and closed under \emph{countable} unions (i.e. $A_1$, $A_2$, \dots are all elements of $\Sigma$, then the union $\cup_1^\infty A_i$ is also an element of $\Sigma$).
+  \end{enumerate}
+  Elements of the $\sigma$-algebra are called \emph{events}, or $\Sigma$-measurable events.
+\end{definition}
+
+\begin{remark}
+  The notion of $\sigma$-algebra is \emph{central} to probability, and represents \emph{information}.
+  Elements of the $\sigma$-algebra are events whose probability are known.
+\end{remark}
+
+\begin{remark}
+  You should check that the above definition implies that $\emptyset, \Omega \in \Sigma$, and that $\Sigma$ is also closed under countable intersections and set differences.
+\end{remark}
+
+\begin{definition}
+  A \emph{probability measure} on $(\Omega, \Sigma)$ is a \emph{countably additive} function $\P\colon \Sigma \to [0, 1]$ such that $\P(\Omega) = 1$.
+  That is, for each $A \in \Sigma$, $\P(A) \in [0, 1]$ and $\P(\Omega) = 1$.
+  Moreover, if $A_1,\ A_2, \dots \in \Sigma$ are \emph{pairwise disjoint}, then
+  \begin{equation*}
+    \P\paren[\Big]{ \bigcup_{i = 1}^\infty A_i } = \sum_{i=1}^\infty \P(A_i)\,.
+  \end{equation*}
+\end{definition}
+
+\begin{remark}
+For a $\Sigma$-measurable event $A$, $\P(A)$ is the probability of the event $A$ occurring.
+\end{remark}
+
+\begin{remark}
+  You should check that the above definition implies:
+  \begin{enumerate}
+    \item
+      $\P(\emptyset) = 0$,
+    \item
+      If $A, B \in \Sigma$ are disjoint, then $\P(A \cup B) = \P(A) + \P(B)$.
+    \item
+      $\P(A^c) = 1 - \P(A)$.
+      More generally, if $A, B \in \Sigma$ with $A \subseteq B$, then $\P(B - A) = \P(B) - \P(A)$.
+    \item
+      If $A_1 \subseteq A_2 \subseteq A_3 \cdots$ and each $A_i \in \Sigma$ then $\P(\cup A_i) = \lim_{n \to \infty} \P(A_n)$.
+    \item
+      If $A_1 \supseteq A_2 \supseteq A_3 \cdots$ and each $A_i \in \Sigma$ then $\P(\cap A_i) = \lim_{n \to \infty} \P(A_n)$.
+  \end{enumerate}
+\end{remark}
+
+\begin{definition}
+  A \emph{random variable} is a function $X:\Omega \to \R$ such that for every $\alpha \in \R$, the set $\set{ \omega \in \Omega \st X(\omega) < \alpha }$ is an element of $\Sigma$.
+  (Such functions are also called \emph{$\Sigma$-measurable}, \emph{measurable with respect to $\Sigma$}, or simply \emph{measurable} if the $\sigma$-algebra in question is clear from the context.)
+\end{definition}
+\begin{remark}
+  The argument $\omega$ is \emph{always} suppressed when writing random variables.
+  That is, the event $\set{\omega \in \Omega \st X(\omega) < \alpha}$ is simply written as $\set{X < \alpha}$.
+\end{remark}
+\begin{remark}
+  Note for any random variable, $\set{X \geq \alpha} = \set{X < \alpha}^c$ which must also belong to $\Sigma$ since $\Sigma$ is closed under complements.
+  You should check that for every $\alpha < \beta \in \R$ the events $\set{X \leq \alpha}$, $\set{X > \alpha}$, $\set{X \in (\alpha, \beta)}$, $\set{X \in [\alpha, \beta)}$, $\set{X \in (\alpha, \beta]}$ and $\set{X \in (\alpha, \beta)}$ are all also elements of $\Sigma$.
+
+  Since $\P$ is defined on all of $\Sigma$, the quantity $\P( \set{X \in (\alpha, \beta)})$ is mathematically well defined, and represents the chance that the random variable $X$ takes values in the interval $(\alpha, \beta)$.
+  For brevity, I will often omit the outermost curly braces and write $\P(X \in (\alpha, \beta))$ for $\P(\set{X \in (\alpha, \beta)})$.
+\end{remark}
+
+\begin{remark}
+  You should check that if $X$, $Y$ are random variables then so are $X \pm Y$, $XY$, $X/Y$ (when defined), $\abs{X}$, $X \varmin Y$ and $X \varmax Y$.
+  In fact if $f: \R \to \R$ is any reasonably nice (more precisely, a Borel measurable) function, $f(X)$ is also a random variable.
+\end{remark}
+
+\begin{example}
+  If $A \subseteq \Omega$, define $\one_A\colon \Omega \to \R$ by $\one_A(\omega) = 1$ if $\omega \in A$ and $0$ otherwise.
+  Then $\one_A$ is a ($\Sigma$-measurable) random variable if and only if $A \in \Sigma$.
+\end{example}
+
+\begin{example}
+  For $i \in \N$,  $a_i \in \R$ and $A_i \in \Sigma$ be such that $A_i \cap A_j = \emptyset$ for $i \neq j$, and define
+  \begin{equation*}
+    X\defeq \sum_{i=1}^\infty a_i \one_{A_i}\,.
+  \end{equation*}
+  Then $X$ is a ($\Sigma$-measurable) random variable.
+  (Such variables are called \emph{simple} random variables.)
+\end{example}
+
+Note above that $\P(X = a_i)$ is exactly $\P(A_i)$, and $\sum_i a_i \P(X = a_i) = \sum_i a_i \P(A_i)$ agrees with our notion of expectation from discrete probability.
+
+\begin{definition}
+  For the simple random variable $X$ defined above, we define \emph{expectation of $X$} by
+  \begin{equation*}
+    \E X = \sum_{i = 1}^\infty a_i \P(A_i)\,.
+  \end{equation*}
+\end{definition}
+
+For general random variables, we define the expectation by approximation.
+\begin{definition}
+  If $Y$ is a nonnegative random variable, define
+  \begin{equation*}
+    \E Y \defeq \lim_{n \to \infty} \E X_n
+    \quad\text{where }
+    X_n \defeq \sum_{k=0}^{n^2-1} \frac{k}{n} \one_{\set{\frac{k}{n} \leq Y < \frac{k+1}{n}}}\,.
+  \end{equation*}
+\end{definition}
+\begin{remark}
+  Note each $X_n$ above is simple, and we have previously defined the expectation of simple random variables.
+\end{remark}
+\begin{definition}
+  If $Y$ is any (not necessarily nonnegative) random variable, set $Y^+ = Y \varmax 0$ and $Y^- = Y \varmin 0$, and define
+  \begin{equation*}
+    \E Y = \E Y^+ - \E Y^-\,,
+  \end{equation*}
+  provided at least one of the terms on the right is finite.
+\end{definition}
+\begin{remark}
+  The expectation operator defined above is the \emph{Lebesgue integral} of $Y$ with respect to the probability measure $\P$, and is often written as
+  \begin{equation*}
+    \E Y = \int_\Omega Y \, d\P\,.
+  \end{equation*}
+\end{remark}
+
+The expectation operator defined above satisfies the same properties you're familiar with for discrete random variables (e.g. $\E(X + \alpha Y) = \E X + \alpha \E Y$, but $\E XY \neq \E X \E Y$ etc.) but the proofs aren't easy!
+It also behaves well with respect to taking limits (i.e. $\lim \E X_n = \E \lim X_n$, under modest assumptions) however, investigating these will lead us too far astray.
+We invite the curious to look up \emph{the monotone/dominated convergence theorems} and their proofs.
+The main point of this section was to introduce you to a framework which is capable of describing and studying the objects we will need for the remainder of the course.
+\end{document}
