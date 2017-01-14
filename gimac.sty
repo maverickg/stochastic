@@ -1,6 +1,6 @@
 \ProvidesPackage{gimac}
 % Misc. macros for Gautam Iyer.
-% Last modified: Fri 14 Oct 2016 09:09:21 PM EDT
+% Last modified: Sat 14 Jan 2017 12:24:25 AM EST
 
 \newif\ifGI@exam
 \@ifclassloaded{exam}{\GI@examtrue}{\GI@examfalse}
@@ -41,57 +41,55 @@
 \fi
 \RequirePackage{suffix}
 
-\ifGI@exam\else
-  \ifGI@draft\setlength{\overfullrule}{1mm}\fi
-  \ifGI@twocolumn
-    % 2 Column mode to save trees. Margins chosen so that linewidth here is the
-    % same as amsart, one column with default margins on US letter paper, so
-    % that no overfull hboxes are created / destroyed.
-    \RequirePackage{geometry}
-    \@ifclassloaded{amsart}{
-      \setlength{\columnsep}{24.98999pt} % amsart,  10pt, letter (lw=360pt)
-    }{
-      \setlength{\columnsep}{34.98999pt} % article, 10pt, letter (lw=345pt)
+\ifGI@draft\setlength{\overfullrule}{1mm}\fi
+\ifGI@twocolumn
+  % 2 Column mode to save trees. Margins chosen so that linewidth here is the
+  % same as amsart, one column with default margins on US letter paper, so
+  % that no overfull hboxes are created / destroyed.
+  \RequirePackage{geometry}
+  \@ifclassloaded{amsart}{
+    \setlength{\columnsep}{24.98999pt} % amsart,  10pt, letter (lw=360pt)
+  }{
+    \setlength{\columnsep}{34.98999pt} % article, 10pt, letter (lw=345pt)
+  }
+  \geometry{landscape,includehead,headheight=12pt,headsep=10pt,left=\columnsep,right=\columnsep,top=12.98999pt,bottom=\columnsep}
+  \twocolumn
+
+  \ifGI@amsbook\ifGI@minimal\else
+    % Don't force a new double page for every chapter.
+    \patchcmd{\chapter}{\clearpage}{\newpage}{}{\error}
+
+    % Make vertical space at start of chapter on one column only.
+    \patchcmd{\@makechapterhead}{\global\topskip 7.5pc\relax\begingroup}{\begingroup\topskip 7.5pc\relax}{}{\error}
+
+    % No newpage after title
+    %\patchcmd{\@maketitle}{\newpage}{}{}{}
+  \fi\fi
+\else\ifGI@tablet%ifGI@twocolumn
+  \RequirePackage{geometry}
+  \geometry{paperheight=638pt,paperwidth=400pt,left=20pt,right=20pt,top=10pt,bottom=10pt,includehead,includefoot}
+\else%ifGI@tablet
+  %\usepackage[body={16.65cm,22.65cm}]{geometry}
+  \ifGI@draft
+    % Should be done before loading showkeys
+    \providecommand*{\showkeyslabelformat}[1]{%
+      \fcolorbox{blue!50!black}{cyan!5!white}{%
+	\itshape\fontfamily{\rmdefault}%
+	%\fontsize{4.5pt}{5.4pt}\selectfont%
+	\tiny%
+	#1%
+      }
     }
-    \geometry{landscape,includehead,headheight=12pt,headsep=10pt,left=\columnsep,right=\columnsep,top=12.98999pt,bottom=\columnsep}
-    \twocolumn
-
-    \ifGI@amsbook\ifGI@minimal\else
-      % Don't force a new double page for every chapter.
-      \patchcmd{\chapter}{\clearpage}{\newpage}{}{\error}
-
-      % Make vertical space at start of chapter on one column only.
-      \patchcmd{\@makechapterhead}{\global\topskip 7.5pc\relax\begingroup}{\begingroup\topskip 7.5pc\relax}{}{\error}
-
-      % No newpage after title
-      %\patchcmd{\@maketitle}{\newpage}{}{}{}
-    \fi\fi
-  \else\ifGI@tablet%ifGI@twocolumn
-    \RequirePackage{geometry}
-    \geometry{paperheight=638pt,paperwidth=400pt,left=20pt,right=20pt,top=10pt,bottom=10pt,includehead,includefoot}
-  \else%ifGI@tablet
-    %\usepackage[body={16.65cm,22.65cm}]{geometry}
-    \ifGI@draft
-      % Should be done before loading showkeys
-      \providecommand*{\showkeyslabelformat}[1]{%
-	\fcolorbox{blue!50!black}{cyan!5!white}{%
-	  \itshape\fontfamily{\rmdefault}%
-	  %\fontsize{4.5pt}{5.4pt}\selectfont%
-	  \tiny%
-	  #1%
-	}
-      }
-      \RequirePackage[notref,notcite]{showkeys}
-    \fi%ifGI@draft
-    \ifGI@minimal\else
-      % Make AMS section titles less ugly
-      \@ifclassloaded{amsart}{%
-	\patchcmd{\section}{\scshape\centering}{\bfseries\large}{}{}
-      }
-      {}
-    \fi
-  \fi\fi%else ifGI@tablet, ifGI@twocolumn
-\fi%else ifGI@exam
+    \RequirePackage[notref,notcite]{showkeys}
+  \fi%ifGI@draft
+\fi\fi%else ifGI@tablet, ifGI@twocolumn
+\ifGI@minimal\else
+  % Make AMS section titles less ugly
+  \@ifclassloaded{amsart}{%
+    \patchcmd{\section}{\scshape\centering}{\bfseries\large}{}{}
+  }
+  {}
+\fi
 
 \RequirePackage{hyperref}% put this last...
 %\usepackage{wrapfig}
@@ -199,6 +197,7 @@
 \newcommand{\varmax}{\vee}
 \newcommand{\E}{\bm{E}}
 \renewcommand{\P}{\bm{P}}
+\newcommand{\one}{\bm{1}}
 
 \DeclareMathOperator{\erf}{erf}
 \DeclareMathOperator{\sign}{sign}
@@ -208,14 +207,9 @@
 \DeclareMathOperator{\Lip}{Lip}
 \DeclareMathOperator{\supp}{supp}
 
-\newcommand{\eps}{\varepsilon}
-\renewcommand{\epsilon}{\eps}
+\renewcommand{\epsilon}{\varepsilon}
 \renewcommand{\leq}{\leqslant}
 \renewcommand{\geq}{\geqslant}
-
-% Indicator functions
-\newcommand{\Chi}[1]{\Chi*{\{#1\}}}
-\WithSuffix\newcommand\Chi*[1]{\chi_{\raise-.5ex\hbox{$\scriptstyle#1$}}}
 
 %
 % Spaces & sets
@@ -240,9 +234,11 @@
 %
 \DeclarePairedDelimiter{\paren}{(}{)}
 \DeclarePairedDelimiter{\brak}{[}{]}
-\DeclarePairedDelimiter{\set}{\{}{\}}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\DeclarePairedDelimiterX\set[1]\{\}{%
+  \newcommand{\st}{\nonscript\:\delimsize\vert\nonscript\:\mathopen{}\allowbreak}#1}
 
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
@@ -253,8 +249,6 @@
 \WithSuffix\newcommand\ip*[2]{\av{#1,#2}}
 \newcommand{\given}[1][\big]{\;\ifGI@textstyle|\else#1|\fi\;}
 \WithSuffix\newcommand\given*{\;\middle|\;}
-\newcommand{\st}[1][\big]{\given[#1]}
-\WithSuffix\newcommand\st*{\given*}
 \newcommand{\at}[2][\Bigr]{\ifGI@textstyle|\else#1|_{#2}\fi}
 \WithSuffix\newcommand\at*[1]{\middle|_{#1}}
 
