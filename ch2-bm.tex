@@ -69,12 +69,12 @@ This process is best described and studied through measure theoretic probability
 \end{definition}
 
 \begin{definition}
-  A \emph{$\sigma$-algebra} $\Sigma \subseteq \mathcal P(\Omega)$ is a \emph{non-empty} collection of \emph{subsets} of $\Omega$ which is:
+  A \emph{$\sigma$-algebra} $\mathcal G \subseteq \mathcal P(\Omega)$ is a \emph{non-empty} collection of \emph{subsets} of $\Omega$ which is:
   \begin{enumerate}
-    \item closed under compliments (i.e. if $A \in \Sigma$, then $A^c \in \Sigma$),
-    \item and closed under \emph{countable} unions (i.e. $A_1$, $A_2$, \dots are all elements of $\Sigma$, then the union $\cup_1^\infty A_i$ is also an element of $\Sigma$).
+    \item closed under compliments (i.e. if $A \in \mathcal G$, then $A^c \in \mathcal G$),
+    \item and closed under \emph{countable} unions (i.e. $A_1$, $A_2$, \dots are all elements of $\mathcal G$, then the union $\cup_1^\infty A_i$ is also an element of $\mathcal G$).
   \end{enumerate}
-  Elements of the $\sigma$-algebra are called \emph{events}, or $\Sigma$-measurable events.
+  Elements of the $\sigma$-algebra are called \emph{events}, or $\mathcal G$-measurable events.
 \end{definition}
 
 \begin{remark}
@@ -83,20 +83,21 @@ This process is best described and studied through measure theoretic probability
 \end{remark}
 
 \begin{remark}
-  You should check that the above definition implies that $\emptyset, \Omega \in \Sigma$, and that $\Sigma$ is also closed under countable intersections and set differences.
+  You should check that the above definition implies that $\emptyset, \Omega \in \mathcal G$, and that $\mathcal G$ is also closed under countable intersections and set differences.
 \end{remark}
 
 \begin{definition}
-  A \emph{probability measure} on $(\Omega, \Sigma)$ is a \emph{countably additive} function $\P\colon \Sigma \to [0, 1]$ such that $\P(\Omega) = 1$.
-  That is, for each $A \in \Sigma$, $\P(A) \in [0, 1]$ and $\P(\Omega) = 1$.
-  Moreover, if $A_1,\ A_2, \dots \in \Sigma$ are \emph{pairwise disjoint}, then
+  A \emph{probability measure} on $(\Omega, \mathcal G)$ is a \emph{countably additive} function $\P\colon \mathcal G \to [0, 1]$ such that $\P(\Omega) = 1$.
+  That is, for each $A \in \mathcal G$, $\P(A) \in [0, 1]$ and $\P(\Omega) = 1$.
+  Moreover, if $A_1,\ A_2, \dots \in \mathcal G$ are \emph{pairwise disjoint}, then
   \begin{equation*}
     \P\paren[\Big]{ \bigcup_{i = 1}^\infty A_i } = \sum_{i=1}^\infty \P(A_i)\,.
   \end{equation*}
+  The triple $(\Omega, \mathcal G, \P)$ is called a \emph{probability space}.
 \end{definition}
 
 \begin{remark}
-For a $\Sigma$-measurable event $A$, $\P(A)$ is the probability of the event $A$ occurring.
+For a $\mathcal G$-measurable event $A$, $\P(A)$ represents the probability of the event $A$ occurring.
 \end{remark}
 
 \begin{remark}
@@ -105,30 +106,30 @@ For a $\Sigma$-measurable event $A$, $\P(A)$ is the probability of the event $A$
     \item
       $\P(\emptyset) = 0$,
     \item
-      If $A, B \in \Sigma$ are disjoint, then $\P(A \cup B) = \P(A) + \P(B)$.
+      If $A, B \in \mathcal G$ are disjoint, then $\P(A \cup B) = \P(A) + \P(B)$.
     \item
       $\P(A^c) = 1 - \P(A)$.
-      More generally, if $A, B \in \Sigma$ with $A \subseteq B$, then $\P(B - A) = \P(B) - \P(A)$.
+      More generally, if $A, B \in \mathcal G$ with $A \subseteq B$, then $\P(B - A) = \P(B) - \P(A)$.
     \item
-      If $A_1 \subseteq A_2 \subseteq A_3 \cdots$ and each $A_i \in \Sigma$ then $\P(\cup A_i) = \lim_{n \to \infty} \P(A_n)$.
+      If $A_1 \subseteq A_2 \subseteq A_3 \cdots$ and each $A_i \in \mathcal G$ then $\P(\cup A_i) = \lim_{n \to \infty} \P(A_n)$.
     \item
-      If $A_1 \supseteq A_2 \supseteq A_3 \cdots$ and each $A_i \in \Sigma$ then $\P(\cap A_i) = \lim_{n \to \infty} \P(A_n)$.
+      If $A_1 \supseteq A_2 \supseteq A_3 \cdots$ and each $A_i \in \mathcal G$ then $\P(\cap A_i) = \lim_{n \to \infty} \P(A_n)$.
   \end{enumerate}
 \end{remark}
 
 \begin{definition}
-  A \emph{random variable} is a function $X:\Omega \to \R$ such that for every $\alpha \in \R$, the set $\set{ \omega \in \Omega \st X(\omega) < \alpha }$ is an element of $\Sigma$.
-  (Such functions are also called \emph{$\Sigma$-measurable}, \emph{measurable with respect to $\Sigma$}, or simply \emph{measurable} if the $\sigma$-algebra in question is clear from the context.)
+  A \emph{random variable} is a function $X:\Omega \to \R$ such that for every $\alpha \in \R$, the set $\set{ \omega \in \Omega \st X(\omega) < \alpha }$ is an element of $\mathcal G$.
+  (Such functions are also called \emph{$\mathcal G$-measurable}, \emph{measurable with respect to $\mathcal G$}, or simply \emph{measurable} if the $\sigma$-algebra in question is clear from the context.)
 \end{definition}
 \begin{remark}
   The argument $\omega$ is \emph{always} suppressed when writing random variables.
   That is, the event $\set{\omega \in \Omega \st X(\omega) < \alpha}$ is simply written as $\set{X < \alpha}$.
 \end{remark}
 \begin{remark}
-  Note for any random variable, $\set{X \geq \alpha} = \set{X < \alpha}^c$ which must also belong to $\Sigma$ since $\Sigma$ is closed under complements.
-  You should check that for every $\alpha < \beta \in \R$ the events $\set{X \leq \alpha}$, $\set{X > \alpha}$, $\set{X \in (\alpha, \beta)}$, $\set{X \in [\alpha, \beta)}$, $\set{X \in (\alpha, \beta]}$ and $\set{X \in (\alpha, \beta)}$ are all also elements of $\Sigma$.
+  Note for any random variable, $\set{X \geq \alpha} = \set{X < \alpha}^c$ which must also belong to $\mathcal G$ since $\mathcal G$ is closed under complements.
+  You should check that for every $\alpha < \beta \in \R$ the events $\set{X \leq \alpha}$, $\set{X > \alpha}$, $\set{X \in (\alpha, \beta)}$, $\set{X \in [\alpha, \beta)}$, $\set{X \in (\alpha, \beta]}$ and $\set{X \in (\alpha, \beta)}$ are all also elements of $\mathcal G$.
 
-  Since $\P$ is defined on all of $\Sigma$, the quantity $\P( \set{X \in (\alpha, \beta)})$ is mathematically well defined, and represents the chance that the random variable $X$ takes values in the interval $(\alpha, \beta)$.
+  Since $\P$ is defined on all of $\mathcal G$, the quantity $\P( \set{X \in (\alpha, \beta)})$ is mathematically well defined, and represents the chance that the random variable $X$ takes values in the interval $(\alpha, \beta)$.
   For brevity, I will often omit the outermost curly braces and write $\P(X \in (\alpha, \beta))$ for $\P(\set{X \in (\alpha, \beta)})$.
 \end{remark}
 
@@ -139,19 +140,19 @@ For a $\Sigma$-measurable event $A$, $\P(A)$ is the probability of the event $A$
 
 \begin{example}
   If $A \subseteq \Omega$, define $\one_A\colon \Omega \to \R$ by $\one_A(\omega) = 1$ if $\omega \in A$ and $0$ otherwise.
-  Then $\one_A$ is a ($\Sigma$-measurable) random variable if and only if $A \in \Sigma$.
+  Then $\one_A$ is a ($\mathcal G$-measurable) random variable if and only if $A \in \mathcal G$.
 \end{example}
 
 \begin{example}
-  For $i \in \N$,  $a_i \in \R$ and $A_i \in \Sigma$ be such that $A_i \cap A_j = \emptyset$ for $i \neq j$, and define
+  For $i \in \N$,  $a_i \in \R$ and $A_i \in \mathcal G$ be such that $A_i \cap A_j = \emptyset$ for $i \neq j$, and define
   \begin{equation*}
     X\defeq \sum_{i=1}^\infty a_i \one_{A_i}\,.
   \end{equation*}
-  Then $X$ is a ($\Sigma$-measurable) random variable.
+  Then $X$ is a ($\mathcal G$-measurable) random variable.
   (Such variables are called \emph{simple} random variables.)
 \end{example}
 
-Note above that $\P(X = a_i)$ is exactly $\P(A_i)$, and $\sum_i a_i \P(X = a_i) = \sum_i a_i \P(A_i)$ agrees with our notion of expectation from discrete probability.
+Note that if the $a_i$'s above are all distinct, then $\set{X = a_i} = A_i$, and hence $\sum_i a_i \P(X = a_i) = \sum_i a_i \P(A_i)$, which agrees with our notion of expectation from discrete probability.
 
 \begin{definition}
   For the simple random variable $X$ defined above, we define \emph{expectation of $X$} by
@@ -173,7 +174,7 @@ For general random variables, we define the expectation by approximation.
   Note each $X_n$ above is simple, and we have previously defined the expectation of simple random variables.
 \end{remark}
 \begin{definition}
-  If $Y$ is any (not necessarily nonnegative) random variable, set $Y^+ = Y \varmax 0$ and $Y^- = Y \varmin 0$, and define
+  If $Y$ is any (not necessarily nonnegative) random variable, set $Y^+ = Y \varmax 0$ and $Y^- = Y \varmin 0$, and define the expectation by
   \begin{equation*}
     \E Y = \E Y^+ - \E Y^-\,,
   \end{equation*}
@@ -186,8 +187,23 @@ For general random variables, we define the expectation by approximation.
   \end{equation*}
 \end{remark}
 
-The expectation operator defined above satisfies the same properties you're familiar with for discrete random variables (e.g. $\E(X + \alpha Y) = \E X + \alpha \E Y$, but $\E XY \neq \E X \E Y$ etc.) but the proofs aren't easy!
-It also behaves well with respect to taking limits (i.e. $\lim \E X_n = \E \lim X_n$, under modest assumptions) however, investigating these will lead us too far astray.
-We invite the curious to look up \emph{the monotone/dominated convergence theorems} and their proofs.
+\begin{proposition}[Linearity]
+  If $\alpha \in \R$ and $X, Y$ are random variables, then $\E(X + \alpha Y) = \E X + \alpha \E Y$.
+\end{proposition}
+
+\begin{proposition}[Positivity]
+  If $X \geq 0$ almost surely, then $\E X \geq 0$
+  Moreover, if $X > 0$ almost surely, $\E X > 0$.
+  Consequently, (using linearity) if $X \leq Y$ almost surely then $\E X \leq \E Y$.
+\end{proposition}
+\begin{remark}
+  By $X \geq 0$ almost surely, we mean that $\P(X \geq 0) = 1$.
+\end{remark}
+
+The proof of positivity is immediate, however the proof of linearity is surprisingly not as straightforward as you would expect.
+It's easy to verify linearity for simple random variables, of course.
+For general random variables, however, you need an approximation argument which requires either the \emph{dominated} or \emph{monotone} convergence theorem which guarantee $\lim \E X_n = \E \lim X_n$, under modest assumptions.
+Since discussing these results at this stage will will lead us too far astray, we invite the curious to look up their proofs in any standard measure theory book.
 The main point of this section was to introduce you to a framework which is capable of describing and studying the objects we will need for the remainder of the course.
+
 \end{document}
