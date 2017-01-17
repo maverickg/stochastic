@@ -1,6 +1,6 @@
 These are extremely brief notes written while teaching *Stochastic Calculus
 for Finance I* at Carnegie Mellon University.
-A PDF of these notes can be found on the [class website](http://www.math.cmu.edu/~gautam/sj/teaching/2016-17/944-scalc-finance1/).
+Homework and a PDF of these notes can be found on the [class website](http://www.math.cmu.edu/~gautam/sj/teaching/2016-17/944-scalc-finance1/).
 
 ## Contributing
 These notes are open-source.

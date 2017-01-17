@@ -10,18 +10,18 @@ Intuitively, Brownian motion can be thought of as a process that performs a rand
 We begin by describing Brownian motion as the scaling limit of discrete random walks.
 Let $X_1$, $X_2$, \dots, be a sequence of i.i.d.\ random variables which take on the values $\pm 1$ with probability $1/2$.
 Define the time interpolated random walk $S(t)$ by setting $S(0) = 0$, and
-\begin{gather}
+\begin{equation}\label{e:S}
   S(t) = S(n) + (t - n) X_{n+1}
   \quad\text{when } t \in (n, n+1]\,.
-\end{gather}
+\end{equation}
 Note $S(n) = \sum_{1}^n X_i$, and so at integer times $S$ is simply a symmetric random walk with step size $1$.
 
 Our aim now is to rescale $S$ so that it takes a random step at shorter and shorter time intervals, and then take the limit.
 In order to get a meaningful limit, we will have to compensate by also scaling the step size.
 Let $\epsilon > 0$ and define
-\begin{equation*}
+\begin{equation}\label{e:Sep}
   S_\epsilon(t) = \alpha_\epsilon S\paren[\Big]{ \frac{t}{\epsilon} }\,,
-\end{equation*}
+\end{equation}
 where $\alpha_\epsilon$ will be chosen below in a manner that ensures convergence of $S_\epsilon(t)$ as $\epsilon \to 0$.
 Note that $S_\epsilon$ now takes a random step of size $\alpha_\epsilon$ after every $\epsilon$ time units.
 
@@ -48,7 +48,7 @@ immediately implies
   \lim_{\epsilon \to 0} \var S_\epsilon(t) = t\,.
 \end{equation*}
 
-\begin{theorem}
+\begin{theorem}\label{t:SRW}
   The processes $S_\epsilon(t) \defeq \sqrt{\epsilon} S( t / \epsilon )$ ``converge'' as $\epsilon \to 0$.
   The limiting process, usually denoted by $W$, is called a (standard, one dimensional) \emph{Brownian motion}.
 \end{theorem}
@@ -118,16 +118,16 @@ For a $\mathcal G$-measurable event $A$, $\P(A)$ represents the probability of t
 \end{remark}
 
 \begin{definition}
-  A \emph{random variable} is a function $X:\Omega \to \R$ such that for every $\alpha \in \R$, the set $\set{ \omega \in \Omega \st X(\omega) < \alpha }$ is an element of $\mathcal G$.
+  A \emph{random variable} is a function $X:\Omega \to \R$ such that for every $\alpha \in \R$, the set $\set{ \omega \in \Omega \st X(\omega) \leq \alpha }$ is an element of $\mathcal G$.
   (Such functions are also called \emph{$\mathcal G$-measurable}, \emph{measurable with respect to $\mathcal G$}, or simply \emph{measurable} if the $\sigma$-algebra in question is clear from the context.)
 \end{definition}
 \begin{remark}
   The argument $\omega$ is \emph{always} suppressed when writing random variables.
-  That is, the event $\set{\omega \in \Omega \st X(\omega) < \alpha}$ is simply written as $\set{X < \alpha}$.
+  That is, the event $\set{\omega \in \Omega \st X(\omega) \leq \alpha}$ is simply written as $\set{X \leq \alpha}$.
 \end{remark}
 \begin{remark}
-  Note for any random variable, $\set{X \geq \alpha} = \set{X < \alpha}^c$ which must also belong to $\mathcal G$ since $\mathcal G$ is closed under complements.
-  You should check that for every $\alpha < \beta \in \R$ the events $\set{X \leq \alpha}$, $\set{X > \alpha}$, $\set{X \in (\alpha, \beta)}$, $\set{X \in [\alpha, \beta)}$, $\set{X \in (\alpha, \beta]}$ and $\set{X \in (\alpha, \beta)}$ are all also elements of $\mathcal G$.
+  Note for any random variable, $\set{X > \alpha} = \set{X \leq \alpha}^c$ which must also belong to $\mathcal G$ since $\mathcal G$ is closed under complements.
+  You should check that for every $\alpha < \beta \in \R$ the events $\set{X < \alpha}$, $\set{X \geq \alpha}$, $\set{X > \alpha}$, $\set{X \in (\alpha, \beta)}$, $\set{X \in [\alpha, \beta)}$, $\set{X \in (\alpha, \beta]}$ and $\set{X \in (\alpha, \beta)}$ are all also elements of $\mathcal G$.
 
   Since $\P$ is defined on all of $\mathcal G$, the quantity $\P( \set{X \in (\alpha, \beta)})$ is mathematically well defined, and represents the chance that the random variable $X$ takes values in the interval $(\alpha, \beta)$.
   For brevity, I will often omit the outermost curly braces and write $\P(X \in (\alpha, \beta))$ for $\P(\set{X \in (\alpha, \beta)})$.
@@ -206,4 +206,403 @@ For general random variables, however, you need an approximation argument which 
 Since discussing these results at this stage will will lead us too far astray, we invite the curious to look up their proofs in any standard measure theory book.
 The main point of this section was to introduce you to a framework which is capable of describing and studying the objects we will need for the remainder of the course.
 
+\section{A first characterization of Brownian motion.}
+
+We introduced Brownian motion by calling it a certain scaling limit of a simple random walk.
+While this provides good intuition as to what Brownian motion actually is, it is a somewhat unwieldy object to work with.
+Our aim here is to provide an intrinsic characterization of Brownian motion, that is both useful and mathematically convenient.
+
+\begin{definition}\label{d:bm1}
+  A Brownian motion is a \emph{continuous process} that has stationary independent increments.
+\end{definition}
+
+We will describe what this means shortly.
+While this is one of the most intuitive definitions of Brownian motion, most authors choose to prove this as a theorem, and use the following instead.
+
+\begin{definition}
+  A Brownian motion is a \emph{continuous process} $W$ such that:
+  \begin{enumerate}
+    \item
+       $W$ has independent increments, and
+    \item
+      For $s < t$, $W(t) - W(s) \sim N(0, \sigma^2 (t - s))$.
+  \end{enumerate}
+\end{definition}
+\begin{remark}
+  A \emph{standard} (one dimensional) Brownian motion is one for which $W(0) = 0$ and $\sigma = 1$.
+\end{remark}
+
+Both these definitions are equivalent, thought the proof is beyond the scope of this course.
+In order to make sense of these definitions we need to define the terms \emph{continuous process}, \emph{stationary increments}, and \emph{independent increments}.
+
+\subsection{Continuous processes}
+\begin{definition}
+  A \emph{stochastic process} (aka \emph{process}) is a function $X\colon \Omega \times [0, \infty)$ such that for every time $t \in [0, \infty)$, the function $\omega \mapsto X(t, \omega)$ is a random variable.
+  The $\omega$ variable is usually suppressed, and we will almost always use $X(t)$ to denote the random variable obtained by taking the slice of the function $X$ at time $t$.
+\end{definition}
+
+\begin{definition}
+  A \emph{continuous process} (aka \emph{continuous stochastic process}) is a stochastic process $X$ such that for (almost) every $\omega \in \Omega$ the function $t \mapsto X(t, \omega)$ is a continuous function of $t$.
+  That is, 
+  \begin{equation*}
+    \P\paren[\Big]{ \lim_{s \to t} X(s) = X(t) \text{ for every } t \in [0, \infty) }
+    = 1\,.
+  \end{equation*}
+\end{definition}
+
+
+The processes $S(t)$ and $S_\epsilon(t)$ defined in~\eqref{e:S} and~\eqref{e:Sep} are continuous, but the process
+\begin{equation*}
+  \tilde S(t) \defeq \sum_{n=0}^{\floor{t}} X_n \,,
+\end{equation*}
+is not.
+
+In general it is not true that the limit of continuous processes is again continuous.
+However, one can show that the limit of $S_\epsilon$ (with $\alpha_\epsilon = \sqrt{\epsilon}$ as above yields a continuous process.
+
+\subsection{Stationary increments}
+
+\begin{definition}
+  A process $X$ is said to have stationary increments if the distribution of $X_{t+h} - X_t$ does not depend on $t$.
+\end{definition}
+
+For the process $S$ in~\eqref{e:S}, note that for $n \in \N$, $S(n+1) - S(n) = X_{n+1}$ whose distribution \emph{does not} depend on $n$ as the variables $\set{X_i}$ were chosen to be independent and identically distributed.
+Similarly, $S(n+k) - S(n) = \sum_{n+1}^{n+k} X_i$ which has the same distribution as $\sum_1^{k} X_i$ and is independent of $n$.
+
+However, if $t \in \R$ and is not necessarily an integer, $S(t + k) - S(t)$ will in general depend on $t$.
+So the process $S$ (and also $S_\epsilon$) do not have stationary increments.
+
+We claim, that the limiting process $W$ does have stationary (normally distributed) increments.
+Suppose for some fixed $\epsilon > 0$, both $s$ and $t$ are multiples of $\epsilon$.
+In this case
+\begin{equation*}
+  S_\epsilon(t) - S_\epsilon(s)
+    \sim \sqrt{\epsilon} \sum_{i=1}^{\floor{t - s}/\epsilon}
+	X_i
+    \xrightarrow{\epsilon \to 0} N(0, t-s)\,,
+\end{equation*}
+by the central limit theorem.
+If $s, t$ aren't multiples of $\epsilon$ as we will have in general, the first equality above is true up to a remainder which can easily be shown to vanish.
+
+The above heuristic argument suggests that the limiting process $W$ (from Theorem~\ref{t:SRW}) satisfies $W(t) - W(s) \sim N(0, t - s)$.
+This certainly has independent increments since $W(t + h) - W(t) \sim N(0, h)$ which is independent of $t$.
+This is also the reason why the normal distribution is often pre-supposed when defining Brownian motion.
+
+\subsection{Independent increments}
+
+\begin{definition}
+  A process $X$ is said to have \emph{independent increments} if for every finite sequence of times $0 \leq t_0 < t_1 \cdots < t_N$, the random variables $X(t_0)$, $X(t_1) - X(t_0)$, $X(t_2) - X(t_1)$, \dots, $X(t_N) - X(t_{N-1})$ are all jointly independent.
+\end{definition}
+
+Note again for the process $S$ in~\eqref{e:S}, the increments at \emph{integer times} are independent.
+Increments at non-integer times are correlated, however, one can show that in the limit as $\epsilon \to 0$ the increments of the process $S_\epsilon$ become independent.
+
+Since we assume the reader is familiar with independence from discrete probability, the above is sufficient to motivate and explain the given definitions of Brownian motion.
+However, notion of independence is important enough that we revisit it from a measure theoretic perspective next.
+This also allows us to introduce a few notions on $\sigma$-algebras that will be crucial later.
+
+\subsection{Independence in measure theoretic probability}
+
+
+\begin{definition}
+  Let $X$ be a random variable on $(\Omega, \mathcal G, \P)$.
+  Define $\sigma(X)$ to be the  $\sigma$-algebra generated by the events $\set{X \leq \alpha}$ for every $\alpha \in \R$.
+  That is, $\sigma(X)$ is the \emph{smallest} $\sigma$-algebra which contains each of the events $\set{X \leq \alpha}$ for every $\alpha \in \R$.
+\end{definition}
+
+\begin{remark}
+  The $\sigma$-algebra $\sigma(X)$ represents all the information one can learn by observing $X$.
+  For instance, consider the following game: A card is drawn from a shuffled deck, and you win a dollar if it is red, and lose one if it is black.
+  Now the likely hood of drawing any particular card is $1/52$.
+  However, if you are blindfolded and only told the outcome of the game, you have no way to determine that each gard is picked with probability $1/52$.
+  The only thing you will be able to determine is that red cards are drawn as often as black ones.
+
+  This is captured by $\sigma$-algebra as follows.
+  Let $\Omega = \set{1, \dots, 52}$ represent a deck of cards, $\mathcal G = \mathcal P(\Omega)$, and define $\P(A) = \operatorname{card}(A)/52$.
+  Let $R = \set{1, \dots 26}$ represent the red cards, and $B = R^c$ represent the black cards.
+  The outcome of the above game is now the random variable $X = \one_R - \one_B$, and you should check that $\sigma(X)$ is exactly $\set{ \emptyset, R, B, \Omega}$.
+\end{remark}
+
+We will use $\sigma$-algebras extensively but, as you might have noticed, we haven't developed any examples.
+Infinite $\sigma$-algebras are ``hard'' to write down explicitly, and what one usually does in practice is specify a \emph{generating} family, as we did when defining $\sigma(X)$.
+\begin{definition}
+  Given a collection of sets $A_\alpha$, where $\alpha$ belongs to some (possibly infinite) index set $\mathcal A$, we define $\sigma(\set{A_\alpha})$ to be the \emph{smallest} $\sigma$-algebra that contains each of the sets $A_\alpha$.
+\end{definition}
+
+That is, if $\mathcal G = \sigma(\set{A_\alpha})$, then we must have each $A_\alpha \in \mathcal G$.
+Since $\mathcal G$ is a $\sigma$-algebra, all sets you can obtain from these by taking complements, countable unions and countable intersections intersections must also belong to $\mathcal G$.%
+\footnote{
+  Usually $\mathcal G$ contains \emph{much more} than all countable unions, intersections and complements of the $A_\alpha$'s.
+  You might think you could keep including all sets you generate using countable unions and complements and arrive at all of~$\mathcal G$.
+  It turns out that to make this work, you will usually have to do this \emph{uncountably} many times!
+
+  This won't be too important within the scope of these notes.
+  However, if you read a rigorous treatment and find the authors using some fancy trick (using Dynkin systems or monotone classes) instead of a naive countable unions argument, then the above is the reason why.
+}
+The fact that $\mathcal G$ is the smallest $\sigma$-algebra containing each $A_\alpha$ also means that if $\mathcal G'$ is any other $\sigma$-algebra that contains each $A_\alpha$, then $\mathcal G \subseteq \mathcal G'$.
+
+
+\begin{remark}
+  The smallest $\sigma$-algebra under which $X$ is a random variable (under which $X$ is measurable) is exactly $\sigma(X)$.
+  It turns out that $\sigma(X) = X^{-1}(\mathcal B) =  \set{X \in B \st B \in \mathcal B}$, where $\mathcal B$ is the \emph{Borel} $\sigma$-algebra on $\R$.
+  Here $\mathcal B$ is the \emph{Borel} $\sigma$-algebra, defined to be the $\sigma$-algebra on $\R$ generated by all open intervals.
+\end{remark}
+\iffalse
+\begin{definition}
+  We say two random variables $X$ and $Y$ are independent if for every $A \in \sigma(X)$ and $B \in \sigma(Y)$, the events $A$ and $B$ are independent (i.e.\ $\P(A \cap B) = P(A) P(B)$, or $P(A \given B) = P(A)$).
+\end{definition}
+\fi
+\begin{definition}
+  We say the random variables $X_1$, \dots, $X_N$ are independent if for every $i \in \set{1 \dots N}$ and every $A_i \in \sigma(X_i)$ we have
+  \begin{equation*}
+    \P\paren[\big]{ A_1 \cap A_2 \cap \cdots \cap A_N } = \P(A_1) \, \P(A_2) \cdots \P(A_N) \, .
+  \end{equation*}
+\end{definition}
+\begin{remark}
+  Recall two events $A, B$ are independent if $\P(A \given B) = \P(A)$, or equivalently $A, B$ satisfy the multiplication law: $\P(A \cap B) = \P(A) \P(B)$.
+  A collection of events $A_1, \dots, A_N$ is said to be independent if \emph{any} sub collection $\set{A_{i_1}, \dots, A_{i_k}}$ satisfies the multiplication law.
+  \emph{This is a stronger condition than simply requiring $\P(A_1 \cap \cdots \cap A_N) = \P(A_1) \cdots \P(A_N)$.}
+  You should check, however, that if the random variables $X_1$, \dots, $X_N$, are all independent, then any collection of events of the form $\set{A_1, \dots A_N}$ with $A_i \in \sigma(X_i)$ is also independent.
+\end{remark}
+
+\begin{proposition}
+  Let $X_1$, \dots, $X_N$ be $N$ random variables.
+  The following are equivalent:
+  \begin{enumerate}
+    \item The random variables $X_1$, \dots, $X_N$ are independent.
+    \item For every $\alpha_1, \dots, \alpha_N \in \R$, we have
+      \begin{equation*}
+	\P\paren[\Big]{
+	  \bigcap_{j=1}^N \set{X_j \leq \alpha_j}
+	}
+	= \prod_{j=1}^N \P(X_j \leq \alpha_j)
+      \end{equation*}
+    \item For every collection of bounded continuous functions $f_1, \dots, f_N$ we have
+      \begin{equation*}
+	\E \brak[\Big]{ \prod_{j = 1}^N f_j(X_j) } = \prod_{j=1}^N \E f_j(X_j) \,.
+      \end{equation*}
+
+    \item
+      For every $\xi_1, \dots, \xi_N \in \R$ we have
+      \begin{equation*}
+	\E \exp\paren[\Big]{ i\sum_{j=1}^{N} \xi_j X_j }
+	= \prod_{i=1}^{N} \exp( i \xi_j X_j )\,.
+      \end{equation*}
+  \end{enumerate}
+\end{proposition}
+
+\begin{remark}
+  It is instructive to explicitly check each of these implications when $N = 2$ and $X_1, X_2$ are simple random variables.
+\end{remark}
+
+\begin{remark}
+  The intuition behind the above result is as follows:
+  Since the events $\set{X_j \leq \alpha_j}$ generate $\sigma(X_j)$, we expect the first two properties to be equivalent.
+  Since $\one_{(-\infty, \alpha_j]}$ can be well approximated by continuous functions, we expect equivalence of the second and third properties.
+  The last property is a bit more subtle: Since $\exp(a + b) = \exp(a) \exp(b)$, the third clearly implies the last property.
+  The converse holds because of ``completeness of the complex exponentials'' or Fourier inversion, and again a through discussion of this will lead us too far astray.
+\end{remark}
+
+\begin{remark}
+  The third implication above implies that independent random variables are uncorrelated. The converse, is of course false.
+  However, the normal correlation theorem guarantees that jointly normal uncorrelated variables are independent.
+\end{remark}
+
+
+\subsection{The covariance of Brownian motion}
+
+The independence of increments allows us to compute covariances of Brownian motion easily.
+Suppose $W$ is a standard Brownian motion, and $s < t$.
+Then we know $W_s \sim N(0, s)$, $W_t - W_s \sim N(0, t - s)$ and is independent of $W_s$.
+Consequently $(W_s, W_t - W_s)$ is jointly normal with mean $0$ and covariance matrix $(\begin{smallmatrix} s & 0\\ 0 & t-s \end{smallmatrix})$.
+This implies that $(W_s, W_t)$ is a jointly normal random variable.
+Moreover we can compute the covariance by
+\begin{equation*}
+  \E W_s W_t  = \E W_s (W_t - W_s) + \E W_s^2 = s\,.
+\end{equation*}
+In general if you don't assume $s < t$, the above immediately implies $\E W_s W_t = s \varmin t$.
+
+\section{The Martingale Property}
+
+A martingale is ``fair game''.
+Suppose you are playing a game and $M(t)$ is your cash stockpile at time $t$.
+As time progresses, you learn more and more information about the game.
+For instance, if it was black jack, you can count the number of face cards in play and know whether the deck is ``hot'' or not.
+If the outcome of the game is a martingale, then this extra information you have acquired \emph{can not} help you going forward. 
+That is, if you signal your ``big player'' at any point, you will not affect your expected return.
+
+Mathematically this translates to saying that the \emph{conditional expectation} of your stockpile at a later time given your present accumulated knowledge, is exactly the present value of your stockpile.
+Our aim in this section is to make this precise.
+
+\subsection{Conditional probability}
+
+Suppose you have an incomplete deck of cards which has $10$ red cards, and $20$ black cards.
+Suppose $5$ of the red cards are \emph{high cards} (i.e.\ ace, king, queen, jack or $10$), and only $4$ of the black cards are high.
+If a card is chosen at random, the \emph{conditional probability} of it being high given that it is red is $1/2$, and the \emph{conditional probability} of it being high given that it is black is $1/5$.
+Our aim is to encode both these facts into a single entity.
+
+We do this as follows.
+Let $R, B$ denote the set of all red and black cards respectively, and $H$ denote the set of all high cards.
+A $\sigma$-algebra encompassing all the above information is exactly
+\begin{multline*}
+  \mathcal G \defeq
+    \bigl\{\emptyset, R, B, H, H^c, R\cap H, B\cap H, R\cap H^c, B\cap H^c,
+      \\
+      (R\cap H) \cup (B\cap H^c), (R\cap H^c) \cup (B\cap H), \Omega \bigr\}\,
+\end{multline*}
+and you can explicitly compute the probabilities of each of the above events.
+A $\sigma$-algebra encompassing only the color of cards is exactly
+\begin{equation*}
+  \mathcal G \defeq \set{ \emptyset, R, B, \Omega }\,.
+\end{equation*}
+
+Now we define the \emph{conditional probability} of a card being high given the color to be the \textbf{random variable}
+\begin{equation*}
+  \P( H \given \mathcal C )
+    \defeq \P(H \given R) \one_R + \P(H \given B) \one_B
+    = \frac{1}{2} \one_R + \frac{1}{5} \one_B\,.
+\end{equation*}
+To emphasize:
+\begin{enumerate}
+  \item
+    What is given is the $\sigma$-algebra $\mathcal C$, and not just an event.
+  \item
+    The conditional probability is now a \emph{$\mathcal C$-measurable random variable} and not a number.
+\end{enumerate}
+
+To see how this relates to $\P(H \given R)$ and $\P(H \given B)$ we observe
+\begin{equation*}
+  \int_R \P( H \given \mathcal C ) \, d\P
+  \defeq \E \paren[\big]{ \one_R \P( H \given \mathcal C ) }
+  = \P( H \given R) \, \P(R) \,.
+\end{equation*}
+The same calculation also works for $B$, and so we have
+\begin{equation*}
+  \P( H \given R )
+    = \frac{1}{\P(R)} \int_R \P( H \given \mathcal C ) \, d\P
+  \quad\text{and}\quad
+  \P( H \given B )
+    = \frac{1}{\P(B)} \int_B \P( H \given \mathcal C ) \, d\P\,.
+\end{equation*}
+
+Our aim is now to generalize this to a non-discrete scenario.
+The problem with the above identities is that if either $R$ or $B$ had probability~$0$, then the above would become meaningless.
+However, clearing out denominators yields
+\begin{equation*}
+  \int_R \P( H \given \mathcal C) = \P( H \cap R )
+  \quad\text{and}\quad
+  \int_B \P( H \given \mathcal C) = \P( H \cap B )\,.
+\end{equation*}
+This suggests that the defining property of $\P( H \given \mathcal C)$ should be the identity
+\begin{equation}\label{e:cProb1}
+  \int_C \P( H \given \mathcal C) = \P( H \cap C )
+\end{equation}
+for every event $C \in \mathcal C$.
+Note $\mathcal C = \set{ \emptyset, R, B, \Omega }$ and we have only checked~\eqref{e:cProb1} for $C = R$ and $C = B$.
+However, for $C = \emptyset$ and $C = \Omega$, \eqref{e:cProb1} is immediate.
+
+\begin{definition}
+  Let $(\Omega, \mathcal G, \P)$ be a probability space, and $\mathcal F \subseteq \mathcal G$ be a $\sigma$-algebra.
+  Given $A \in \mathcal G$, we define the conditional probability of $A$ given $\mathcal F$, denoted by $\P( A \given \mathcal F)$ to be an $\mathcal F$-measurable random variable that satisfies 
+  \begin{equation}\label{e:cProb}
+    \int_F \P( H \given \mathcal F) = \P( H \cap F )
+    \quad\text{ for every } F \in \mathcal F.
+  \end{equation}
+\end{definition}
+
+\begin{remark}
+  Showing existence (and uniqueness) of the conditional probability isn't easy, and relies on the \emph{Radon-Nikodym theorem}, which is beyond the scope of this course.
+\end{remark}
+
+\begin{remark}
+  It is crucial to require that $\P( H \given \mathcal F )$ is measurable with respect to $\mathcal F$.
+  Without this requirement we could simply choose $\P( H \given \mathcal F) = \one_H$ and~\eqref{e:cProb} would be satisfied.
+  However, note that if $H \in \mathcal F$, then the function $\one_F$ is $\mathcal F$-measurable, and in this case $\P( H \given \mathcal F ) = \one_F$.
+\end{remark}
+
+\begin{remark}
+  In general we can only expect~\eqref{e:cProb} to hold for all events in $\mathcal F$, and it need not hold for events in $\mathcal G$!
+  Indeed, in the example above we see that
+  \begin{equation*}
+    \int_H \P( H \given \mathcal C) \, d\P
+      = \frac{1}{2} \P(R \cap H) + \frac{1}{5} \P( B \cap H )
+      = \frac{1}{2} \cdot \frac{5}{30} + \frac{1}{5} \cdot \frac{4}{30}
+      = \frac{11}{100}
+  \end{equation*}
+  but
+  \begin{equation*}
+      \P(H \cap H) = \P(H) = \frac{3}{10} \neq \frac{11}{100}\,.
+  \end{equation*}
+\end{remark}
+
+\begin{remark}
+  One situation where you can compute $\P( A \given \mathcal F)$ explicitly is when $\mathcal F = \sigma( \set{F_i} )$ where $\set{F_i}$ is a pairwise disjoint collection of events whose union is all of $\Omega$ and $\P(F_i) > 0 $ for all $i$.
+  In this case
+  \begin{equation*}
+    \P(A \given \mathcal F)
+      = \sum_i \frac{\P( A \cap F_i )}{\P(F_i)} \one_{F_i} \,.
+  \end{equation*}
+\end{remark}
+
+\subsection{Conditional expectation.}
+
+Consider now the situation where $X$ is a $\mathcal G$-measurable random variable and $\mathcal F \subseteq G$ is some $\sigma$-sub-algebra.
+The conditional expectation of $X$ given $\mathcal F$ (denoted by $\E( X \given \mathcal F)$ is the ``best approximation'' of $X$ by a $\mathcal F$ measurable random variable.
+
+Consider the incomplete deck example from the previous section: where you have an incomplete deck of cards which has $10$ red cards (of which $5$ are high), and $20$ black cards (of which $4$ are high).
+Let $X$ be the outcome of a game where you win $\$1$ if a high card is drawn and lose $\$1$ otherwise.
+You play this game through a bookie, who pays you your winnings but only tells you the color of the card that is drawn, and not whether it is high or not.
+After playing this game often the only information you can deduce is that your expected return is $0$ when a red card is drawn and $-3/5$ when a black card is drawn.
+That is, you approximate the game by the random variable
+\begin{equation*}
+  Y \defeq 0 \one_R - \frac{3}{5} \one_B\,,
+\end{equation*}
+where, as before $R, B$ denote the set of all red and black cards respectively. 
+
+Note that the events you can deduce information about by playing this game (through the bookie) are exactly elements of the $\sigma$-algebra $\mathcal C = \set{\emptyset, R, B, \Omega}$.
+By construction, that your approximation $Y$ is $\mathcal C$-measurable, and has the same averages as $X$ on all elements of $\mathcal C$.
+That is, for every $C \in \mathcal C$, we have
+\begin{equation*}
+  \int_C Y \, d\P = \int_C X \, d\P \,.
+\end{equation*}
+This is how we define conditional expectation.
+
+\textbf{2017-01-16: More will be added here later.}
+
+
+\subsection{Adapted processes and filtrations}
+
+Let $X$ be any stochastic process (for example Brownian motion).
+For any $t > 0$, we've seen before that $\sigma(X(t))$ represents the information you obtain by observing $X(t)$.
+Accumulating this over time gives us the \emph{filtration}.
+
+\begin{definition}
+  The \emph{filtration generated $X$} is the family of $\sigma$-algebras $\set{\mathcal F^X_t \st t \geq 0}$ where
+  \begin{equation*}
+    \mathcal F_t^X \defeq \sigma\paren[\Big]{ \bigcup_{s \leq t} \sigma(X_s) }
+    \,.
+  \end{equation*}
+\end{definition}
+
+Clearly each $\mathcal F_t^X$ is a $\sigma$-algebra, and if $s \leq t$, $\mathcal F^X_s \subseteq \mathcal F^X_t$.
+A family of $\sigma$-algebras with this property is called a \emph{filtration}.
+
+\begin{definition}
+  A \emph{filtration} is a family of $\sigma$-algebras $\set{ \mathcal F_t \st t \geq 0}$ such that whenever $s \leq t$, we have $\mathcal F_s \subseteq \mathcal F_t$.
+\end{definition}
+
+The $\sigma$-algebra $\mathcal F_t$ represents the information accumulated up to time $t$.
+When given a filtration, it is important that all stochastic processes we construct respect the flow of information because trading / pricing strategies can not rely on the price at a later time, and gambling strategies do not know the outcome of the next hand.
+This is called \emph{adapted}.
+
+\begin{definition}
+  A stochastic process $X$ is said to be \emph{adapted} to a filtration $\set{\mathcal F_t \st t \geq 0}$ if for every $t$ the random variable $X(t)$ is $\mathcal F_t$ measurable (i.e.\ $\set{X(t) \leq \alpha} \in \mathcal F_t$ for every $\alpha \in \R$, $t \geq 0$).
+\end{definition}
+
+Clearly a process $X$ is adapted with respect to the filtration it generates $\set{\mathcal F_t^X}$.
+%Most of the time the filtration chosen will be the \emph{Brownian filtrations} (i.e.\ the filtration generated by Brownian motion).
+
+\subsection{Martingales}
+
+TODO.
 \end{document}
