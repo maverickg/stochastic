@@ -1,5 +1,5 @@
 \ProvidesPackage{marktext}[2016/07/16]
-% Last modified: Fri 09 Dec 2016 09:59:47 AM EST
+% Last modified: Tue 17 Jan 2017 02:29:21 PM EST
 
 \newif\ifMT@draft\MT@draftfalse
 \newif\ifMT@shift\MT@shiftfalse
@@ -26,6 +26,9 @@
 	\geometry{asymmetric,left=72pt,width=345pt,marginparwidth=175pt,top=72pt,bottom=72pt}
       }{}
       \@ifclassloaded{amsart}{
+	\geometry{asymmetric,left=72pt,width=360pt,marginparwidth=160pt,top=72pt,bottom=72pt}
+      }{}
+      \@ifclassloaded{amsbook}{
 	\geometry{asymmetric,left=72pt,width=360pt,marginparwidth=160pt,top=72pt,bottom=72pt}
       }{}
     \else

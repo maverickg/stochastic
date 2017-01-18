@@ -427,8 +427,11 @@ In general if you don't assume $s < t$, the above immediately implies $\E W_s W_
 A martingale is ``fair game''.
 Suppose you are playing a game and $M(t)$ is your cash stockpile at time $t$.
 As time progresses, you learn more and more information about the game.
-For instance, if it was black jack, you can count the number of face cards in play and know whether the deck is ``hot'' or not.
-If the outcome of the game is a martingale, then this extra information you have acquired \emph{can not} help you going forward. 
+For instance, in blackjack getting a high card benefits the player more than the dealer, and a common card counting strategy is to have a ``spotter'' betting the minimum while counting the high cards.
+When the odds of getting a high card are favorable enough, the player will signal a ``big player'' who joins the table and makes large bets, as long as the high card count is favorable.
+Variants of this strategy have been shown to give the player up to a 2\% edge over the house.
+
+If a game is a martingale, then this extra information you have acquired \emph{can not} help you going forward. 
 That is, if you signal your ``big player'' at any point, you will not affect your expected return.
 
 Mathematically this translates to saying that the \emph{conditional expectation} of your stockpile at a later time given your present accumulated knowledge, is exactly the present value of your stockpile.
@@ -549,9 +552,10 @@ However, for $C = \emptyset$ and $C = \Omega$, \eqref{e:cProb1} is immediate.
 Consider now the situation where $X$ is a $\mathcal G$-measurable random variable and $\mathcal F \subseteq G$ is some $\sigma$-sub-algebra.
 The conditional expectation of $X$ given $\mathcal F$ (denoted by $\E( X \given \mathcal F)$ is the ``best approximation'' of $X$ by a $\mathcal F$ measurable random variable.
 
-Consider the incomplete deck example from the previous section: where you have an incomplete deck of cards which has $10$ red cards (of which $5$ are high), and $20$ black cards (of which $4$ are high).
-Let $X$ be the outcome of a game where you win $\$1$ if a high card is drawn and lose $\$1$ otherwise.
-You play this game through a bookie, who pays you your winnings but only tells you the color of the card that is drawn, and not whether it is high or not.
+Consider the incomplete deck example from the previous section, where you have an incomplete deck of cards which has $10$ red cards (of which $5$ are high), and $20$ black cards (of which $4$ are high).
+You a game through a dealer who pays you $\$1$ when a high card is drawn, and charges you $\$1$ otherwise.
+\emph{However, the dealer only tells you the color of the card drawn and your winnings, and not the rules of the game or whether the card was high.}
+
 After playing this game often the only information you can deduce is that your expected return is $0$ when a red card is drawn and $-3/5$ when a black card is drawn.
 That is, you approximate the game by the random variable
 \begin{equation*}
@@ -559,7 +563,7 @@ That is, you approximate the game by the random variable
 \end{equation*}
 where, as before $R, B$ denote the set of all red and black cards respectively. 
 
-Note that the events you can deduce information about by playing this game (through the bookie) are exactly elements of the $\sigma$-algebra $\mathcal C = \set{\emptyset, R, B, \Omega}$.
+Note that the events you can deduce information about by playing this game (through the dealer) are exactly elements of the $\sigma$-algebra $\mathcal C = \set{\emptyset, R, B, \Omega}$.
 By construction, that your approximation $Y$ is $\mathcal C$-measurable, and has the same averages as $X$ on all elements of $\mathcal C$.
 That is, for every $C \in \mathcal C$, we have
 \begin{equation*}

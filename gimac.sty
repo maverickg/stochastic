@@ -1,6 +1,6 @@
 \ProvidesPackage{gimac}
 % Misc. macros for Gautam Iyer.
-% Last modified: Sat 14 Jan 2017 12:24:25 AM EST
+% Last modified: Tue 17 Jan 2017 03:30:10 PM EST
 
 \newif\ifGI@exam
 \@ifclassloaded{exam}{\GI@examtrue}{\GI@examfalse}
@@ -47,11 +47,13 @@
   % same as amsart, one column with default margins on US letter paper, so
   % that no overfull hboxes are created / destroyed.
   \RequirePackage{geometry}
+  \setlength{\columnsep}{34.98999pt} % article, 10pt, letter (lw=345pt)
   \@ifclassloaded{amsart}{
     \setlength{\columnsep}{24.98999pt} % amsart,  10pt, letter (lw=360pt)
-  }{
-    \setlength{\columnsep}{34.98999pt} % article, 10pt, letter (lw=345pt)
-  }
+  }{}
+  \@ifclassloaded{amsbook}{
+    \setlength{\columnsep}{24.98999pt} % amsbook, 10pt, letter (lw=360pt)
+  }{}
   \geometry{landscape,includehead,headheight=12pt,headsep=10pt,left=\columnsep,right=\columnsep,top=12.98999pt,bottom=\columnsep}
   \twocolumn
 
