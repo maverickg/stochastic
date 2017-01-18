@@ -1,6 +1,6 @@
 \ProvidesPackage{gimac}
 % Misc. macros for Gautam Iyer.
-% Last modified: Tue 17 Jan 2017 03:30:10 PM EST
+% Last modified: Tue 17 Jan 2017 11:06:22 PM EST
 
 \newif\ifGI@exam
 \@ifclassloaded{exam}{\GI@examtrue}{\GI@examfalse}
@@ -227,18 +227,20 @@
 %
 % Test if we're in a display or not
 %
-\newif\ifGI@textstyle
-\GI@textstyletrue
-\everydisplay\expandafter{\the\everydisplay\GI@textstylefalse}
+%\newif\ifGI@textstyle
+%\GI@textstyletrue
+%\everydisplay\expandafter{\the\everydisplay\GI@textstylefalse}
 
 %
 % Norms and parenthesis
 %
-\DeclarePairedDelimiter{\paren}{(}{)}
 \DeclarePairedDelimiter{\brak}{[}{]}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 
+\DeclarePairedDelimiterX\paren[1]{(}{)}{%
+  \renewcommand{\given}{\nonscript\:\mathopen{}\delimsize\vert\nonscript\:\mathopen}#1%
+}
 \DeclarePairedDelimiterX\set[1]\{\}{%
   \newcommand{\st}{\nonscript\:\delimsize\vert\nonscript\:\mathopen{}\allowbreak}#1}
 
@@ -247,11 +249,10 @@
 \DeclarePairedDelimiter{\qv}{\langle}{\rangle}
 \DeclarePairedDelimiter{\av}{\langle}{\rangle}
 
-\newcommand{\ip}[3][]{\av[#1]{#2,#3}}
-\WithSuffix\newcommand\ip*[2]{\av{#1,#2}}
-\newcommand{\given}[1][\big]{\;\ifGI@textstyle|\else#1|\fi\;}
-\WithSuffix\newcommand\given*{\;\middle|\;}
-\newcommand{\at}[2][\Bigr]{\ifGI@textstyle|\else#1|_{#2}\fi}
-\WithSuffix\newcommand\at*[1]{\middle|_{#1}}
+%\newcommand{\ip}[3][]{\av[#1]{#2,#3}}
+%\WithSuffix\newcommand\ip*[2]{\av{#1,#2}}
+\newcommand{\given}[1][\big]{\nonscript\;|\nonscript\;}
+%\newcommand{\at}[2][\Bigr]{\ifGI@textstyle|\else#1|_{#2}}
+%\WithSuffix\newcommand\at*[1]{\middle|_{#1}}
 
 \newcommand{\defeq}{\stackrel{\scriptscriptstyle\textup{def}}{=}}

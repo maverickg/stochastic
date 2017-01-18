@@ -476,7 +476,7 @@ To emphasize:
 To see how this relates to $\P(H \given R)$ and $\P(H \given B)$ we observe
 \begin{equation*}
   \int_R \P( H \given \mathcal C ) \, d\P
-  \defeq \E \paren[\big]{ \one_R \P( H \given \mathcal C ) }
+  \defeq \E \paren[\big]{ \one_R \P\paren{ H \given \mathcal C } }
   = \P( H \given R) \, \P(R) \,.
 \end{equation*}
 The same calculation also works for $B$, and so we have
@@ -485,7 +485,7 @@ The same calculation also works for $B$, and so we have
     = \frac{1}{\P(R)} \int_R \P( H \given \mathcal C ) \, d\P
   \quad\text{and}\quad
   \P( H \given B )
-    = \frac{1}{\P(B)} \int_B \P( H \given \mathcal C ) \, d\P\,.
+    = \frac{1}{\P(B)} \int_B \P\paren{ H \given \mathcal C } \, d\P\,.
 \end{equation*}
 
 Our aim is now to generalize this to a non-discrete scenario.
@@ -553,7 +553,7 @@ Consider now the situation where $X$ is a $\mathcal G$-measurable random variabl
 The conditional expectation of $X$ given $\mathcal F$ (denoted by $\E( X \given \mathcal F)$ is the ``best approximation'' of $X$ by a $\mathcal F$ measurable random variable.
 
 Consider the incomplete deck example from the previous section, where you have an incomplete deck of cards which has $10$ red cards (of which $5$ are high), and $20$ black cards (of which $4$ are high).
-You a game through a dealer who pays you $\$1$ when a high card is drawn, and charges you $\$1$ otherwise.
+Let $X$ be the outcome of a game played through a dealer who pays you $\$1$ when a high card is drawn, and charges you $\$1$ otherwise.
 \emph{However, the dealer only tells you the color of the card drawn and your winnings, and not the rules of the game or whether the card was high.}
 
 After playing this game often the only information you can deduce is that your expected return is $0$ when a red card is drawn and $-3/5$ when a black card is drawn.
@@ -571,8 +571,48 @@ That is, for every $C \in \mathcal C$, we have
 \end{equation*}
 This is how we define conditional expectation.
 
-\textbf{2017-01-16: More will be added here later.}
+\begin{definition}
+  Let $X$ be a $\mathcal G$-measurable random variable, and $\mathcal F \subseteq \mathcal G$ be a $\sigma$-sub-algebra.
+  We define $\E(X \given \mathcal F)$, the \emph{conditional expectation of $X$ given $\mathcal F$} to be a \emph{random variable} such that:
+  \begin{enumerate}
+    \item
+      $\E( X \given \mathcal F)$ is $\mathcal G$-measurable.
 
+    \item
+      For every $F \in \mathcal F$, we have
+      \begin{equation*}
+	\int_F \E(X \given \mathcal F) \, d\P = \int_F X \, d\P.
+      \end{equation*}
+  \end{enumerate}
+\end{definition}
+
+\begin{remark}
+  Under mild integrability assumptions one can show that conditional expectations exist and are unique.
+  This requires the \emph{Radon-Nikodym} theorem and goes beyond the scope of this course.
+  If, however, $\mathcal F = \sigma( \set{F_i} )$ where $\set{F_i}$ is a pairwise disjoint collection of events whose union is all of $\Omega$ and $\P(F_i) > 0 $ for all $i$, then
+  \begin{equation*}
+    \E( X \given \mathcal F)
+      = \sum_i \frac{1}{\P(F_i)} \int_{F_i} X \, d\P \,.
+  \end{equation*}
+\end{remark}
+
+\begin{remark}
+  Note we defined and motivated conditional expectations and conditional probabilities independently.
+  They are however intrinsically related:
+  Indeed, $\E( \one_A \given \mathcal F) = \P( A \given \mathcal F)$, and this can be checked easily using the definitions.
+\end{remark}
+
+\begin{remark}
+  From the definition it immediately follows that if $X$ is $\mathcal F$-measurable, then $\E(X \given \mathcal F) = X$.
+  More generally, if $X$ is $\mathcal F$ measurable and $Y$ is any random variable (not necessarily $\mathcal F$-measurable) then
+  \begin{equation*}
+    \E( XY \given \mathcal F) = X \E( Y \given \mathcal F ) \,,
+  \end{equation*}
+  but this is harder to prove.
+  (The idea behind the proof is to approximate $X$ by $\mathcal F$-measurable \emph{simple} random variables.)
+\end{remark}
+
+Conditional expectations are tremendously important in probability, and we will develop many properties of them as we progress.
 
 \subsection{Adapted processes and filtrations}
 
