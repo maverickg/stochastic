@@ -185,6 +185,11 @@ For general random variables, we define the expectation by approximation.
   \begin{equation*}
     \E Y = \int_\Omega Y \, d\P\,.
   \end{equation*}
+  More generally, if $A \in \mathcal G$ we define
+  \begin{equation*}
+    \int_A Y \, d\P \defeq \E \paren{ \one_{A} Y} \,,
+  \end{equation*}
+  and when $A = \Omega$ we will often omit writing it.
 \end{remark}
 
 \begin{proposition}[Linearity]
@@ -576,7 +581,7 @@ This is how we define conditional expectation.
   We define $\E(X \given \mathcal F)$, the \emph{conditional expectation of $X$ given $\mathcal F$} to be a \emph{random variable} such that:
   \begin{enumerate}
     \item
-      $\E( X \given \mathcal F)$ is $\mathcal G$-measurable.
+      $\E( X \given \mathcal F)$ is $\mathcal F$-measurable.
 
     \item
       For every $F \in \mathcal F$, we have
@@ -585,6 +590,10 @@ This is how we define conditional expectation.
       \end{equation*}
   \end{enumerate}
 \end{definition}
+
+\begin{remark}
+  Choosing $F = \Omega$ we see $\E \E(X\given \mathcal F) = \E X$.
+\end{remark}
 
 \begin{remark}
   Under mild integrability assumptions one can show that conditional expectations exist and are unique.
@@ -599,20 +608,58 @@ This is how we define conditional expectation.
 \begin{remark}
   Note we defined and motivated conditional expectations and conditional probabilities independently.
   They are however intrinsically related:
-  Indeed, $\E( \one_A \given \mathcal F) = \P( A \given \mathcal F)$, and this can be checked easily using the definitions.
+  Indeed, $\E( \one_A \given \mathcal F) = \P( A \given \mathcal F)$, and this can be checked directly from the definition.
 \end{remark}
 
-\begin{remark}
-  From the definition it immediately follows that if $X$ is $\mathcal F$-measurable, then $\E(X \given \mathcal F) = X$.
-  More generally, if $X$ is $\mathcal F$ measurable and $Y$ is any random variable (not necessarily $\mathcal F$-measurable) then
+Conditional expectations are tremendously important in probability, and we will encounter it often as we progress.
+This is probably the first visible advantage of the measure theoretic approach, over the previous ``intuitive'' or discrete approach to probability.
+
+\begin{proposition}
+  Conditional expectations satisfy the following properties.
+  \begin{enumerate}
+    \item
+      \emph{(Linearity)}
+      If $X, Y$ are random variables, and $\alpha \in \R$ then
+      \begin{equation*}
+	\E( X + \alpha Y \given \mathcal F ) = \E( X \given \mathcal F ) + \alpha \E( Y \given \mathcal F )\,.
+      \end{equation*}
+
+    \item
+      \emph{(Positivity)}
+      If $X \leq Y$, then $\E(X \given \mathcal F) \leq \E(Y \given \mathcal F)$ (almost surely).
+
+    \item If $X$ is $\mathcal F$ measurable and $Y$ is an arbitrary (not necessarily $\mathcal F$-measurable) random variable then (almost surely)
+      \begin{equation*}
+	\E( XY \given \mathcal F) = X \E( Y \given \mathcal F ) \,.
+      \end{equation*}
+      In particular, if $X$ is $\mathcal F$ measurable then $\E( X \given \mathcal F) = X$.
+    \item
+      If $X$ is independent\footnote{%
+	We say a random variable $X$ is independent of $\sigma$-algebra $\mathcal F$ if for every $A \in \sigma(X)$ and $B \in \mathcal F$ the events $A$ and $B$ are independent.%
+      }
+      of $\mathcal F$, then $\E( X \given \mathcal F) = \E X$.
+    \item
+      \emph{(Tower property)}
+      If $\mathcal E \subseteq \mathcal F \subseteq \mathcal G$ are $\sigma$-algebras, then (almost surely)
+      \begin{equation*}
+	\E\paren{ X \given \mathcal E } =
+	  \E\paren[\Big]{ \E\paren{ X \given \mathcal F } \given \mathcal E }\,.
+      \end{equation*}
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  The first property follows immediately from linearity.
+  For the second property, set $Z = Y - X$ and observe
   \begin{equation*}
-    \E( XY \given \mathcal F) = X \E( Y \given \mathcal F ) \,,
+    \int_{\E(Z \given \mathcal F)} \E(Z \given \mathcal F) \, d\P
+    = \int_{\E(Z \given \mathcal F)} Z \, d\P
+    \geq 0\,,
   \end{equation*}
-  but this is harder to prove.
-  (The idea behind the proof is to approximate $X$ by $\mathcal F$-measurable \emph{simple} random variables.)
-\end{remark}
-
-Conditional expectations are tremendously important in probability, and we will develop many properties of them as we progress.
+  which can only happen if $\P( \E( Z \given \mathcal F ) < 0 ) = 0$.
+  The third property is easily checked for simple random variables, and follows in general by approximating.
+  The same is true for the fourth property.
+  The tower property follows immediately from the definition.
+\end{proof}
 
 \subsection{Adapted processes and filtrations}
 
@@ -648,5 +695,130 @@ Clearly a process $X$ is adapted with respect to the filtration it generates $\s
 
 \subsection{Martingales}
 
-TODO.
+Recall, a martingale is a ``fair game''.
+Using conditional expectations, we can now define this precisely.
+
+\begin{definition}
+  A stochastic process $M$ is a martingale with respect to a filtration $\set{\mathcal F_t}$ if:
+  \begin{enumerate}
+    \item
+       $M$ is adapted to the filtration $\set{\mathcal F_t}$.
+    \item
+      For any $s < t$ we have $\E\paren{ M(t) \given \mathcal F_s} = M(s)$, almost surely.
+  \end{enumerate}
+\end{definition}
+\begin{remark}
+  A \emph{sub-martingale} is an adapted process $M$ for which $\E(M(t) \given \mathcal F_s) \geq \mathcal F_s$, and a \emph{super-martingale} if $\E( M(t) \given \mathcal F_s) \leq M(s)$.
+  Thus $\E M(t)$ is an increasing function of time if $M$ is a sub-martingale, constant in time if $M$ is a martingale, and a decreasing function of time if $M$ is a super-martingale.
+\end{remark}
+
+\begin{remark}
+  It is crucial to specify the filtration when talking about martingales, as it is certainly possible that a process is a martingale with respect to one filtration but not with respected to another.
+  For our purposes the filtration will almost always be the \emph{Brownian filtration} (i.e.\ the filtration generated by Brownian motion).
+\end{remark}
+
+\begin{example}
+  Let $\set{\mathcal F_t}$ be a filtration, $\mathcal F_\infty = \sigma( \cup_{t \geq 0} \mathcal F_t )$, and $X$ be any $\mathcal F_\infty$-measurable random variable.
+  The process $M(t) \defeq \E\paren{ X_\infty \given \mathcal F_t }$ is a martingale with respect to the filtration $\set{\mathcal F_t}$.
+\end{example}
+
+
+In discrete time a random walk is a martingale, so it is natural to expect that in continuous time Brownian motion is a martingale as well.
+
+\begin{theorem}
+  Let $W$ be a Brownian motion, $\mathcal F_t = \mathcal F_t^W$ be the Brownian filtration.
+  Brownian motion is a martingale with respect to this filtration.
+\end{theorem}
+\begin{proof}
+  By independence of increments, $W(t) - W(s)$ is certainly independent of $W(r)$ for any $r \leq s$.
+  Since $\mathcal F_s = \sigma( \cup_{r \leq s}\sigma(W(r)) )$ we expect that $W(t) - W(s)$ is independent of~$\mathcal F_s$.
+  Consequently
+  \begin{equation*}
+    \E( W(t) \given \mathcal F_s )
+      = \E( W(t) - W(s) \given \mathcal F_s)
+        + \E( W(s) \given \mathcal F_s)
+      = 0 + W(s) = W(s)\,.
+      \qedhere
+  \end{equation*}
+\end{proof}
+
+\begin{theorem}
+  Let $W$ be a standard Brownian motion (i.e. a Brownian motion normalized so that $W(0) = 0$ and $\var(W(t)) = t$).
+  For any $C^{1,2}_b$ function%
+  \footnote{%
+    Recall a function $f = f(t, x)$ is said to be $C^{1,2}$ if it is $C^1$ in $t$ (i.e.\ once continuously differentiable), $C^2$ in $x$.
+    The space $C^{1,2}_b$ refers to all $C^{1,2}$ functions $f$ for which and $f$, $\partial_t f$, $\partial_x f$, $\partial_x^2 f$ are all bounded functions.%
+  }
+  $f = f(t, x)$ the process
+  \begin{equation*}
+    M(t) \defeq f(t, W(t))
+      - \int_0^t \paren[\Big]{
+	  \partial_t f(s, W(s)) + \frac{1}{2} \partial_x^2 f(s, W(s))
+	} \, ds
+  \end{equation*}
+  is a martingale (with respect to the Brownian filtration).
+\end{theorem}
+\begin{proof}
+  This is an extremely useful fact about Brownian motion follows quickly from the It\^o formula, which we will discuss later.
+  However, at this stage, we can provide a simple, elegant and instructive proof as follows.
+
+  Adaptedness of $M$ is easily checked.
+  To compute $\E( M(t) \given \mathcal F_r )$ we first observe
+  \begin{equation*}
+    \E \paren[\big]{ f( t, W(t) ) \given \mathcal F_r }
+    = \E \paren[\big]{ f( t, \brak{W(t) - W(r)} + W(r) ) \given \mathcal F_r }.
+  \end{equation*}
+  Since $W(t) - W(r) \sim N(0, t - r)$ and is independent of $\mathcal F_r$, the above conditional expectation can be computed by
+  \begin{equation*}
+    \E \paren[\big]{ f( t, \brak{W(t) - W(r)} + W(r) ) \given \mathcal F_r }
+    = \int_\R f(t, y + W(r)) G(t -r, y) \, dy \,,
+  \end{equation*}
+  where
+  \begin{equation*}
+    G(\tau , y ) = \frac{1}{\sqrt{2 \pi \tau}} \exp\paren[\Big]{ \frac{-y^2}{\tau} }
+  \end{equation*}
+  is the density of $W(t) - W(r)$.
+
+  Similarly
+  \begin{align*}
+    \MoveEqLeft
+    \E\paren[\Big]{
+      \int_0^t \paren[\big]{
+	\partial_t f(s, W(s)) + \frac{1}{2} \partial_x^2 f(s, W(s))
+      } \, ds \given \mathcal F_r}
+    \\
+    &= \int_0^r \partial_t \paren[\big]{ f(s, W(s)) + \frac{1}{2} \partial_x^2 f(s, W(s)) } \, ds
+    \\
+    &\qquad
+      + \int_r^t \int_\R \paren[\big]{
+	    f(s, y + W(r)) + \frac{1}{2} \partial_x^2 f(s, y + W(r))
+	} G(s - r, y) \, ds
+  \end{align*}
+  Hence
+  \begin{align*}
+    \MoveEqLeft
+    \E\paren{ M(t) \given \mathcal F_s } - M(s)
+    = \int_\R f(t, y + W(r)) G(t -r, y) \, dy 
+    \\
+      &+ \int_r^t \int_\R \paren[\big]{
+	    f(s, y + W(r)) + \frac{1}{2} \partial_x^2 f(s, y + W(r))
+	} G(s - r, y) \, ds
+    \\
+      &- f(r, W(r))\,.
+  \end{align*}
+  We claim that the right hand side of the above vanishes.
+  In fact, we claim the (deterministic) identity 
+  \begin{multline*}
+    \int_r^t \int_\R \paren[\big]{
+	  f(s, y + x) + \frac{1}{2} \partial_x^2 f(s, y + x))
+      } G(s - r, y) \, ds
+    \\
+    + \int_\R f(t, y + x) G(t -r, y) \, dy 
+      - f(r, x) = 0 \,,
+  \end{multline*}
+  holds for any function $f$ and $x \in \R$.
+  For those readers who are familiar with PDEs, this is simply the Duhamel's principle for the heat equation.
+  If you're unfamiliar with this, the above identity can be easily checked using the fact that $\partial_\tau G = \frac{1}{2} \partial_y^2 G$ and integrating the first integral by parts.
+  We leave this calculation to the reader.
+\end{proof}
 \end{document}
