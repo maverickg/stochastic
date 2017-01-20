@@ -821,4 +821,36 @@ In discrete time a random walk is a martingale, so it is natural to expect that 
   If you're unfamiliar with this, the above identity can be easily checked using the fact that $\partial_\tau G = \frac{1}{2} \partial_y^2 G$ and integrating the first integral by parts.
   We leave this calculation to the reader.
 \end{proof}
+\subsection{Stopping Times}
+
+For this section we assume that a filtration $\set{\mathcal F_t}$ is given to us, and fixed.
+
+Consider a game (played in continuous time) where you have the option to walk away at any time.
+Let $\tau$ be the \emph{random} time you decide to stop playing and walk away.
+In order to respect the flow of information, you need to be able to decide weather you have stopped using only information up to the present.
+At time $t$, event $\set{\tau \leq t}$ is exactly when you have stopped and walked away.
+Thus, to respect the flow of information, we need to ensure $\set{\tau \leq t} \in \mathcal F_t$.
+
+\begin{definition}
+  A stopping time is a function $\tau\colon \Omega \to [0, \infty)$ such that for every $t \geq 0$ the event $\set{\tau \leq t} \in \mathcal F_t$.
+\end{definition}
+
+A standard example of a stopping time is \emph{hitting times}.
+Say you decide to liquidate your position once the value of your portfolio reaches a certain threshold.
+The time at which you liquidate is a hitting time, and under mild assumptions on the filtration, will always be a stopping time.
+
+\begin{definition}
+  Let $X$ be an adapted continuous process, $\alpha \in \R$ and $\tau$ be the first time $X$ hits $\alpha$ (i.e.\ $\tau  = \inf\set{t \geq 0 \st X(t) = \alpha })$.
+  Then $\tau$ is a stopping time (if the filtration is right continuous).
+\end{definition}
+
+\begin{theorem}[Doob's optional sampling theorem]
+  If $M$ is a martingale and $\tau$ is a bounded stopping time.
+  Then the stopped process $M^\tau(t) \defeq M(\tau \varmin t)$ is also a martingale.
+  Consequently, $\E M(\tau \varmin t) = \E M(0) = \E M(t)$.
+\end{theorem}
+
+The proof goes beyond the scope of these notes, and can be found in any standard reference.
+What this means is that if the game you're playing is a martingale, you can not improve your odds by walking away from it at a stopping time since the stopped process is also a martingale.
+
 \end{document}
