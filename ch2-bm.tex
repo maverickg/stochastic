@@ -30,7 +30,10 @@ Note first
 \begin{equation*}
   \var S(t) = \floor{t} + (t - \floor{t})^2,
 \end{equation*}
-and consequently
+and\footnote{%
+  Here $\floor{x}$ denotes the greatest integer smaller than $x$. That is, $\floor{x} = \max\set{ n \in \Z \st n \leq x }$.
+}
+consequently
 \begin{equation*}
   \var S_\epsilon(t)
     = \alpha_\epsilon^2 \paren[\Big]{
@@ -391,7 +394,8 @@ The fact that $\mathcal G$ is the smallest $\sigma$-algebra containing each $A_\
       For every $\xi_1, \dots, \xi_N \in \R$ we have
       \begin{equation*}
 	\E \exp\paren[\Big]{ i\sum_{j=1}^{N} \xi_j X_j }
-	= \prod_{i=1}^{N} \exp( i \xi_j X_j )\,.
+	= \prod_{j=1}^{N} \E \exp( i \xi_j X_j )\,,
+	\quad\text{ where } i = \sqrt{-1}\,.
       \end{equation*}
   \end{enumerate}
 \end{proposition}
@@ -708,7 +712,7 @@ Using conditional expectations, we can now define this precisely.
   \end{enumerate}
 \end{definition}
 \begin{remark}
-  A \emph{sub-martingale} is an adapted process $M$ for which $\E(M(t) \given \mathcal F_s) \geq \mathcal F_s$, and a \emph{super-martingale} if $\E( M(t) \given \mathcal F_s) \leq M(s)$.
+  A \emph{sub-martingale} is an adapted process $M$ for which we have $\E(M(t) \given \mathcal F_s) \geq \mathcal F_s$, and a \emph{super-martingale} if $\E( M(t) \given \mathcal F_s) \leq M(s)$.
   Thus $\E M(t)$ is an increasing function of time if $M$ is a sub-martingale, constant in time if $M$ is a martingale, and a decreasing function of time if $M$ is a super-martingale.
 \end{remark}
 
@@ -839,18 +843,21 @@ A standard example of a stopping time is \emph{hitting times}.
 Say you decide to liquidate your position once the value of your portfolio reaches a certain threshold.
 The time at which you liquidate is a hitting time, and under mild assumptions on the filtration, will always be a stopping time.
 
-\begin{definition}
+\begin{proposition}
   Let $X$ be an adapted continuous process, $\alpha \in \R$ and $\tau$ be the first time $X$ hits $\alpha$ (i.e.\ $\tau  = \inf\set{t \geq 0 \st X(t) = \alpha })$.
   Then $\tau$ is a stopping time (if the filtration is right continuous).
-\end{definition}
+\end{proposition}
 
 \begin{theorem}[Doob's optional sampling theorem]
   If $M$ is a martingale and $\tau$ is a bounded stopping time.
   Then the stopped process $M^\tau(t) \defeq M(\tau \varmin t)$ is also a martingale.
   Consequently, $\E M(\tau \varmin t) = \E M(0) = \E M(t)$.
 \end{theorem}
+\begin{remark}
+  If instead of assuming $\tau$ is bounded, we assume $M^\tau$ is bounded the above result is still true.
+\end{remark}
 
 The proof goes beyond the scope of these notes, and can be found in any standard reference.
-What this means is that if the game you're playing is a martingale, you can not improve your odds by walking away from it at a stopping time since the stopped process is also a martingale.
-
+What this means is that if you're playing a fair game, then you can not hope to improve your odds by ``quitting when you're ahead''.
+Any rule by which you decide to stop, must be a stopping time and the above result guarantees that stopping a martingale still yields a martingale.
 \end{document}
