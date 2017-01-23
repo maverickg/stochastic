@@ -1,6 +1,6 @@
 \ProvidesPackage{gimac}
 % Misc. macros for Gautam Iyer.
-% Last modified: Tue 17 Jan 2017 11:06:22 PM EST
+% Last modified: Sun 22 Jan 2017 06:54:43 PM EST
 
 \newif\ifGI@exam
 \@ifclassloaded{exam}{\GI@examtrue}{\GI@examfalse}
@@ -152,6 +152,8 @@
   \newtheorem{remark}[theorem]{Remark}
   \newtheorem*{remark*}{Remark}
   \newtheorem{example}[theorem]{Example}
+
+  \ifGI@exam\else\newtheorem{problem}{Problem}[section]\fi
 \fi
 
 % Misc. theorems. (Uses optional argument as name.)
@@ -246,7 +248,7 @@
 
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
-\DeclarePairedDelimiter{\qv}{\langle}{\rangle}
+\DeclarePairedDelimiter{\qv}{[}{]}
 \DeclarePairedDelimiter{\av}{\langle}{\rangle}
 
 %\newcommand{\ip}[3][]{\av[#1]{#2,#3}}
