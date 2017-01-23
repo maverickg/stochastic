@@ -558,7 +558,7 @@ However, for $C = \emptyset$ and $C = \Omega$, \eqref{e:cProb1} is immediate.
 
 \subsection{Conditional expectation.}
 
-Consider now the situation where $X$ is a $\mathcal G$-measurable random variable and $\mathcal F \subseteq G$ is some $\sigma$-sub-algebra.
+Consider now the situation where $X$ is a $\mathcal G$-measurable random variable and $\mathcal F \subseteq \mathcal G$ is some $\sigma$-sub-algebra.
 The conditional expectation of $X$ given $\mathcal F$ (denoted by $\E( X \given \mathcal F)$ is the ``best approximation'' of $X$ by a $\mathcal F$ measurable random variable.
 
 Consider the incomplete deck example from the previous section, where you have an incomplete deck of cards which has $10$ red cards (of which $5$ are high), and $20$ black cards (of which $4$ are high).
@@ -588,19 +588,22 @@ This is how we define conditional expectation.
       $\E( X \given \mathcal F)$ is $\mathcal F$-measurable.
 
     \item
-      For every $F \in \mathcal F$, we have
-      \begin{equation*}
+      For every $F \in \mathcal F$, we have the \emph{partial averaging} identity:
+      \begin{equation}\label{e:2pavg}
 	\int_F \E(X \given \mathcal F) \, d\P = \int_F X \, d\P.
-      \end{equation*}
+      \end{equation}
   \end{enumerate}
 \end{definition}
 
 \begin{remark}
   Choosing $F = \Omega$ we see $\E \E(X\given \mathcal F) = \E X$.
 \end{remark}
-
 \begin{remark}
-  Under mild integrability assumptions one can show that conditional expectations exist and are unique.
+  Note we can only expect~\eqref{e:2pavg} to hold for all events $F \in \mathcal F$.
+  In general~\eqref{e:2pavg} \emph{will not} hold for events $G \in \mathcal G - \mathcal F$.
+\end{remark}
+\begin{remark}
+  Under mild integrability assumptions one can show that conditional expectations exist.
   This requires the \emph{Radon-Nikodym} theorem and goes beyond the scope of this course.
   If, however, $\mathcal F = \sigma( \set{F_i} )$ where $\set{F_i}$ is a pairwise disjoint collection of events whose union is all of $\Omega$ and $\P(F_i) > 0 $ for all $i$, then
   \begin{equation*}
@@ -608,6 +611,42 @@ This is how we define conditional expectation.
       = \sum_i \frac{1}{\P(F_i)} \int_{F_i} X \, d\P \,.
   \end{equation*}
 \end{remark}
+\begin{remark}
+  Once existence is established it is easy to see that conditional expectations are unique.
+  Namely, if $Y$ is any $\mathcal F$-measurable random variable that satisfies
+  \begin{equation*}
+    \int_F Y \, d\P = \int_F X \, d\P
+    \quad\text{for every } F \in \mathcal F\,,
+  \end{equation*}
+  then $Y = \E( X \given F)$.
+  Often, when computing the conditional expectation, we will ``guess'' what it is, and verify our guess by checking measurablity and the above partial averaging identity. 
+\end{remark}
+\begin{proposition}
+If $X$ is $\mathcal F$-measurable, then $\E(X \given \mathcal F) = X$.
+On the other hand, if $X$ is independent\footnote{%
+  We say a random variable $X$ is independent of $\sigma$-algebra $\mathcal F$ if for every $A \in \sigma(X)$ and $B \in \mathcal F$ the events $A$ and $B$ are independent.%
+}
+of~$\mathcal F$ then $\E( X \given \mathcal F) = \E X$.
+\end{proposition}
+\begin{proof}
+  If $X$ is $\mathcal F$-measurable, then clearly the random variable $X$ is both $\mathcal F$-measurable and satisfies the partial averaging identity.
+  Thus by uniqueness, we must have $\E( X \given \mathcal F) = X$.
+  
+  Now consider the case when $X$ is independent of $\mathcal F$.
+  Suppose first $X = \sum a_i \one_{A_i}$ for finitely many sets $A_i \in \mathcal G$.
+  Then for any $F \in \mathcal F$,
+  \begin{equation*}
+    \int_F X \, d\P
+      = \sum a_i \P( A_i \cap F )
+      = \P(F) \sum a_i \P(A_i)
+      = \P(F) \E X
+      = \int_F \E X \, d\P\,.
+  \end{equation*}
+  Thus the constant random variable $\E X$ is clearly $\mathcal F$-measurable and satisfies the partial averaging identity.
+  This forces $\E( X \given \mathcal F) = \E X$.
+  The general case when $X$ is not simple follows by approximation.
+\end{proof}
+
 
 \begin{remark}
   Note we defined and motivated conditional expectations and conditional probabilities independently.
@@ -636,12 +675,6 @@ This is probably the first visible advantage of the measure theoretic approach, 
       \begin{equation*}
 	\E( XY \given \mathcal F) = X \E( Y \given \mathcal F ) \,.
       \end{equation*}
-      In particular, if $X$ is $\mathcal F$ measurable then $\E( X \given \mathcal F) = X$.
-    \item
-      If $X$ is independent\footnote{%
-	We say a random variable $X$ is independent of $\sigma$-algebra $\mathcal F$ if for every $A \in \sigma(X)$ and $B \in \mathcal F$ the events $A$ and $B$ are independent.%
-      }
-      of $\mathcal F$, then $\E( X \given \mathcal F) = \E X$.
     \item
       \emph{(Tower property)}
       If $\mathcal E \subseteq \mathcal F \subseteq \mathcal G$ are $\sigma$-algebras, then (almost surely)
@@ -661,7 +694,6 @@ This is probably the first visible advantage of the measure theoretic approach, 
   \end{equation*}
   which can only happen if $\P( \E( Z \given \mathcal F ) < 0 ) = 0$.
   The third property is easily checked for simple random variables, and follows in general by approximating.
-  The same is true for the fourth property.
   The tower property follows immediately from the definition.
 \end{proof}
 
@@ -828,6 +860,7 @@ In discrete time a random walk is a martingale, so it is natural to expect that 
 \subsection{Stopping Times}
 
 For this section we assume that a filtration $\set{\mathcal F_t}$ is given to us, and fixed.
+When we refer to process being adapted (or martingales), we implicitly mean they are adapted (or martingales) with respect to this filtration.
 
 Consider a game (played in continuous time) where you have the option to walk away at any time.
 Let $\tau$ be the \emph{random} time you decide to stop playing and walk away.
@@ -851,7 +884,7 @@ The time at which you liquidate is a hitting time, and under mild assumptions on
 \begin{theorem}[Doob's optional sampling theorem]
   If $M$ is a martingale and $\tau$ is a bounded stopping time.
   Then the stopped process $M^\tau(t) \defeq M(\tau \varmin t)$ is also a martingale.
-  Consequently, $\E M(\tau \varmin t) = \E M(0) = \E M(t)$.
+  Consequently, $\E M(\tau) = \E M(\tau \varmin t) = \E M(0) = \E M(t)$ for all $t \geq 0$.
 \end{theorem}
 \begin{remark}
   If instead of assuming $\tau$ is bounded, we assume $M^\tau$ is bounded the above result is still true.
@@ -860,4 +893,27 @@ The time at which you liquidate is a hitting time, and under mild assumptions on
 The proof goes beyond the scope of these notes, and can be found in any standard reference.
 What this means is that if you're playing a fair game, then you can not hope to improve your odds by ``quitting when you're ahead''.
 Any rule by which you decide to stop, must be a stopping time and the above result guarantees that stopping a martingale still yields a martingale.
+
+\begin{remark}
+  Let $W$ be a standard Brownian motion, $\tau$ be the first hitting time of $W$ to $1$.
+  Then $\E W(\tau) = 1 \neq 0 = \E W(t)$.
+  This is one situation where the optional sampling theorem doesn't apply (in fact, $\E \tau = \infty$, and $W^\tau$ is unbounded).
+  
+  This example corresponds to the gambling strategy of walking away when you make your ``million''.
+  The reason it's not a sure bet is because the time taken to achieve your winnings is finite almost surely, but very long (since $\E \tau = \infty$).
+  In the mean time you might have incurred financial ruin and expended your entire fortune.
+\end{remark}
+
+Suppose the price of a security you're invested in fluctuates like a martingale (say for instance Brownian motion).
+This is of course unrealistic, since Brownian motion can also become negative; but lets use this as a first example.
+You decide you're going to liquidate your position and walk away when either you're bankrupt, or you make your first million.
+What are your expected winnings?
+This can be computed using the optional sampling theorem.
+
+\begin{problem}
+  Let $a \geq 0$ and $M$ be any continuous martingale with $M(0) = x \in (0, a)$.
+  Let $\tau$ be the first time $M$ hits either $0$ or $a$.
+  Compute $\P( M(\tau) = a )$ and your expected return $\E M(\tau)$.
+\end{problem}
+
 \end{document}
