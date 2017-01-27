@@ -744,7 +744,7 @@ Using conditional expectations, we can now define this precisely.
   \end{enumerate}
 \end{definition}
 \begin{remark}
-  A \emph{sub-martingale} is an adapted process $M$ for which we have $\E(M(t) \given \mathcal F_s) \geq \mathcal F_s$, and a \emph{super-martingale} if $\E( M(t) \given \mathcal F_s) \leq M(s)$.
+  A \emph{sub-martingale} is an adapted process $M$ for which we have $\E(M(t) \given \mathcal F_s) \geq M(s)$, and a \emph{super-martingale} if $\E( M(t) \given \mathcal F_s) \leq M(s)$.
   Thus $\E M(t)$ is an increasing function of time if $M$ is a sub-martingale, constant in time if $M$ is a martingale, and a decreasing function of time if $M$ is a super-martingale.
 \end{remark}
 
@@ -823,21 +823,21 @@ In discrete time a random walk is a martingale, so it is natural to expect that 
 	\partial_t f(s, W(s)) + \frac{1}{2} \partial_x^2 f(s, W(s))
       } \, ds \given \mathcal F_r}
     \\
-    &= \int_0^r \partial_t \paren[\big]{ f(s, W(s)) + \frac{1}{2} \partial_x^2 f(s, W(s)) } \, ds
+    &= \int_0^r \paren[\big]{ \partial_t f(s, W(s)) + \frac{1}{2} \partial_x^2 f(s, W(s)) } \, ds
     \\
     &\qquad
       + \int_r^t \int_\R \paren[\big]{
-	    f(s, y + W(r)) + \frac{1}{2} \partial_x^2 f(s, y + W(r))
+	  \partial_t f(s, y + W(r)) + \frac{1}{2} \partial_x^2 f(s, y + W(r))
 	} G(s - r, y) \, ds
   \end{align*}
   Hence
   \begin{align*}
     \MoveEqLeft
-    \E\paren{ M(t) \given \mathcal F_s } - M(s)
+    \E\paren{ M(t) \given \mathcal F_r } - M(r)
     = \int_\R f(t, y + W(r)) G(t -r, y) \, dy 
     \\
-      &+ \int_r^t \int_\R \paren[\big]{
-	    f(s, y + W(r)) + \frac{1}{2} \partial_x^2 f(s, y + W(r))
+      &- \int_r^t \int_\R \paren[\big]{
+	  \partial_t f(s, y + W(r)) + \frac{1}{2} \partial_x^2 f(s, y + W(r))
 	} G(s - r, y) \, ds
     \\
       &- f(r, W(r))\,.
@@ -846,7 +846,7 @@ In discrete time a random walk is a martingale, so it is natural to expect that 
   In fact, we claim the (deterministic) identity 
   \begin{multline*}
     \int_r^t \int_\R \paren[\big]{
-	  f(s, y + x) + \frac{1}{2} \partial_x^2 f(s, y + x))
+	\partial_t f(s, y + x) + \frac{1}{2} \partial_x^2 f(s, y + x))
       } G(s - r, y) \, ds
     \\
     + \int_\R f(t, y + x) G(t -r, y) \, dy 

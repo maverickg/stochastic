@@ -10,26 +10,26 @@ If you only trade this security at times $0 = t_0 < t_1 < t_2 < \cdots < t_n = T
   X(t_n) = \sum_{i=0}^{n-1} \Delta(t_i) ( S(t_{i+1}) - S(t_i) )
 \end{equation*}
 If you are trading this continuously in time, you'd expect that a ``simple'' limiting procedure should show that your winnings are given by the \emph{Riemann-Stieltjes} integral:
-\begin{equation}\label{e:3stLim}
+\begin{equation*}%\label{e:3stLim}
   X(T) = 
     \lim_{\norm{P} \to 0}
-      \sum_{i=0}^{n-1} \Delta(\xi_i) \paren{ S( t_{i+1} ) - S( t_i ) }
+      \sum_{i=0}^{n-1} \Delta(t_i) \paren{ S( t_{i+1} ) - S( t_i ) }
     = \int_0^T \Delta(t) \, dS(t) \,.
-\end{equation}
-Here $P = \set{0 = t_0 < \cdots < t_n = T}$ is a partition of $[0, T]$, $\norm{P} = \max\set{ t_{i+1} - t_i }$ and $\xi_i$ are \emph{arbitrary} times in the interval $[t_i, t_{i+1}]$.
+\end{equation*}
+Here $P = \set{0 = t_0 < \cdots < t_n = T}$ is a partition of $[0, T]$, and $\norm{P} = \max\set{ t_{i+1} - t_i }$.
 
-The reason we have $X(\xi_i)$ above, and not $X(t_i)$ is because the standard definition of the \emph{Riemann-Stieltjes} allows you to choose \emph{arbitrary} times in the partition sub-intervals $[t_i, t_{i+1}]$.
-In our context, this doesn't sit right: If you trade at time $t_i$, you should do so using only information available to you up to time $t_i$ (i.e.\ be $\mathcal F_{t_i}$-measurable), and your winnings are $X(t_i) (S(t_{i+1}) - S(t_i) )$ and not $X(\xi_i) (S(t_{i+1}) - S(t_i) )$.
-Indeed, it turns out that if $S$ is a continuous martingale, then the limit of the form~\eqref{e:3stLim} \emph{will not} exist in general.
+%The reason we have $X(\xi_i)$ above, and not $X(t_i)$ is because the standard definition of the \emph{Riemann-Stieltjes} allows you to choose \emph{arbitrary} times in the partition sub-intervals $[t_i, t_{i+1}]$.
+%In our context, this doesn't sit right: If you trade at time $t_i$, you should do so using only information available to you up to time $t_i$ (i.e.\ be $\mathcal F_{t_i}$-measurable), and your winnings are $X(t_i) (S(t_{i+1}) - S(t_i) )$ and not $X(\xi_i) (S(t_{i+1}) - S(t_i) )$.
+%Indeed, it turns out that if $S$ is a continuous martingale, then the limit of the form~\eqref{e:3stLim} \emph{will not} exist in general.
 
-This is because for the above limiting procedure to work directly, you need $S$ to have finite \emph{first variation}.
-Recall, the \emph{first variation} is defined to be
+This has been well studied by mathematicians, and it is well known that for the above limiting procedure to ``work directly'', you need $S$ to have finite \emph{first variation}.
+Recall, the \emph{first variation} of a function is defined to be
 \begin{equation*}
   V_{[0,T]}(S) \defeq \lim_{\norm{P} \to 0} \sum_{i=0}^{n-1} \abs{S(t_{i+1}) - S(t_i)}\,.
 \end{equation*}
-It turns out for \emph{any} (non-trivial) continuous martingale~$S$, the first variation is almost surely infinite!
+It turns out that almost \emph{any} continuous martingale~$S$ \emph{will not} have finite first variation.
 Thus to define integrals with respect to martingales, one has to do something `clever'.
-It turns out that if $\xi_i = t_i$, $X$ is adapted and $S$ is an martingale, then the above limiting procedure works, and this was carried out by It\^o (and independently by Doeblin).
+It turns out that if $X$ is adapted and $S$ is an martingale, then the above limiting procedure works, and this was carried out by It\^o (and independently by Doeblin).
 
 \section{The First Variation of Brownian motion}
 
@@ -68,7 +68,8 @@ We begin by showing that the first variation of Brownian motion is infinite.
   \end{equation*}
   where
   \begin{equation*}
-     C = \int_\R \abs{y} e^{-y^2/2} \, \frac{dy}{\sqrt{2\pi}}\,.
+     C = \int_\R \abs{y} e^{-y^2/2} \, \frac{dy}{\sqrt{2\pi}}
+      = \E \abs{N(0, 1)} \,.
   \end{equation*}
   Consequently
   \begin{equation*}
@@ -91,13 +92,13 @@ It turns out that the \emph{second} variation of any \emph{square integrable} ma
   Let $M$ be any process.
   We define the \emph{quadratic variation} of $M$, denoted by $\qv{M}$ by
   \begin{equation*}
-    \qv{M}_T = \lim_{\norm{P} \to 0} (M(t_{i+1}) - M(t_i))^2\,,
+    \qv{M}(T) = \lim_{\norm{P} \to 0} (M(t_{i+1}) - M(t_i))^2\,,
   \end{equation*}
   where $P = \set{0 = t_1 < t_1 \cdots < t_n = T}$ is a partition of $[0, T]$.
 \end{definition}
 
 \begin{proposition}
-  If $W$ is a standard Brownian motion, then $\qv{W}_T = T$ almost surely.
+  If $W$ is a standard Brownian motion, then $\qv{W}(T) = T$ almost surely.
 \end{proposition}
 \begin{proof}
   For simplicity, let's assume $t_i = Ti/n$.
@@ -119,12 +120,17 @@ It turns out that the \emph{second} variation of any \emph{square integrable} ma
 	      - W\paren[\Big]{\frac{iT}{n}}
 	    }^2 - \frac{T}{n}\,.
   \end{equation*}
-  Note that $\xi_i$'s are i.i.d.\ with distribution $N(0, T/n)^2 - T/n$, and so $\var \xi_i = T^2 / n^2 \E N(0,1)^4$.
+  Note that $\xi_i$'s are i.i.d.\ with distribution $N(0, T/n)^2 - T/n$, and hence
+  \begin{equation*}
+    \E \xi_i = 0
+    \qquad\text{and}\qquad
+    \var \xi_i = \frac{T^2 (\E N(0,1)^4 - 1)}{n^2}.
+  \end{equation*}
   Consequently
   \begin{equation*}
     \var\paren[\Big]{
       \sum_{i=0}^{n-1} \xi_i
-    } = \frac{T^2 \E N(0,1)^4}{n} \xrightarrow{n \to \infty} 0\,,
+    } = \frac{T^2 (\E N(0,1)^4 - 1)}{n} \xrightarrow{n \to \infty} 0\,,
   \end{equation*}
   which shows
   \begin{equation*}
@@ -141,7 +147,7 @@ It turns out that the \emph{second} variation of any \emph{square integrable} ma
 \end{proof}
 
 \begin{corollary}
-  The process $M(t) \defeq W(t)^2 - \qv{W}_t$ is a martingale.
+  The process $M(t) \defeq W(t)^2 - \qv{W}(t)$ is a martingale.
 \end{corollary}
 \begin{proof}
   We see
@@ -158,18 +164,27 @@ The above wasn't a co-incidence.
 This property in fact characterizes the quadratic variation.
 \begin{theorem}\label{t:qv1}
   Let $M$ be a continuous martingale with respect to a filtration~$\set{\mathcal F_t}$.
-  Then $\E M(t)^2 < \infty$ if and only if $\E \qv{M}_t < \infty$.
-  In this case the process $M(t)^2 - \qv{M}_t$ is also a martingale with respect to the same filtration, and hence $\E M(t)^2 = \E \qv{M}_t$.
+  Then $\E M(t)^2 < \infty$ if and only if $\E \qv{M}(t) < \infty$.
+  In this case the process $M(t)^2 - \qv{M}(t)$ is also a martingale with respect to the same filtration, and hence $\E M(t)^2 - \E M(0)^2 = \E \qv{M}(t)$.
 \end{theorem}
 
 The above is in fact a characterization of the quadratic variation of martingales.
 
 \begin{theorem}\label{t:qv2}
-  If $A(t)$ is any continuous, increasing, adapted process such that $M(t)^2 - A(t)$ is an martingale, then $A = \qv{M}$.
+  If $A(t)$ is any continuous, increasing, adapted process such that $M(t)^2 - A(t)$ is a martingale, then $A = \qv{M}$.
 \end{theorem}
 
 The proof of these theorems are a bit technical and go beyond the scope of these notes.
 The results themselves, however, are extremely important and will be used subsequently.
+
+\begin{remark}
+  The intuition to keep in mind about the first variation and the quadratic variation is the following.
+  Divide the interval $[0, T]$ into $T/\delta_t$ intervals of size $\delta_t$.
+  If $X$ has finite first variation, then on each subinterval $(k \delta_t, (k+1) \delta_t)$ the increment of $X$ should be of order $\delta_t$.
+  Thus adding $T / \delta_t$ terms of order $\delta_t$ will yield something finite.
+
+  On the other hand if $X$ has finite quadratic variation.
+\end{remark}
 
 
 \section{Construction of the It\^o integral}
@@ -181,9 +196,9 @@ We think of $\Delta(t)$ to represent our position at time $t$ on an asset whose 
 Let $P = \set{0 = t_0 < t_1 < t_2 < \cdots}$ be an increasing sequence of times, and assume $\Delta$ is constant on $[t_i, t_{i+1})$ (i.e.\ the asset is only traded at times $t_0$, \dots, $t_n$).
 Let $I_P(T)$, defined by
 \begin{equation*}
-  I_P(t)
+  I_P(T)
     = \sum_{i=0}^{n-1} \Delta(t_i) (W(t_{i+1}) - W(t_i))
-      + \Delta(t_n) (W(t) - W(t_n))
+      + \Delta(t_n) (W(T) - W(t_n))
   \quad\text{if } T \in [t_n, t_{n+1})\,.
 \end{equation*}
 be your cumulative winnings up to time $T$.
@@ -191,49 +206,19 @@ Then,
 \begin{equation}\label{e:3Eip2}
   \E I_P(T)^2
     = \E \brak[\Big]{ \sum_{i=0}^{n} \Delta(t_i)^2 (t_{i+1} - t_i)
-      + \Delta(t_n)^2 (t - t_n) }
+      + \Delta(t_n)^2 (T - t_n) }
   \quad\text{if } T \in [t_n, t_{n+1})\,.
 \end{equation}
 Moreover, $I_P$ is a martingale and
 \begin{equation}\label{e:3dqv}
-  \qv{I_P}_T = \sum_{i=0}^{n} \Delta(t_i)^2 (t_{i+1} - t_i)
-      + \Delta(t_n)^2 (t - t_n)
+  \qv{I_P}(T) = \sum_{i=0}^{n} \Delta(t_i)^2 (t_{i+1} - t_i)
+      + \Delta(t_n)^2 (T - t_n)
   \quad\text{if } T \in [t_n, t_{n+1})\,.
 \end{equation}
 \end{lemma}
 
-Before proving this lemma, we remark that it is the key to the construction of stochastic integrals (called It\^o integrals).
-Note that as $\norm{P} \to 0$, the right hand side of~\eqref{e:3dqv} converges to the standard Riemann integral $\int_0^T \Delta(t)^2 \, dt$.
-It\^o realised he could use this to prove that $I_P$ itself converges, and the limit is now called the It\^o integral.
-
-\begin{theorem}
-  If $\int_0^T \Delta(t)^2 \, dt < \infty$ almost surely, then as $\norm{P} \to 0$, the processes $I_P$ converge to a process $I$ denoted by
-  \begin{equation*}
-    I(T)
-      \defeq \lim_{\norm{P} \to 0} I_P(t)\,
-      \defeq \int_0^T \Delta(t) \, dW(t)\,.
-  \end{equation*}
-  This is known as the \emph{It\^o integral of $\Delta$ with respect to $W$}.
-  If further
-  \begin{equation}\label{e:3Dsq}
-    \E \int_0^T \Delta(t)^2 \, dt < \infty\,,
-  \end{equation}
-  then the process $I(T)$ is a martingale and the quadratic variation $\qv{I}$ satisfies
-  \begin{equation*}
-    \qv{I}_T = \int_0^T \Delta(t)^2 \, dt
-    \quad\text{almost surely.}
-  \end{equation*}
-\end{theorem}
-
-\begin{corollary}[It\^o Isometry]
-  If~\eqref{e:3Dsq} holds then
-  \begin{equation*}
-    \E \paren[\Big]{ \int_0^T \Delta(t) \, dW(t) }^2
-      = \E \int_0^T \Delta(t)^2 \, dt\,.
-  \end{equation*}
-\end{corollary}
-
-\begin{proof}[Proof of Lemma~\ref{l:3dito}]
+This lemma, as we will shortly see, is the key to the construction of stochastic integrals (called It\^o integrals).
+\begin{proof}%[Proof of Lemma~\ref{l:3dito}]
   We first prove~\eqref{e:3Eip2} with $T = t_n$ for simplicity.
   Note
   \begin{multline}\label{e:3sum1}
@@ -279,6 +264,58 @@ It\^o realised he could use this to prove that $I_P$ itself converges, and the l
   Now the main idea is to use the tower property to check that the process $M(t)^2 - A(t)$ is a martingale, and then use Theorem~\ref{t:qv2}.
 \end{proof}
 
+Note that as $\norm{P} \to 0$, the right hand side of~\eqref{e:3dqv} converges to the standard Riemann integral $\int_0^T \Delta(t)^2 \, dt$.
+It\^o realised he could use this to prove that $I_P$ itself converges, and the limit is now called the It\^o integral.
+
+\begin{theorem}\label{t:3ipconv}
+  If $\int_0^T \Delta(t)^2 \, dt < \infty$ almost surely, then as $\norm{P} \to 0$, the processes $I_P$ converge to a \emph{continuous process} $I$ denoted by
+  \begin{equation*}
+    I(T)
+      \defeq \lim_{\norm{P} \to 0} I_P(T)\,
+      \defeq \int_0^T \Delta(t) \, dW(t)\,.
+  \end{equation*}
+  This is known as the \emph{It\^o integral of $\Delta$ with respect to $W$}.
+  If further
+  \begin{equation}\label{e:3Dsq}
+    \E \int_0^T \Delta(t)^2 \, dt < \infty\,,
+  \end{equation}
+  then the process $I(T)$ is a \emph{martingale} and the quadratic variation $\qv{I}$ satisfies
+  \begin{equation*}
+    \qv{I}(T) = \int_0^T \Delta(t)^2 \, dt
+    \quad\text{almost surely.}
+  \end{equation*}
+\end{theorem}
+
+\begin{remark}
+  For the above to work, it is \emph{crucial} that $\Delta$ is adapted, and is sampled at the left endpoint of the time intervals.
+  That is, the terms in the sum are $\Delta(t_i) (W(t_{i+1}) - W(t_i))$, and not $\Delta(t_{i+1}) (W(t_{i+1}) - W(t_i))$ or $\frac{1}{2} (\Delta(t_i) + \Delta(t_{i+1})) (W(t_{i+1}) - W(t_i))$, or something else.
+
+  Usually if the process is not adapted, there is no meaningful way to make sense of the limit.
+  If you sample at different points, it still works out (usually) but what you get is \emph{different} from the It\^o integral (one example is the Stratonovich integral). 
+\end{remark}
+
+\begin{corollary}[It\^o Isometry]
+  If~\eqref{e:3Dsq} holds then
+  \begin{equation*}
+    \E \paren[\Big]{ \int_0^T \Delta(t) \, dW(t) }^2
+      = \E \int_0^T \Delta(t)^2 \, dt\,.
+  \end{equation*}
+\end{corollary}
+
+\begin{proposition}[Linearity]
+  If $\Delta_1$ and $\Delta_2$ are two adapted processes, and $\alpha \in \R$, then
+  \begin{equation*}
+    \int_0^T (\Delta_1(t) + \alpha \Delta_2(t)) \, dW(t) 
+      \leq \int_0^T \Delta_1(t) \, dW(t) + \alpha \int_0^T \Delta_2(t) \, dW(t)\,.
+  \end{equation*}
+\end{proposition}
+\begin{remark}
+  Positivity, however, is not preserved by It\^o integrals.
+  Namely if $\Delta_1 \leq \Delta_2$, there is no reason to expect $\int_0^T \Delta_1(t) \, dW(t) \leq \int_0^T \Delta_2(t) \, dW(t)$.
+  Indeed choosing $\Delta_1 = 0$ and $\Delta_2 = 1$ we see that we can not possibly have $0 = \int_0^T \Delta_1(t) \, dW(t)$ to be almost surely smaller than $W(T) = \int_0^T \Delta_2(t) \, dW(t)$.
+\end{remark}
+
+
 Recall, our starting point in these notes was modelling stock prices as \emph{geometric Brownian motions}, given by the equation
 \begin{equation*}
   dS(t) = \alpha S(t) \, dt + \sigma S(t) \, dW(t)\,.
@@ -303,11 +340,110 @@ For instance, what is
 \end{equation*}
 This, as we will shortly, can be computed easily using the It\^o formula (also called the It\^o-Doeblin formula).
 
+Suppose $\Theta$ and $\Delta$ are adapted processes.
+(In particular, they could but need not, be random).
+Consider a process $X$ defined by
+\begin{equation}\label{e:3X}
+  X(T) = X(0) + \int_0^T \Theta(t) \, dt + \int_0^T \Delta(t) \, dW(t)\,.
+\end{equation}
+Note the first integral $\int_0^T \Delta(t) \, dt$ is a regular Riemann integral that can be done directly.
+The second integral the It\^o integral we constructed in the previous section.
+
+\begin{definition}
+  The process $X$ is called an It\^o process if $X(0)$ is deterministic (not random) and for all $T \geq 0$,
+  \begin{equation*}
+    \E \int_0^T \Delta(t)^2 \, dt < \infty
+    \qquad\text{and}\qquad
+    \int_0^T \Theta(t) \, dt < \infty\,.
+  \end{equation*}
+\end{definition}
+
+\begin{remark}
+  The shorthand notation for~\eqref{e:3X} is to write
+  \begin{equation*}
+    \tag{\ref{e:3X}$'$}
+    dX(t) = \Theta(t) \, dt + \Delta(t) \, dW(t)\,.
+  \end{equation*}
+\end{remark}
+
+\begin{proposition}
+  The quadratic variation of $X$ is
+  \begin{equation*}
+    \qv{X}(T) = \int_0^T \Delta(t)^2 \, dt
+    \quad\text{almost surely.}
+  \end{equation*}
+\end{proposition}
+\begin{proof}
+  Define $B$ and $M$ by
+  \begin{equation*}
+    B(T) = \int_0^T \Theta(t) \, dt
+    \qquad\text{and}\qquad
+    M(T) = \int_0^T \Delta(t) \, dW(t)
+  \end{equation*}
+\end{proof}
+
+Suppose $\Gamma$ is some adapted process.
+We interpret $X$ as the price of an asset, and $\Gamma$ as our position on it.
+(We could either be long, or short on the asset so $\Gamma$ could be positive or negative.)
+
+\begin{definition}
+  We define
+  \begin{equation*}
+    \int_0^T \Gamma(t) \, dX(t)
+      \defeq \int_0^T \Gamma(t) \Theta(t) \, dt 
+	+ \int_0^T \Gamma(t) \sigma(t) \, dW(t)\,.
+  \end{equation*}
+\end{definition}
+
+\begin{remark}
+  Note that the first integral on the right $\int_0^T \Gamma(t) \Theta(t) \, dt$ is a regular Riemann integral, and the second one is an It\^o integral.
+\end{remark}
+
+\begin{remark}
+  If we define $I_P$ by
+  \begin{equation*}
+    I_P(T)
+      = \sum_{i=0}^{n-1} \Gamma(t_i) (X(t_{i+1}) - X(t_i))
+	+ \Gamma(t_n) (X(T) - X(t_n))
+    \quad\text{if } T \in [t_n, t_{n+1})\,,
+  \end{equation*}
+  then $I_P$ converges to the integral $\int_0^T \Gamma(t) X(t) \, dt$ defined above.
+  This works in the same way as~Theorem~\ref{t:3ipconv}.
+\end{remark}
+
+Suppose now $f(t, x)$ is some function.
+If $X$ is differentiable as a function of $t$ \emph{(which it most certainly is not)}, then we would have
+\begin{align*}
+  f(T, X(T)) - f(0, X(0))
+    &= \int_0^T \partial_t \paren[\Big]{ f(t, X(t)) } \, dt
+  \\
+    &= \int_0^T \partial_t f( t, X(t)) \, dt
+      + \int_0^T \partial_x f( t, X(t) ) \, \partial_t X(t) \, dt
+  \\
+    &= \int_0^T \partial_t f( t, X(t) ) \, dt
+      + \int_0^T \partial_x f(t, X(t) ) \, dX(t)\,.
+\end{align*}
+It\^o process are \emph{almost never} differentiable as a function of time, and so the above has no chance of working.
+It turns out, however, that for It\^o process you can make the above work by adding an \emph{It\^o correction} term.
+This is the It\^o formula (which is also called the It\^o-Doeblin formula).
+
+\begin{theorem}[It\^o formula]
+  Suppose $f = f(t, x)$ is a function that is continuously differentiable in $t$ and twice continuously differentiable in $x$, then
+  \begin{multline*}
+    f(T, X(T)) - f(0, X(0))
+      = \int_0^T \partial_t f( t, X(t) ) \, dt
+	+ \int_0^T \partial_x f(t, X(t) ) \, dX(t)
+    \\
+	+ \frac{1}{2} \int_0^T \partial_x^2 f(t, X(t) \, d\qv{X}(t)\,.
+  \end{multline*}
+\end{theorem}
+
+\begin{todo}
 \begin{enumerate}
-  \item Define $dX = b(t) \, dt + \sigma(t) \, dW$.
   \item Define It\^o integrals with respect to $X$.
   \item State It\^o formula.
   \item Compute a few integrals
   \item Motivate the proof of It\^o's formula.
 \end{enumerate}
+\end{todo}
 \end{document}
