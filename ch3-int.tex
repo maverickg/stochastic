@@ -179,11 +179,24 @@ The results themselves, however, are extremely important and will be used subseq
 
 \begin{remark}
   The intuition to keep in mind about the first variation and the quadratic variation is the following.
-  Divide the interval $[0, T]$ into $T/\delta_t$ intervals of size $\delta_t$.
-  If $X$ has finite first variation, then on each subinterval $(k \delta_t, (k+1) \delta_t)$ the increment of $X$ should be of order $\delta_t$.
-  Thus adding $T / \delta_t$ terms of order $\delta_t$ will yield something finite.
+  Divide the interval $[0, T]$ into $T/\delta t$ intervals of size $\delta t$.
+  If $X$ has finite first variation, then on each subinterval $(k \delta t, (k+1) \delta t)$ the increment of $X$ should be of order $\delta t$.
+  Thus adding $T / \delta t$ terms of order $\delta t$ will yield something finite.
 
-  On the other hand if $X$ has finite quadratic variation.
+  On the other hand if $X$ has finite quadratic variation, on each subinterval $(k \delta t, (k+1) \delta t)$ the increment of $X$ should be of order $\sqrt{\delta t}$, so that adding $T / \delta t$ terms of the \emph{square} of the increment yields something finite.
+
+  Doing a quick check for Brownian motion, we see
+  \begin{equation*}
+    \E \abs{W(t + \delta t) - W(t)} = \sqrt{\delta t} \E \abs{N(0, 1)}
+    \quad\text{and}\quad
+    \E \abs{W(t + \delta t) - W(t)}^2 = \delta t\,,
+  \end{equation*}
+  in line with our intuition above.
+\end{remark}
+
+\begin{remark}
+  If a process has finite first variation, its quadratic variation will necessarily be $0$.
+  On the other hand, if a continuous process has finite (and non-zero) quadratic variation, its first variation will necessary be infinite.
 \end{remark}
 
 
@@ -340,21 +353,21 @@ For instance, what is
 \end{equation*}
 This, as we will shortly, can be computed easily using the It\^o formula (also called the It\^o-Doeblin formula).
 
-Suppose $\Theta$ and $\Delta$ are adapted processes.
+Suppose $b$ and $\sigma$ are adapted processes.
 (In particular, they could but need not, be random).
 Consider a process $X$ defined by
 \begin{equation}\label{e:3X}
-  X(T) = X(0) + \int_0^T \Theta(t) \, dt + \int_0^T \Delta(t) \, dW(t)\,.
+  X(T) = X(0) + \int_0^T b(t) \, dt + \int_0^T \sigma(t) \, dW(t)\,.
 \end{equation}
-Note the first integral $\int_0^T \Delta(t) \, dt$ is a regular Riemann integral that can be done directly.
+Note the first integral $\int_0^T b(t) \, dt$ is a regular Riemann integral that can be done directly.
 The second integral the It\^o integral we constructed in the previous section.
 
 \begin{definition}
   The process $X$ is called an It\^o process if $X(0)$ is deterministic (not random) and for all $T \geq 0$,
   \begin{equation*}
-    \E \int_0^T \Delta(t)^2 \, dt < \infty
+    \E \int_0^T \sigma(t)^2 \, dt < \infty
     \qquad\text{and}\qquad
-    \int_0^T \Theta(t) \, dt < \infty\,.
+    \int_0^T b(t) \, dt < \infty\,.
   \end{equation*}
 \end{definition}
 
@@ -362,57 +375,98 @@ The second integral the It\^o integral we constructed in the previous section.
   The shorthand notation for~\eqref{e:3X} is to write
   \begin{equation*}
     \tag{\ref{e:3X}$'$}
-    dX(t) = \Theta(t) \, dt + \Delta(t) \, dW(t)\,.
+    dX(t) = b(t) \, dt + \sigma(t) \, dW(t)\,.
   \end{equation*}
 \end{remark}
 
 \begin{proposition}
   The quadratic variation of $X$ is
-  \begin{equation*}
-    \qv{X}(T) = \int_0^T \Delta(t)^2 \, dt
+  \begin{equation}\label{e:3qvX}
+    \qv{X}(T) = \int_0^T \sigma(t)^2 \, dt
     \quad\text{almost surely.}
-  \end{equation*}
+  \end{equation}
 \end{proposition}
 \begin{proof}
   Define $B$ and $M$ by
   \begin{equation*}
-    B(T) = \int_0^T \Theta(t) \, dt
+    B(T) = \int_0^T b(t) \, dt
     \qquad\text{and}\qquad
-    M(T) = \int_0^T \Delta(t) \, dW(t)
+    M(T) = \int_0^T \sigma(t) \, dW(t)\,
   \end{equation*}
+  and observe
+  \begin{multline}\label{e:3incX}
+    (X(s + \delta t) - X(s))^2
+      = (B(s+\delta t) - B(s))^2 
+	+ (M( s + \delta t) - M(s))^2
+	\\
+	+ 2 \paren{ B(s + \delta t) - B(s) }
+	    \paren{ M(s + \delta t) - M(s) }\,.
+  \end{multline}
+
+  The key point is that the increment in $B$ is of order $\delta t$, and the increments in $M$ are of order $\sqrt{\delta t}$.
+  Indeed, note
+  \begin{equation*}
+    \abs{B(s + \delta t) - B(s)} = \abs[\Big]{ \int_s^{s + \delta t} b(t) \, dt}
+      \leq (\delta t) \max \abs{b}\,,
+  \end{equation*}
+  showing that increments of $B$ are of order $\delta t$ as desired.
+  We already know $M$ has finite quadratic variation, so already expect the increments of $M$ to be of order $\delta t$.
+
+  Now to compute the quadratic variation of $X$, let $n = \floor{T / \delta t}$, $t_i = i \delta t$ and observe
+  \begin{multline*}
+    \sum_{i=0}^{n-1} \paren{ X(t_{i+1}) - X( t_i ) }^2
+      = \sum_{i=0}^{n-1} \paren{ M(t_{i+1}) - M( t_i ) }^2
+    \\
+    \mathbin+ \sum_{i=0}^{n-1} \paren{ B(t_{i+1}) - B( t_i ) }^2
+	+ 2\sum_{i=0}^{n-1}
+	    \paren{ B(t_{i+1}) - B( t_i ) }
+	    \paren{ M(t_{i+1}) - M( t_i ) }\,.
+  \end{multline*}
+  The first sum on the right converges (as $\delta t \to 0$) to $\qv{M}(T)$, which we know is exactly $\int_0^T \sigma(t)^2 \, dt$.
+  Each term in the second sum is of order $(\delta t)^2$.
+  Since there are $T / \delta t$ terms, the second sum converges to $0$.
+  Similarly, each term in the third sum is of order $(\delta t)^{3/2}$ and so converges to $0$ as $\delta t \to 0$.
 \end{proof}
 
-Suppose $\Gamma$ is some adapted process.
-We interpret $X$ as the price of an asset, and $\Gamma$ as our position on it.
-(We could either be long, or short on the asset so $\Gamma$ could be positive or negative.)
+\begin{remark}
+  It's common to decompose $X = B + M$ where $M$ is a martingale and $B$ has finite first variation.
+  Processes that can be decomposed in this form are called \emph{semi-martingales}, and the decomposition is unique.
+  The process $M$ is called the martingale part of $X$, and $B$ is called the \emph{bounded variation} part of $X$.
+\end{remark}
+
+Given an adapted process $\Delta$, interpret $X$ as the price of an asset, and $\Delta$ as our position on it.
+(We could either be long, or short on the asset so $\Delta$ could be positive or negative.)
 
 \begin{definition}
-  We define
+  We define the It\^o integral of $\Delta$ with respect to $X$ by
   \begin{equation*}
-    \int_0^T \Gamma(t) \, dX(t)
-      \defeq \int_0^T \Gamma(t) \Theta(t) \, dt 
-	+ \int_0^T \Gamma(t) \sigma(t) \, dW(t)\,.
+    \int_0^T \Delta(t) \, dX(t)
+      \defeq \int_0^T \Delta(t) b(t) \, dt 
+	+ \int_0^T \Delta(t) \sigma(t) \, dW(t)\,.
   \end{equation*}
 \end{definition}
 
+As before, $\int_0^T \Delta \, dX$ represents the winnings or profit obtained using the trading strategy $\Delta$.
+
 \begin{remark}
-  Note that the first integral on the right $\int_0^T \Gamma(t) \Theta(t) \, dt$ is a regular Riemann integral, and the second one is an It\^o integral.
+  Note that the first integral on the right $\int_0^T \Delta(t) b(t) \, dt$ is a regular Riemann integral, and the second one is an It\^o integral.
 \end{remark}
 
 \begin{remark}
   If we define $I_P$ by
   \begin{equation*}
     I_P(T)
-      = \sum_{i=0}^{n-1} \Gamma(t_i) (X(t_{i+1}) - X(t_i))
-	+ \Gamma(t_n) (X(T) - X(t_n))
+      = \sum_{i=0}^{n-1} \Delta(t_i) (X(t_{i+1}) - X(t_i))
+	+ \Delta(t_n) (X(T) - X(t_n))
     \quad\text{if } T \in [t_n, t_{n+1})\,,
   \end{equation*}
-  then $I_P$ converges to the integral $\int_0^T \Gamma(t) X(t) \, dt$ defined above.
+  then $I_P$ converges to the integral $\int_0^T \Delta(t) X(t) \, dt$ defined above.
   This works in the same way as~Theorem~\ref{t:3ipconv}.
 \end{remark}
 
+
 Suppose now $f(t, x)$ is some function.
-If $X$ is differentiable as a function of $t$ \emph{(which it most certainly is not)}, then we would have
+If $X$ is differentiable as a function of $t$ \emph{(which it most certainly is not)}, then the chain rule gives
 \begin{align*}
   f(T, X(T)) - f(0, X(0))
     &= \int_0^T \partial_t \paren[\Big]{ f(t, X(t)) } \, dt
@@ -425,25 +479,65 @@ If $X$ is differentiable as a function of $t$ \emph{(which it most certainly is 
 \end{align*}
 It\^o process are \emph{almost never} differentiable as a function of time, and so the above has no chance of working.
 It turns out, however, that for It\^o process you can make the above work by adding an \emph{It\^o correction} term.
-This is the It\^o formula (which is also called the It\^o-Doeblin formula).
+This is the celebrated It\^o formula (more correctly the It\^o-Doeblin\footnote{%
+  W. Doeblin was a French-German mathematician who was drafted for military service during the second world war.
+  During the war he wrote down his mathematical work and sent it in a sealed envelope to the French Academy of Sciences, because he did not want it to ``fall into the wrong hands''.
+  When he was about to be captured by the Germans he burnt his mathematical notes and killed himself.
+
+  The sealed envelope was opened in 2000 which revealed that he had a treatment of stochastic Calculus that was essentially equivalent to It\^o's.
+  In posthumous recognition, It\^o's formula is now referred to as the It\^o-Doeblin formula by many authors.
+}
+formula).
 
 \begin{theorem}[It\^o formula]
   Suppose $f = f(t, x)$ is a function that is continuously differentiable in $t$ and twice continuously differentiable in $x$, then
-  \begin{multline*}
+  \begin{multline}\label{e:3ito}
     f(T, X(T)) - f(0, X(0))
       = \int_0^T \partial_t f( t, X(t) ) \, dt
 	+ \int_0^T \partial_x f(t, X(t) ) \, dX(t)
     \\
 	+ \frac{1}{2} \int_0^T \partial_x^2 f(t, X(t) \, d\qv{X}(t)\,.
-  \end{multline*}
+  \end{multline}
 \end{theorem}
+
+\begin{remark}
+  In short hand differential form, this is written as
+  \begin{equation}\label{e:3itoD}
+    \tag{\ref{e:3ito}$'$}
+    df(t, X(t)) = \partial_t f(t, X(t)) \, dt + \partial_x f(t, X(t)) \, dX(t)
+      + \frac{1}{2} \partial_x^2 f(t, X(t)) \, d\qv{X}(t)\,.
+  \end{equation}
+  The term $\frac{1}{2} \partial_x^2 f \, d\qv{X}(t)$ is an ``extra'' term, and is often referred to as the \emph{It\^o correction term}.
+  The It\^o formula is simply a version of the \emph{chain rule} for stochastic processes.
+  %For brevity many write
+  %\begin{equation*}
+  %  df(t, X(t)) = \partial_t f \, dt + \partial_x f \, dX(t) + \frac{1}{2} \partial_x^2 f \, d\qv{X}(t)\,.
+  %\end{equation*}
+\end{remark}
+
+\begin{remark}
+  Substituting what we know about $X$ from~\eqref{e:3X} and~\eqref{e:3qvX} we see that~\eqref{e:3ito} becomes
+  \begin{multline*}
+    f(T, X(T)) - f(0, X(0))
+      = \int_0^T \paren[\big]{ \partial_t f( t, X(t) )
+	+ \partial_x f(t, X(t) ) b(t)} \, dt
+    \\
+      \mathbin+ \int_0^T \partial_x f(t, X(t)) \sigma(t) \, dW(t)
+	+ \frac{1}{2} \int_0^T \partial_x^2 f(t, X(t) \, \sigma(t)^2 \, dt\,.
+  \end{multline*}
+  The second integral on the right is an It\^o integral (and hence a martingale).
+  The other integrals are regular Riemann integrals which yield processes of finite variation.
+\end{remark}
+
+While a complete rigorous proof of the It\^o formula is technical, and beyond the scope of this course, we provide a quick heuristic argument here.
+
+\begin{proof}[Intuition behind the It\^o formula]
+\end{proof}
 
 \begin{todo}
 \begin{enumerate}
-  \item Define It\^o integrals with respect to $X$.
-  \item State It\^o formula.
-  \item Compute a few integrals
   \item Motivate the proof of It\^o's formula.
+  \item Compute a few integrals
 \end{enumerate}
 \end{todo}
 \end{document}

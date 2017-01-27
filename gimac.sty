@@ -1,6 +1,6 @@
 \ProvidesPackage{gimac}
 % Misc. macros for Gautam Iyer.
-% Last modified: Wed 25 Jan 2017 10:30:39 AM EST
+% Last modified: Fri 27 Jan 2017 11:05:10 AM EST
 
 \newif\ifGI@exam
 \@ifclassloaded{exam}{\GI@examtrue}{\GI@examfalse}
@@ -236,15 +236,23 @@
 %
 % Norms and parenthesis
 %
-\DeclarePairedDelimiter{\brak}{[}{]}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 
+\newcommand{\GI@given}[1]{\nonscript\:\mathopen{}#1\vert\nonscript\:\mathopen{}}
+\newcommand{\given}[1][]{\GI@given{#1}}
 \DeclarePairedDelimiterX\paren[1]{(}{)}{%
-  \renewcommand{\given}{\nonscript\:\mathopen{}\delimsize\vert\nonscript\:\mathopen}#1%
+  \renewcommand{\given}{\GI@given{\delimsize}}#1%
 }
+\DeclarePairedDelimiterX\brak[1]{[}{]}{%
+  \renewcommand{\given}{\GI@given{\delimsize}}#1%
+}
+
+\newcommand{\GI@st}[1]{\nonscript\:#1\vert\nonscript\:\mathopen{}\allowbreak}
+\newcommand{\st}[1][]{\GI@st{#1}}
 \DeclarePairedDelimiterX\set[1]\{\}{%
-  \newcommand{\st}{\nonscript\:\delimsize\vert\nonscript\:\mathopen{}\allowbreak}#1}
+  \renewcommand{\st}{\GI@st{\delimsize}}#1%
+}
 
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
@@ -253,7 +261,6 @@
 
 %\newcommand{\ip}[3][]{\av[#1]{#2,#3}}
 %\WithSuffix\newcommand\ip*[2]{\av{#1,#2}}
-\newcommand{\given}[1][\big]{\nonscript\;|\nonscript\;}
 %\newcommand{\at}[2][\Bigr]{\ifGI@textstyle|\else#1|_{#2}}
 %\WithSuffix\newcommand\at*[1]{\middle|_{#1}}
 
