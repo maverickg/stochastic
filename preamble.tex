@@ -5,3 +5,9 @@
 
 % Stochastic calc specific macros
 \DeclarePairedDelimiterX\qv[1]{[}{]}{#1,#1}
+\newenvironment{sol}[1][Solution]{%
+    \begin{proof}[#1]%
+    %\setlength{\parindent}{2ex}
+}{%
+    \end{proof}%
+}

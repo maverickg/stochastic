@@ -184,18 +184,17 @@ The results themselves, however, are extremely important and will be used subseq
   Thus adding $T / \delta t$ terms of order $\delta t$ will yield something finite.
 
   On the other hand if $X$ has finite quadratic variation, on each subinterval $(k \delta t, (k+1) \delta t)$ the increment of $X$ should be of order $\sqrt{\delta t}$, so that adding $T / \delta t$ terms of the \emph{square} of the increment yields something finite.
-
-  Doing a quick check for Brownian motion, we see
+  Doing a quick check for Brownian motion (which has finite quadratic variation), we see
   \begin{equation*}
-    \E \abs{W(t + \delta t) - W(t)} = \sqrt{\delta t} \E \abs{N(0, 1)}
-    \quad\text{and}\quad
-    \E \abs{W(t + \delta t) - W(t)}^2 = \delta t\,,
+    \E \abs{W(t + \delta t) - W(t)} = \sqrt{\delta t} \E \abs{N(0, 1)}\,,
+    %\quad\text{and}\quad
+    %\E \abs{W(t + \delta t) - W(t)}^2 = \delta t\,,
   \end{equation*}
-  in line with our intuition above.
+  which is in line with our intuition.
 \end{remark}
 
 \begin{remark}
-  If a process has finite first variation, its quadratic variation will necessarily be $0$.
+  If a continuous process has finite first variation, its quadratic variation will necessarily be $0$.
   On the other hand, if a continuous process has finite (and non-zero) quadratic variation, its first variation will necessary be infinite.
 \end{remark}
 
@@ -344,7 +343,7 @@ The second integral, representing the noisy fluctuations, is the It\^o integral 
 Note that the above is a little more complicated than the It\^o integrals we will study first, since the process $S$ (that we're trying to define) also appears as an integrand on the right hand side.
 In general, such equations are called \emph{Stochastic differential equations}, and are extremely useful in many contexts.
 
-\section{The It\^o formula (unfinished)}
+\section{The It\^o formula}
 
 Using the abstract ``limit'' definition of the It\^o integral, it is hard to compute examples.
 For instance, what is
@@ -490,7 +489,7 @@ This is the celebrated It\^o formula (more correctly the It\^o-Doeblin\footnote{
 formula).
 
 \begin{theorem}[It\^o formula]
-  Suppose $f = f(t, x)$ is a function that is continuously differentiable in $t$ and twice continuously differentiable in $x$, then
+  If $f = f(t, x)$ is $C^{1,2}$ (i.e.\ a function that is continuously differentiable in $t$ and twice continuously differentiable in $x$), then
   \begin{multline}\label{e:3ito}
     f(T, X(T)) - f(0, X(0))
       = \int_0^T \partial_t f( t, X(t) ) \, dt
@@ -500,6 +499,11 @@ formula).
   \end{multline}
 \end{theorem}
 
+\begin{remark}
+  To clarify notation, $\partial_t f( t, X(t))$ means the following: differentiate~$f(t, x)$ with respect to $t$ (treating $x$ as a constant), and then substitute $x = X(t)$.
+  Similarly $\partial_x f( t, X(t))$ means differentiate $f(t, x)$ with respect to $x$, and then substitute $x = X(t)$.
+  Finally $\partial_x^2 f(t, X(t))$ means take the second derivative of the function $f(t, x)$ with respect to $x$, and the substitute $x = X(t)$.
+\end{remark}
 \begin{remark}
   In short hand differential form, this is written as
   \begin{equation}\label{e:3itoD}
@@ -523,21 +527,163 @@ formula).
 	+ \partial_x f(t, X(t) ) b(t)} \, dt
     \\
       \mathbin+ \int_0^T \partial_x f(t, X(t)) \sigma(t) \, dW(t)
-	+ \frac{1}{2} \int_0^T \partial_x^2 f(t, X(t) \, \sigma(t)^2 \, dt\,.
+	+ \frac{1}{2} \int_0^T \partial_x^2 f(t, X(t)) \, \sigma(t)^2 \, dt\,.
   \end{multline*}
   The second integral on the right is an It\^o integral (and hence a martingale).
   The other integrals are regular Riemann integrals which yield processes of finite variation.
 \end{remark}
 
-While a complete rigorous proof of the It\^o formula is technical, and beyond the scope of this course, we provide a quick heuristic argument here.
+While a complete rigorous proof of the It\^o formula is technical, and beyond the scope of this course, we provide a quick heuristic argument that illustrates the main idea clearly.
 
 \begin{proof}[Intuition behind the It\^o formula]
+  Suppose that the function $f$ is only a function of $x$ and doesn't depend on $t$, and $X$ is a standard Brownian motion (i.e.\ $b = 0$ and $\sigma = 1$).
+  In this case proving It\^o's formula reduces to proving
+  \begin{equation*}
+    f(W(T)) - f(W(0)) = \int_0^T f'(W(t)) \, dW(t) + \frac{1}{2} \int_0^T f''(W(t)) \, dt \,.
+  \end{equation*}
+
+  Let $P = \set{0 = t_0 < t_1 < \cdots < t_n = T}$ be a partition of $[0, T]$.
+  Taylor expanding $f$ to second order gives
+  \begin{multline}\label{e:3itoProof1}
+    f(W(T)) - f(W(0))
+      = \sum_{i=0}^{n-1} f(W(t_{i+1})) - f(W(t_i))
+    \\
+      = \sum_{i=0}^{n-1} f'(W(t_i)) (W(t_{i+1}) - W(t_i))
+	+ \frac{1}{2} \sum_{i=0}^{n-1} f''(W(t_i)) (W( t_{i+1}) - W(t_i))^2
+    \\
+	+ \frac{1}{2} \sum_{i=0}^{n-1} o\paren[\big]{ (W( t_{i+1}) - W(t_i))^2 } \,,
+  \end{multline}
+  where the last sum on the right is the remainder from the Taylor expansion.
+
+  Note the first sum on the right of~\eqref{e:3itoProof1} converges to the It\^o integral
+  \begin{equation*}
+    \int_0^T f'(W(t)) \, dW(t)\,.
+  \end{equation*}
+  For the second sum on the right of~\eqref{e:3itoProof1}, note
+  \begin{multline*}
+    f''(W(t_i)) (W( t_{i+1}) - W(t_i))^2
+      = f''(W(t_i)) (t_{i+1} - t_i)
+    \\
+	+ f''(W(t_i))\brak[\big]{(W( t_{i+1}) - W(t_i))^2 - (t_{i+1} - t_i)}
+  \end{multline*}
+  After summing over $i$, first term on the right converges to the Riemann integral $\int_0^T f''(W(t)) \, dt$.
+  The second term on the right is similar to what we had when computing the quadratic variation of $W$.
+  The variance of $(W( t_{i+1}) - W(t_i))^2 - (t_{i+1} - t_i)$ is of order $(t_{i+1} - t_i)^2$.
+  Thus we expect that the second term above, when summed over $i$, converges to $0$.
+
+  Finally each summand in the remainder term (the last term on the right of~\eqref{e:3itoProof1}) is smaller than $(W(t_{i+1}) - W(t_i))^2$.
+  (If, for instance, $f$ is three times continuously differentiable in $x$, then each summand in the remainder term is of order $(W(t_{i+1}) - W(t_i))^3$.)
+  Consequently, when summed over~$i$ this should converge to $0$ 
 \end{proof}
 
-\begin{todo}
-\begin{enumerate}
-  \item Motivate the proof of It\^o's formula.
-  \item Compute a few integrals
-\end{enumerate}
-\end{todo}
+\section{A few examples using It\^o's formula (unfinished)}
+
+Technically, as soon as you know It\^o's formula you can ``jump right in'' and derive the Black-Scholes equation.
+However, because of the importance of It\^o's formula, we work out a few simpler examples first.
+
+\begin{example}
+  Compute the quadratic variation of $W(t)^2$.
+\end{example}
+\begin{sol}
+  Let $f(t, x) = x^2$.
+  Then, by It\^o's formula,
+  \begin{align*}
+    d \paren[\big]{ W(t)^2 }
+      &= d f(t, W(t))
+    \\
+      &= \partial_t f( t, W(t)) \, dt + \partial_x f (t, W(t)) \, dW(t)
+	+ \frac{1}{2} \partial_x^2 f(t, W(t)) \, dt
+    \\
+      &= 2 W(t) \, dW(t) + dt\,.
+  \end{align*}
+  Or, in integral form,
+  \begin{equation*}
+    W(T)^2 - W(0)^2
+      = W(T)^2
+      = 2 \int_0^T W(t) \, dW(t) + T\,.
+  \end{equation*}
+  Now the second term on the right has finite first variation, and won't affect our computations for quadratic variation.
+  The first term is an martingale whose quadratic variation is $\int_0^T W(t)^2 \, dt$, and so
+  \begin{equation*}
+    \qv{W^2}(T) = 4 \int_0^T W(t)^2 \, dt \,.
+    \qedhere
+  \end{equation*}
+\end{sol}
+\begin{remark}
+  Note the above also tells you
+  \begin{equation*}
+    2 \int_0^T W(t) \, dW(t) = W(T)^2 - T \,.
+  \end{equation*}
+\end{remark}
+
+\begin{example}
+  Let $M(t) = W(t)$ and $N(t) = W(t)^2 - t$.
+  We know $M$ and $N$ are martingales.
+  Is $M N$ a martingale?
+\end{example}
+\begin{sol}
+  Note $M(t) N(t) = W(t)^3 - t W(t)$.
+  By It\^o's formula,
+  \begin{equation*}
+    d(MN) = - W(t) \, dt + (3 W(t)^2 - t) \, dW(t) + 3 W(t) \, dt \,.
+  \end{equation*}
+  Or in integral form
+  \begin{equation*}
+    M(t) N(t) = \int_0^t 2 W(s) \, ds + \int_0^t (3 W(s)^2 - s) \, dW(s)\,.
+  \end{equation*}
+  Now the second integral on the right is a martingale, but the first integral most certainly is not.
+  So $MN$ can not be a martingale.
+\end{sol}
+\begin{remark}
+  Note, above we changed the integration variable from $t$ to $s$.
+  This is perfectly legal -- the variable with which you integrate with respect to is a dummy variable (just line regular Riemann integrals) and you can replace it what your favourite (unused!) symbol.
+\end{remark}
+\begin{remark}
+  It's worth pointing out that the It\^o integral $\int_0^t \Delta(s) \, dW(s)$ is always a martingale (under the finiteness condition~\eqref{e:3Dsq}).
+  However, the Riemann integral $\int_0^t b(s) \, ds$ is only a martingale if $b = 0$ identically.
+\end{remark}
+
+\begin{proposition}
+  If $f = f(t, x)$ is $C^{1,2}_b$ then the process
+  \begin{equation*}
+    M(t) \defeq f(t, W(t))
+      - \int_0^t \paren[\Big]{
+	  \partial_t f(s, W(s)) + \frac{1}{2} \partial_x^2 f(s, W(s))
+	} \, ds
+  \end{equation*}
+  is a martingale.
+\end{proposition}
+\begin{remark}
+  We'd seen this earlier, and the proof involved computing the conditional expectations directly and checking an algebraic identity involving the density of the normal distribution.
+  With It\^o's formula, the proof is ``immediate''.
+\end{remark}
+\begin{proof}
+  By It\^o's formula (in integral form)
+  \begin{align*}
+    \MoveEqLeft
+    f(t, W(t)) - f(0, W(0))
+    \\
+      &= \int_0^t \partial_t f(s, W(s)) \, ds
+	+ \int_0^t \partial_x f( s, W(s)) \, dW(s)
+	+ \frac{1}{2} \int_0^t \partial_x^2 f(s, W(s)) \, ds
+    \\
+      &= \int_0^t \paren[\Big]{
+	      \partial_t f(s, W(s))
+	      + \frac{1}{2} \partial_x^2 f(s, W(s))
+	    } \, ds
+	  + \int_0^t \partial_x f( s, W(s)) \, dW(s)\,.
+  \end{align*}
+  Substituting this we see
+  \begin{equation*}
+    M(t) = f(0, W(0))
+	  + \int_0^t \partial_x f( s, W(s)) \, dW(s)\,,
+  \end{equation*}
+  which is a martingale.
+\end{proof}
+\begin{remark}
+  Note we said $f \in C^{1,2}_b$ to ``cover our bases''.
+  Recall for It\^o integrals to be martingales, we need the finiteness condition~\eqref{e:3Dsq} to hold.
+  This will certainly be the case if $\partial_x f$ is bounded, which is why we made this assumption.
+  The result above is of course true under much more general assumptions.
+\end{remark}
 \end{document}
