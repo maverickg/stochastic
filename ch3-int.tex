@@ -270,10 +270,12 @@ This lemma, as we will shortly see, is the key to the construction of stochastic
   \end{align*}
   Substituting these in~\eqref{e:3sum1} immediately yields~\eqref{e:3Eip2} for $t_n = T$.
 
-  The proof of~\eqref{e:3dqv} is similar in spirit, but has a few more details to check.
-  Let $A(t)$ be the right hand side of~\eqref{e:3dqv}.
-  This is clearly a continuous, increasing, adapted process.
-  Now the main idea is to use the tower property to check that the process $M(t)^2 - A(t)$ is a martingale, and then use Theorem~\ref{t:qv2}.
+  The proof that $I_P$ is an martingale uses the same ``tower property'' idea, and is left to the reader to check.
+  The proof of~\eqref{e:3dqv} is also similar in spirit, but has a few more details to check.
+  The main idea is to let $A(t)$ be the right hand side of~\eqref{e:3dqv}.
+  Observe~$A$ is clearly a continuous, increasing, adapted process.
+  Thus, if we show $M^2 - A$ is a martingale, then using Theorem~\ref{t:qv2} we will have $A = \qv{M}$ as desired.
+  The proof that $M^2 - A$ is an martingale uses the same ``tower property'' idea, but is a little more technical and is left to the reader.
 \end{proof}
 
 Note that as $\norm{P} \to 0$, the right hand side of~\eqref{e:3dqv} converges to the standard Riemann integral $\int_0^T \Delta(t)^2 \, dt$.
@@ -281,11 +283,11 @@ It\^o realised he could use this to prove that $I_P$ itself converges, and the l
 
 \begin{theorem}\label{t:3ipconv}
   If $\int_0^T \Delta(t)^2 \, dt < \infty$ almost surely, then as $\norm{P} \to 0$, the processes $I_P$ converge to a \emph{continuous process} $I$ denoted by
-  \begin{equation*}
+  \begin{equation}\label{e:3Idef}
     I(T)
       \defeq \lim_{\norm{P} \to 0} I_P(T)\,
       \defeq \int_0^T \Delta(t) \, dW(t)\,.
-  \end{equation*}
+  \end{equation}
   This is known as the \emph{It\^o integral of $\Delta$ with respect to $W$}.
   If further
   \begin{equation}\label{e:3Dsq}
@@ -303,7 +305,19 @@ It\^o realised he could use this to prove that $I_P$ itself converges, and the l
   That is, the terms in the sum are $\Delta(t_i) (W(t_{i+1}) - W(t_i))$, and not $\Delta(t_{i+1}) (W(t_{i+1}) - W(t_i))$ or $\frac{1}{2} (\Delta(t_i) + \Delta(t_{i+1})) (W(t_{i+1}) - W(t_i))$, or something else.
 
   Usually if the process is not adapted, there is no meaningful way to make sense of the limit.
-  If you sample at different points, it still works out (usually) but what you get is \emph{different} from the It\^o integral (one example is the Stratonovich integral). 
+  However, if you sample at different points, it still works out (usually) but what you get is \emph{different} from the It\^o integral (one example is the Stratonovich integral). 
+\end{remark}
+
+\begin{remark}
+  The variable $t$ used in~\eqref{e:3Idef} is a ``dummy'' integration variable.
+  Namely one can write
+  \begin{equation*}
+    \int_0^T \Delta(t) \, dW(t)
+      = \int_0^T \Delta(s) \, dW(s)
+      = \int_0^T \Delta(r) \, dW(r)
+      \,,
+  \end{equation*}
+  or any other variable of your choice.
 \end{remark}
 
 \begin{corollary}[It\^o Isometry]
@@ -372,10 +386,10 @@ The second integral the It\^o integral we constructed in the previous section.
 
 \begin{remark}
   The shorthand notation for~\eqref{e:3X} is to write
-  \begin{equation*}
+  \begin{gather}\label{e:3Xd}
     \tag{\ref{e:3X}$'$}
     dX(t) = b(t) \, dt + \sigma(t) \, dW(t)\,.
-  \end{equation*}
+  \end{gather}
 \end{remark}
 
 \begin{proposition}
@@ -488,8 +502,11 @@ This is the celebrated It\^o formula (more correctly the It\^o-Doeblin\footnote{
 }
 formula).
 
-\begin{theorem}[It\^o formula]
-  If $f = f(t, x)$ is $C^{1,2}$ (i.e.\ a function that is continuously differentiable in $t$ and twice continuously differentiable in $x$), then
+\begin{theorem}[It\^o formula, aka It\^o-Doeblin formula]
+  If $f = f(t, x)$ is $C^{1,2}$ function\footnote{%
+    Recall a function $f = f(t, x)$ is said to be $C^{1,2}$ if it is $C^1$ in $t$ (i.e.\ differentiable with respect to $t$ and $\partial_t f$ is continuous), and $C^2$ in $x$ (i.e.\ twice differentiable with respect to $x$ and $\partial_x f$, $\partial_x^2 f$ are both continuous).
+  }
+  then
   \begin{multline}\label{e:3ito}
     f(T, X(T)) - f(0, X(0))
       = \int_0^T \partial_t f( t, X(t) ) \, dt
@@ -506,11 +523,12 @@ formula).
 \end{remark}
 \begin{remark}
   In short hand differential form, this is written as
-  \begin{equation}\label{e:3itoD}
+  \begin{multline}\label{e:3itoD}
     \tag{\ref{e:3ito}$'$}
     df(t, X(t)) = \partial_t f(t, X(t)) \, dt + \partial_x f(t, X(t)) \, dX(t)
+    \\
       + \frac{1}{2} \partial_x^2 f(t, X(t)) \, d\qv{X}(t)\,.
-  \end{equation}
+  \end{multline}
   The term $\frac{1}{2} \partial_x^2 f \, d\qv{X}(t)$ is an ``extra'' term, and is often referred to as the \emph{It\^o correction term}.
   The It\^o formula is simply a version of the \emph{chain rule} for stochastic processes.
   %For brevity many write
