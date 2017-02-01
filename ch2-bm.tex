@@ -647,6 +647,43 @@ of~$\mathcal F$ then $\E( X \given \mathcal F) = \E X$.
   The general case when $X$ is not simple follows by approximation.
 \end{proof}
 
+The above fact has a generalization that is tremendously useful when computing conditional expectations.
+Intuitively, the general principle is to \emph{average} quantities that are independent of $\mathcal F$, and \emph{leave unchanged} quantities that are $\mathcal F$ measurable.
+This is known as the independence lemma.
+\begin{lemma}[Independence Lemma]
+  Suppose $X, Y$ are two random variables such that $X$ is independent of $\mathcal F$ and $Y$ is $\mathcal F$-measurable.
+  Then if $f = f(x, y)$ is any function of two variables we have
+  \begin{equation*}
+    \E \paren[\big]{ f(X, Y) \given \mathcal F}
+      = g(Y)\,,
+  \end{equation*}
+  where $g = g(y)$ is the function defined by
+  \begin{equation*}
+    g(y) \defeq \E f(X, y)\,.
+  \end{equation*}
+\end{lemma}
+\begin{remark*}
+  If $p_X$ is the probability density function of $X$, then the above says
+  \begin{equation*}
+    \E\paren[\big]{ f(X, Y) \given \mathcal F}
+      = \int_\R f(x, Y) \, p_X(x) \, dx\,.
+  \end{equation*}
+  Indicating the $\omega$ dependence explicitly for clarity, the above says
+  \begin{equation*}
+    \E\paren[\big]{ f(X, Y) \given \mathcal F}(\omega)
+      = \int_\R f(x, Y(\omega)) \, p_X(x) \, dx\,.
+  \end{equation*}
+\end{remark*}
+\iffalse
+\begin{remark}
+  In Lebesgue integral notation (with the $\omega$ dependence explicitly indicated) this simply says that
+  \begin{equation*}
+    \E( f(X, Y) \given \mathcal F )(\omega)
+      = \int_\Omega f( X(\xi), Y(\omega) ) \, d\P(\xi)\,.
+  \end{equation*}
+\end{remark}
+\fi
+
 
 \begin{remark}
   Note we defined and motivated conditional expectations and conditional probabilities independently.
@@ -696,6 +733,8 @@ This is probably the first visible advantage of the measure theoretic approach, 
   The third property is easily checked for simple random variables, and follows in general by approximating.
   The tower property follows immediately from the definition.
 \end{proof}
+
+
 
 \subsection{Adapted processes and filtrations}
 

@@ -451,7 +451,7 @@ Given an adapted process $\Delta$, interpret $X$ as the price of an asset, and $
 (We could either be long, or short on the asset so $\Delta$ could be positive or negative.)
 
 \begin{definition}
-  We define the It\^o integral of $\Delta$ with respect to $X$ by
+  We define the \remove{It\^o} integral of $\Delta$ with respect to $X$ by
   \begin{equation*}
     \int_0^T \Delta(t) \, dX(t)
       \defeq \int_0^T \Delta(t) b(t) \, dt 
@@ -463,6 +463,8 @@ As before, $\int_0^T \Delta \, dX$ represents the winnings or profit obtained us
 
 \begin{remark}
   Note that the first integral on the right $\int_0^T \Delta(t) b(t) \, dt$ is a regular Riemann integral, and the second one is an It\^o integral.
+  Recall that It\^o integrals with respect to Brownian motion (i.e.\ integrals of the form $\int_0^t \Delta(s) \, dW(s)$ are martingales).
+  Integrals with respect to a general process $X$ are only guaranteed to be martingales if $X$ itself is a martingale (i.e.\ $b = 0$), or if the integrand is $0$.
 \end{remark}
 
 \begin{remark}
@@ -704,4 +706,54 @@ However, because of the importance of It\^o's formula, we work out a few simpler
   This will certainly be the case if $\partial_x f$ is bounded, which is why we made this assumption.
   The result above is of course true under much more general assumptions.
 \end{remark}
+
+\begin{example}
+  Let $X(t) = t \sin( W(t) )$. Is $X^2 - \qv{X}$ a martingale?
+\end{example}
+\begin{sol}
+  We compute
+  \begin{equation*}
+    dX(t) = \sin(W(t)) \, dt + t \cos( W(t)) \, dW(t) - \frac{1}{2} t \sin^2(W(t)) \, dt\,,
+  \end{equation*}
+  and so
+  \begin{equation*}
+    d\qv{X}(t) = t^2 \cos^2(W(t)) \, dt\,.
+  \end{equation*}
+  Also
+  \begin{equation*}
+    d X(t)^2
+      = 2 X(t) \, dX(t) + d\qv{X}(t)
+  \end{equation*}
+  and so
+  \begin{multline*}
+    d( X(t)^2 - \qv{X} )
+      = 2 X(t) \, dX(t)
+    \\
+      = 2t \sin(t) \paren[\big]{ \sin(W(t)) - \frac{t \sin(W(t))^2 }{2} } \, dt
+	+ 2t \sin(t) \paren[\big]{ t \cos(W(t)) } \, dW(t)\,.
+  \end{multline*}
+  Since the $dt$ term above isn't $0$, $X(t)^2 - \qv{X}$ can not be a martingale.
+\end{sol}
+
+Recall we said earlier that for any martingale $M$, $M^2 - \qv{M}$ is a martingale.
+We used this fact in the construction of It\^o integrals, and the proof of It\^o's formula.
+However, once we have It\^o's formula, this fact can be deduced quickly for It\^o processes.
+
+\begin{proposition}
+  Let $M(t)= \int_0^t \sigma(s) \, dW(s)$.
+  Then $X^2 - \qv{X}$ is a martingale.
+\end{proposition}
+\begin{proof}
+  Let $N(t) = X(t)^2 - \qv{X}(t)$.
+  Observe that by It\^o's formula,
+  \begin{equation*}
+    d( X(t)^2 ) = 2 X(t) \, dX(t) + d\qv{X}(t)\,.
+  \end{equation*}
+  Hence
+  \begin{equation*}
+    d N = 2 X(t) dX(t) + d\qv{X}(t) - d\qv{X}(t)
+      = 2X(t) \sigma(t) \, dW(t)\,,
+  \end{equation*}
+  which is a martingale.
+\end{proof}
 \end{document}
