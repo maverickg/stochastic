@@ -1,7 +1,7 @@
 %&subfile
 \begin{document}
 \ifstandalonechapter\setcounter{chapter}{2}\fi
-\chapter{Stochastic Integration (unfinished)}
+\chapter{Stochastic Integration}
 
 \section{Motivation}
 Suppose $\Delta(t)$ is your position at time $t$ on a security whose price is $S(t)$.
@@ -162,7 +162,7 @@ It turns out that the \emph{second} variation of any \emph{square integrable} ma
 
 The above wasn't a co-incidence.
 This property in fact characterizes the quadratic variation.
-\begin{theorem}\label{t:qv1}
+\begin{theorem}\label{t:3qv1}
   Let $M$ be a continuous martingale with respect to a filtration~$\set{\mathcal F_t}$.
   Then $\E M(t)^2 < \infty$ if and only if $\E \qv{M}(t) < \infty$.
   In this case the process $M(t)^2 - \qv{M}(t)$ is also a martingale with respect to the same filtration, and hence $\E M(t)^2 - \E M(0)^2 = \E \qv{M}(t)$.
@@ -170,7 +170,7 @@ This property in fact characterizes the quadratic variation.
 
 The above is in fact a characterization of the quadratic variation of martingales.
 
-\begin{theorem}\label{t:qv2}
+\begin{theorem}\label{t:3qv2}
   If $A(t)$ is any continuous, increasing, adapted process such that $M(t)^2 - A(t)$ is a martingale, then $A = \qv{M}$.
 \end{theorem}
 
@@ -274,7 +274,7 @@ This lemma, as we will shortly see, is the key to the construction of stochastic
   The proof of~\eqref{e:3dqv} is also similar in spirit, but has a few more details to check.
   The main idea is to let $A(t)$ be the right hand side of~\eqref{e:3dqv}.
   Observe~$A$ is clearly a continuous, increasing, adapted process.
-  Thus, if we show $M^2 - A$ is a martingale, then using Theorem~\ref{t:qv2} we will have $A = \qv{M}$ as desired.
+  Thus, if we show $M^2 - A$ is a martingale, then using Theorem~\ref{t:3qv2} we will have $A = \qv{M}$ as desired.
   The proof that $M^2 - A$ is an martingale uses the same ``tower property'' idea, but is a little more technical and is left to the reader.
 \end{proof}
 
@@ -596,7 +596,7 @@ While a complete rigorous proof of the It\^o formula is technical, and beyond th
   Consequently, when summed over~$i$ this should converge to $0$ 
 \end{proof}
 
-\section{A few examples using It\^o's formula (unfinished)}
+\section{A few examples using It\^o's formula}
 
 Technically, as soon as you know It\^o's formula you can ``jump right in'' and derive the Black-Scholes equation.
 However, because of the importance of It\^o's formula, we work out a few simpler examples first.
@@ -735,13 +735,13 @@ However, because of the importance of It\^o's formula, we work out a few simpler
   Since the $dt$ term above isn't $0$, $X(t)^2 - \qv{X}$ can not be a martingale.
 \end{sol}
 
-Recall we said earlier that for any martingale $M$, $M^2 - \qv{M}$ is a martingale.
+Recall we said earlier (Theorem~\ref{t:3qv1}) that for any martingale $M$, $M^2 - \qv{M}$ is a martingale.
 We used this fact in the construction of It\^o integrals, and the proof of It\^o's formula.
 However, once we have It\^o's formula, this fact can be deduced quickly for It\^o processes.
 
 \begin{proposition}
   Let $M(t)= \int_0^t \sigma(s) \, dW(s)$.
-  Then $X^2 - \qv{X}$ is a martingale.
+  Then $M^2 - \qv{M}$ is a martingale.
 \end{proposition}
 \begin{proof}
   Let $N(t) = X(t)^2 - \qv{X}(t)$.
@@ -756,4 +756,83 @@ However, once we have It\^o's formula, this fact can be deduced quickly for It\^
   \end{equation*}
   which is a martingale.
 \end{proof}
+
+\section{Review Problems}
+
+\begin{problem}
+  If $0 \leq r < s < t$, compute $\E \paren[\big]{ W(r) W(s) W(t)}$.
+\end{problem}
+
+\begin{problem}
+  Define the processes $X, Y, Z$ by
+  \begin{equation*}
+    X(t) = \int_0^{W(t)} e^{-W(s)^2} \, ds\,,
+    \quad
+    Y(t) = \exp\paren[\Big]{ \int_0^t W(s) \, ds }\,,
+    \quad
+    Z(t) = \frac{t}{X(t)}\,.
+  \end{equation*}
+  Decompose each of these processes as the sum of a martingale and a process of finite first variation.
+  What is the quadratic variation of each of these processes?
+\end{problem}
+
+\begin{problem}
+  Define the processes $X, Y$ by
+  \begin{equation*}
+    X(t) \defeq \int_0^t W(s) \, ds\,, \quad
+    Y(t) \defeq \int_0^t W(s) \, dW(s)\,.
+  \end{equation*}
+  Given $0 \leq s < t$, compute the conditional expectations
+  $\E( X(t) \given \mathcal F_s )$, 
+  and
+  $\E( Y(t) \given \mathcal F_s )$.
+\end{problem}
+
+\begin{problem}
+  Let $\displaystyle M(t) = \int_0^t W(s) \, dW(s)$.
+  Find a function $f$ such that
+  \begin{equation*}
+    E(t) \defeq \exp\paren[\Big]{ M(t) - \int_0^t f(s, W(s)) \, ds }
+  \end{equation*}
+  is a martingale.
+\end{problem}
+\begin{problem}
+  Suppose $\sigma = \sigma(t)$ is a deterministic (i.e.\ non-random) process, and $X$ is the It\^o process defined by
+  \begin{equation*}
+    X(t) = \int_0^t \sigma(u) \, dW(u)\,.
+  \end{equation*}
+  \vspace{-.7\baselineskip}
+  \begin{parts}
+    \item
+      Given $\lambda, s, t \in \R$ with $0 \leq s < t$ compute $\E \paren{ e^{\lambda (X(t) - X(s))} \given \mathcal F_s}$.
+
+    \item
+      If $r \leq s$ compute $\E \exp\paren{\lambda X(r) + \mu(X(t) - X(s))}$.
+
+    \item
+      What is the joint distribution of $(X(r), X(t) - X(s))$?
+
+    \item
+      \emph{(L\'evy's criterion)}
+      If $\sigma(u) = \pm 1$ for all $u$, then show that $X$ is a standard Brownian motion.
+  \end{parts}
+\end{problem}
+
+\begin{problem}
+  Let $\displaystyle M(t) = \int_0^t W(s) \, dW(s)$.
+  For $s < t$, is $M(t) - M(s)$ independent of $\mathcal F_s$?
+  Justify.
+\end{problem}
+
+\begin{problem}
+  Determine whether the following identities are true or false, and justify your answer.
+  \begin{parts}
+    \item
+      $\displaystyle e^{2t} \sin(2 W(t)) = 2 \int_0^t e^{2s} \cos(2 W(s)) \, dW(s)$.
+
+    \item
+      $\displaystyle \abs{W(t)} = \int_0^t \sign(W(s)) \, dW(s)$.
+      (Recall $\sign(x) = 1$ if $x > 0$, $\sign(x) = -1$ if $x < 0$ and $\sign(x) = 0$ if $x = 0$.)
+  \end{parts}
+\end{problem}
 \end{document}

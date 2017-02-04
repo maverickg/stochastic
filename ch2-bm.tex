@@ -657,11 +657,17 @@ This is known as the independence lemma.
     \E \paren[\big]{ f(X, Y) \given \mathcal F}
       = g(Y)\,,
   \end{equation*}
-  where $g = g(y)$ is the function defined by
+  where $g = g(y)$ is the function%
+  \footnote{%
+    To clarify, we are defining a function $g = g(y)$ here when $y \in \R$ is any real number.
+    Then, once we compute $g$, we substitute in $y = Y (= Y(\omega))$, where $Y$ is the given random variable.%
+  }
+  defined by
   \begin{equation*}
     g(y) \defeq \E f(X, y)\,.
   \end{equation*}
 \end{lemma}
+
 \begin{remark*}
   If $p_X$ is the probability density function of $X$, then the above says
   \begin{equation*}
