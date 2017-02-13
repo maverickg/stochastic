@@ -608,7 +608,7 @@ This is how we define conditional expectation.
   If, however, $\mathcal F = \sigma( \set{F_i} )$ where $\set{F_i}$ is a pairwise disjoint collection of events whose union is all of $\Omega$ and $\P(F_i) > 0 $ for all $i$, then
   \begin{equation*}
     \E( X \given \mathcal F)
-      = \sum_i \frac{1}{\P(F_i)} \int_{F_i} X \, d\P \,.
+      = \sum_{i=1}^{\infty}  \frac{\one_{F_i}}{\P(F_i)} \int_{F_i} X \, d\P \,.
   \end{equation*}
 \end{remark}
 \begin{remark}

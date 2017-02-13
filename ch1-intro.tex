@@ -20,7 +20,7 @@ The mathematical tools required for this are Brownian motion, and It\^o integral
 
 An important point to note is that the above model can not be used to \emph{predict} the price of $S$, because randomness is built into the model.
 Instead, we will use this model is to \emph{price securities}.
-Consider a \emph{call option} for a stock $S$ with strike prices $K$ and maturity $T$ (i.e.\ this is the right to buy the asset $S$ at price $K$ at time $T$).
+Consider a \emph{European call option} for a stock $S$ with strike prices $K$ and maturity $T$ (i.e.\ this is the right to buy the asset $S$ at price $K$ at time $T$).
 Given the stock price $S(t)$ at some time $t \leq T$, what is a fair price for this option?
 
 Seminal work of Black and Scholes computes the fair price of this option in terms of the time to maturity $T - t$, the stock price $S(t)$, the strike price $K$, the model parameters $\alpha, \sigma$ and the interest rate~$r$.
@@ -38,7 +38,7 @@ where
 	+ \paren[\Big]{ r \pm \frac{\sigma^2}{2} } \tau
       }\,.
 \end{equation*}
-Here $r$ is the interest rate at which you can borrow or lend money.
+Here $r$ is the interest rate at which you can borrow or lend money, and $N$ is the CDF of a standard normal random variable.
 (It might come as a surprise to you that the formula above is independent of~$\alpha$, the mean return rate of the stock.)
 
 The second goal of this course is to understand the derivation of this formula.

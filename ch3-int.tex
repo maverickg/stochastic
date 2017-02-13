@@ -447,6 +447,16 @@ The second integral the It\^o integral we constructed in the previous section.
   The process $M$ is called the martingale part of $X$, and $B$ is called the \emph{bounded variation} part of $X$.
 \end{remark}
 
+\begin{proposition}\label{p:3smuniq}
+  The semi-martingale decomposition of $X$ is unique.
+  That is, if $X = B_1 + M_1 = B_2 + M_2$ where $B_1, B_2$ are continuous adapted processes with bounded variation, and $M_1, M_2$ are continuous (square integrable) martingales, then $B_1 = B_2$ and $M_1 = M_2$.
+\end{proposition}
+\begin{proof}
+  Set $M = M_1 - M_2$ and $B = B_1 - B_2$, and note that $M = -B$.
+  Consequently, $M$ has finite first variation and hence $0$ quadratic variation.
+  This implies $\E M(t)^2 = \E \qv{M}(t) = 0$ and hence $M = 0$ identically, which in turn implies $B = 0$, $B_1 = B_2$ and $M_1 = M_2$.
+\end{proof}
+
 Given an adapted process $\Delta$, interpret $X$ as the price of an asset, and $\Delta$ as our position on it.
 (We could either be long, or short on the asset so $\Delta$ could be positive or negative.)
 
@@ -475,7 +485,7 @@ As before, $\int_0^T \Delta \, dX$ represents the winnings or profit obtained us
 	+ \Delta(t_n) (X(T) - X(t_n))
     \quad\text{if } T \in [t_n, t_{n+1})\,,
   \end{equation*}
-  then $I_P$ converges to the integral $\int_0^T \Delta(t) X(t) \, dt$ defined above.
+  then $I_P$ converges to the integral $\int_0^T \Delta(t) \, d X(t)$ defined above.
   This works in the same way as~Theorem~\ref{t:3ipconv}.
 \end{remark}
 
@@ -711,15 +721,22 @@ However, because of the importance of It\^o's formula, we work out a few simpler
   Let $X(t) = t \sin( W(t) )$. Is $X^2 - \qv{X}$ a martingale?
 \end{example}
 \begin{sol}
-  We compute
-  \begin{equation*}
-    dX(t) = \sin(W(t)) \, dt + t \cos( W(t)) \, dW(t) - \frac{1}{2} t \sin^2(W(t)) \, dt\,,
-  \end{equation*}
+  Let $f(t, x) = t \sin(x)$.
+  Observe $X(t) = f(t, W(t))$, $\partial_t f = \sin x$, $\partial_x f = t \cos x$, and $\partial_x^2 f = - t \sin x$.
+  Thus by It\^o's formula,
+  \begin{multline*}
+    dX(t)
+      = \partial_t f( t, W(t)) \, dt + \partial_x f (t, W(t)) \, dW(t)
+	+ \frac{1}{2} \partial_x^2 f(t, W(t)) \, d\qv{W}(t)
+    \\
+      = \sin(W(t)) \, dt + t \cos( W(t)) \, dW(t) - \frac{1}{2} t \sin(W(t)) \, dt\,,
+  \end{multline*}
   and so
   \begin{equation*}
     d\qv{X}(t) = t^2 \cos^2(W(t)) \, dt\,.
   \end{equation*}
-  Also
+  Now let $g(x) = x^2$ and apply It\^o's formula to compute $d g(X(t))$.
+  This gives
   \begin{equation*}
     d X(t)^2
       = 2 X(t) \, dX(t) + d\qv{X}(t)
@@ -729,32 +746,38 @@ However, because of the importance of It\^o's formula, we work out a few simpler
     d( X(t)^2 - \qv{X} )
       = 2 X(t) \, dX(t)
     \\
-      = 2t \sin(t) \paren[\big]{ \sin(W(t)) - \frac{t \sin(W(t))^2 }{2} } \, dt
+      = 2t \sin(t) \paren[\big]{ \sin(W(t)) - \frac{t \sin(W(t)) }{2} } \, dt
 	+ 2t \sin(t) \paren[\big]{ t \cos(W(t)) } \, dW(t)\,.
   \end{multline*}
   Since the $dt$ term above isn't $0$, $X(t)^2 - \qv{X}$ can not be a martingale.
 \end{sol}
 
 Recall we said earlier (Theorem~\ref{t:3qv1}) that for any martingale $M$, $M^2 - \qv{M}$ is a martingale.
-We used this fact in the construction of It\^o integrals, and the proof of It\^o's formula.
-However, once we have It\^o's formula, this fact can be deduced quickly for It\^o processes.
+In the above example $X$ is not a martingale, and so there is no contradiction when we show that $X^2 - \qv{X}$ is not a martingale.
+If $M$ is a martingale, It\^o's formula can be used to ``prove''%
+\footnote{%
+  We used the fact that $M^2 - \qv{M}$ is a martingale crucially in the construction of It\^o integrals, and hence in proving It\^o's formula.
+  Thus proving $M^2 - \qv{M}$ is a martingale using the It\^o's formula is circular and not a valid proof.
+  It is however instructive, and helps with building intuition, which is why it is presented here.%
+}
+that $M^2 - \qv{M}$ is a martingale.
 
 \begin{proposition}
   Let $M(t)= \int_0^t \sigma(s) \, dW(s)$.
   Then $M^2 - \qv{M}$ is a martingale.
 \end{proposition}
 \begin{proof}
-  Let $N(t) = X(t)^2 - \qv{X}(t)$.
+  Let $N(t) = M(t)^2 - \qv{M}(t)$.
   Observe that by It\^o's formula,
   \begin{equation*}
-    d( X(t)^2 ) = 2 X(t) \, dX(t) + d\qv{X}(t)\,.
+    d( M(t)^2 ) = 2 M(t) \, dM(t) + d\qv{M}(t)\,.
   \end{equation*}
   Hence
   \begin{equation*}
-    d N = 2 X(t) dX(t) + d\qv{X}(t) - d\qv{X}(t)
-      = 2X(t) \sigma(t) \, dW(t)\,,
+    d N = 2 M(t) \, dM(t) + d\qv{M}(t) - d\qv{M}(t)
+      = 2M(t) \sigma(t) \, dW(t)\,.
   \end{equation*}
-  which is a martingale.
+  Since there is no ``$dt$'' term and It\^o integrals are martingales, $N$ is a martingale.
 \end{proof}
 
 \section{Review Problems}
@@ -766,7 +789,7 @@ However, once we have It\^o's formula, this fact can be deduced quickly for It\^
 \begin{problem}
   Define the processes $X, Y, Z$ by
   \begin{equation*}
-    X(t) = \int_0^{W(t)} e^{-W(s)^2} \, ds\,,
+    X(t) = \int_0^{W(t)} e^{-s^2} \, ds\,,
     \quad
     Y(t) = \exp\paren[\Big]{ \int_0^t W(s) \, ds }\,,
     \quad
@@ -817,7 +840,15 @@ However, once we have It\^o's formula, this fact can be deduced quickly for It\^
       If $\sigma(u) = \pm 1$ for all $u$, then show that $X$ is a standard Brownian motion.
   \end{parts}
 \end{problem}
-
+\begin{problem}
+  Define the process $X, Y$ by
+  \begin{equation*}
+    X = \int_0^t s \, dW(s)\,,
+    \quad
+    Y = \int_0^t W(s) \, ds\,.
+  \end{equation*}
+  Find a formula for $\E X(t)^n$ and $\E Y(t)^n$ for any $n \in \N$.
+\end{problem}
 \begin{problem}
   Let $\displaystyle M(t) = \int_0^t W(s) \, dW(s)$.
   For $s < t$, is $M(t) - M(s)$ independent of $\mathcal F_s$?
@@ -835,4 +866,356 @@ However, once we have It\^o's formula, this fact can be deduced quickly for It\^
       (Recall $\sign(x) = 1$ if $x > 0$, $\sign(x) = -1$ if $x < 0$ and $\sign(x) = 0$ if $x = 0$.)
   \end{parts}
 \end{problem}
+\section{The Black Scholes Merton equation (unfinished).}
+
+The price of an asset with a constant rate of return~$\alpha$ is given by
+\begin{equation*}
+  dS(t) = \alpha S(t) \, dt\,.
+\end{equation*}
+To account for noisy fluctuations we model stock prices by adding the term $\sigma S(t) \, dW(t)$ to the above:
+\begin{equation}\label{e:3gbm}
+  dS(t) = \alpha S(t) \, dt + \sigma dW(t)\,.
+\end{equation}
+The parameter $\alpha$ is called the \emph{mean return rate} or the \emph{percentage drift}, and the parameter $\sigma$ is called the \emph{volatility} or the \emph{percentage volatility}.
+
+\begin{definition}
+  A stochastic process $S$ satisfying~\eqref{e:3gbm} above is called a \emph{geometric Brownian motion}.
+\end{definition}
+
+The reason $S$ is called a geometric Brownian motion is as follows.
+Set $Y = \ln S$ and observe
+\begin{equation*}
+  dY(t) = \frac{1}{S(t)} \, dS(t) - \frac{1}{2 S(t)^2} \, d\qv{S}(t)
+    = \paren[\Big]{\alpha - \frac{\sigma^2}{2}} \, dt + \sigma \, dW(t)\,.
+\end{equation*}
+If $\alpha = \sigma^2/2$ then $Y = \ln S$ is simply a Brownian motion.
+
+We remark, however, that our application of It\^o's formula above is not completely justified.
+Indeed, the function $f(x) = \ln x$ is \emph{not} differentiable at $x = 0$, and It\^o's formula requires $f$ to be at least $C^2$.
+The reason the application of It\^o's formula here is valid is because the process $S$ \emph{never} hits the point $x = 0$, and at all other points the function $f$ is infinitely differentiable.
+
+The above also gives us an explicit formula for $S$.
+Indeed,
+\begin{equation*}
+  \ln\paren[\Big]{ \frac{S(t)}{S(0)} }
+    = \paren[\Big]{\alpha - \frac{\sigma^2}{2}} t + \sigma W(t)\,,
+\end{equation*}
+and so
+\begin{equation}\label{e:3gbmFor}
+  S(t) = S(0) \exp\paren[\Big]{
+    \paren[\Big]{\alpha - \frac{\sigma^2}{2}} t + \sigma W(t)
+  }\,.
+\end{equation}
+
+Now consider a European call option with strike price $K$ and maturity time $T$.
+This is a security that allows you the option (not obligation) to buy~$S$ at price $K$ and time $T$.
+Clearly the price of this option at time $T$ is $(S(T) - K)^+$.
+Our aim is to compute the \emph{arbitrage free}%
+\footnote{
+  In an arbitrage free market, we say $p$ is the arbitrage free price of a non traded security if given the opportunity to trade the security at price $p$, the market is still arbitrage free.
+  (Recall a financial market is said to be \emph{arbitrage free} if there doesn't exist a self-financing portfolio $X$ with $X(0) = 0$ such that at some $t > 0$ we have $X(t) \geq 0$ and $\P(X(t) > 0) > 0$.)%
+}
+price of such an option at time $t < T$.
+
+Black and Scholes realised that the price of this option at time $t$ should only depend on the asset price $S(t)$, and the current time $t$ (or more precisely, the time to maturity $T - t$), and of course the model parameters $\alpha, \sigma$.
+In particular, the option price does not depend on the price history of $S$.
+
+\begin{theorem}\label{t:3bsm}
+  Suppose we have an arbitrage free financial market consisting of a money market account with constant return rate $r$, and a risky asset whose price is given by $S$.
+  Consider a European call option with strike price $K$ and maturity $T$.
+  \begin{enumerate}
+    \item\label{p:3bsm1}
+      If $c = c(x, t)$ is a function such that at any time $t \leq T$, the arbitrage free price of this option is $c(t, S(t))$, then
+      \begin{alignat}{2}
+	\span\label{e:3BS}
+	  \partial_t c + r x \partial_x c + \frac{\sigma^2 x^2}{2} \partial_x^2 c - r c
+	  = 0
+	  &\qquad& x > 0,\ t < T\,,
+	\\
+	\span\label{e:3cBC}
+	  c(t, 0) = 0
+	  && t \leq T\,,
+	\\
+	\span\label{e:3TC}
+	  c(T, x) = (x - K)^+
+	  && x \geq 0\,.
+      \end{alignat}
+
+    \item\label{p:3bsm2}
+      Conversely, if $c$ satisfies~\eqref{e:3BS}--\eqref{e:3TC} then $c(t, S(t))$ is the arbitrage free price of this option at any time $t \leq T$.
+  \end{enumerate}
+\end{theorem}
+\begin{remark}
+  Since $\alpha, \sigma$ and $T$ are fixed, we suppress the explicit dependence of $c$ on these quantities.
+\end{remark}
+\begin{remark}
+  The above result assumes the following:
+  \begin{enumerate}
+    \item
+      The market is \emph{frictionless} (i.e.\ there are no transaction costs).
+    \item
+      The asset is liquid and fractional quantities of it can be traded.
+    \item
+      The borrowing and lending rate are both $r$.
+  \end{enumerate}
+\end{remark}
+\begin{remark}
+  Even though the asset price $S(t)$ is random, the function $c$ is a deterministic (non-random) function.
+  The option price, however, is $c(t, S(t))$, which is certainly random.
+\end{remark}
+\begin{remark}
+  Equation~\eqref{e:3BS}--\eqref{e:3TC} are the \emph{Black Scholes Merton PDE}.
+  This is a \emph{partial differential equation}, which is a differential equation involving derivatives with respect to more than one variable.
+  Equation~\eqref{e:3BS} governs the evolution of $c$ for $x \in (0, \infty)$ and $t < T$.
+  Equation~\eqref{e:3TC} specifies the terminal condition at $t = T$, and equation~\eqref{e:3cBC} specifies a boundary condition at $x = 0$.
+
+  To be completely correct, one also needs to add a boundary condition as $x \to \infty$ to the system~\eqref{e:3BS}--\eqref{e:3TC}.
+  When $x$ is very large, the call option is deep in the money, and will very likely end in the money.
+  In this case the price fluctuations of $S$ are small in comparison, price of the option should roughly be the discounted cash value of $(x - K)^+$.
+  Thus a boundary condition at $x = \infty$ can be obtained by supplementing~\eqref{e:3cBC} with
+  \begin{gather}\label{e:3cBCp}
+    \tag{\ref{e:3cBC}$'$}
+    \lim_{x \to \infty} \paren[\big]{
+      c(t, x) - (x - K e^{-r(T-t)})
+    } = 0\,.
+  \end{gather}
+\end{remark}
+\begin{remark}
+  The system~\eqref{e:3BS}--\eqref{e:3TC} can be solved explicitly using standard calculus by substituting~$y = \ln x$ and converting it into the \emph{heat equation}, for which the solution is explicitly known.
+  This gives the Black-Scholes-Merton formula
+  \begin{equation}\label{e:3c}
+    c(t, x) = x N( d_+(T - t, x) ) - Ke^{-r (T-t)} N( d_-(T-t, x) )
+  \end{equation}
+  where
+  \begin{equation}\label{e:3dpm}
+    d_\pm( \tau, x ) \defeq
+      \frac{1}{\sigma \sqrt{\tau}}\paren[\Big]{
+	\ln\paren[\Big]{\frac{x}{K}}
+	  + \paren[\Big]{ r \pm \frac{\sigma^2}{2} } \tau
+      }\,,
+  \end{equation}
+  and
+  \begin{equation}\label{e:3N}
+    N(x) \defeq \frac{1}{\sqrt{2\pi}} \int_0^x e^{-y^2 / 2} \, dy\,,
+  \end{equation}
+  is the CDF of a standard normal variable.
+
+  Even if you're unfamiliar with the techniques involved in arriving at the solution above, you can certainly check that the function $c$ given by~\eqref{e:3c}--\eqref{e:3dpm} above satisfies~\eqref{e:3BS}--\eqref{e:3TC}.
+  Indeed, this is a direct calculation that only involves patience and a careful application of the chain rule.
+  We will, however, derive~\eqref{e:3c}--\eqref{e:3dpm} later using risk neutral measures.
+\end{remark}
+
+
+
+We will prove Theorem~\ref{t:3bsm} by using a \emph{replicating portfolio}.
+This is a portfolio (consisting of cash and the risky asset) that has exactly the same cash flow at maturity as the European call option that needs to be priced.
+%We compute this price by creating a replicating portfolio with the same cash flow.
+%That is, if $X(t)$ is the value of the replicating portfolio at time $t$, we will arrange 
+Specifically, let $X(t)$ be the value of the replicating portfolio and $\Delta(t)$ be the number of shares of the asset held.
+The remaining $X(t) - S(t) \Delta(t)$ will be invested in the money market account with return rate $r$.
+(It is possible that $\Delta(t) S(t) > X(t)$, in which means we borrow money from the money market account to invest in stock.)
+For a replicating portfolio, the trading strategy $\Delta$ should be chosen in a manner that ensures that we have the same cash flow as the European call option.
+That is, we must have $X(T) = (S(T) - K)^+ = c(T, S(T))$.
+Now the arbitrage free price is precisely the value of this portfolio.
+
+\begin{remark}
+  Through the course of the proof we will see that given the function $c$, the number of shares of $S$ the replicating portfolio should hold is given by the \emph{delta hedging rule}
+  \begin{equation}\label{e:3DH}
+    \Delta(t) = \partial_x c(t, S(t)) \,.
+  \end{equation}
+\end{remark}
+\begin{remark}
+  Note that there is no $\alpha$ dependence in the system~\eqref{e:3BS}--\eqref{e:3TC}, and consequently the formula~\eqref{e:3c} does not depend on~$\alpha$.
+  At first sight, this might appear surprising.
+  (In fact, Black and Scholes had a hard time getting the original paper published because the community couldn't believe that the final formula is independent of~$\alpha$.)
+  The fact that~\eqref{e:3c} is independent of $\alpha$ can be heuristically explained by the fact that the replicating portfolio also holds the same asset: thus a high mean return rate will help both an investor holding a call option and an investor holding the replicating portfolio.
+  (Of course this isn't the entire story, as one has to actually write down the dependence and check that an investor holding the call option benefits exactly as much as an investor holding the replicating portfolio.
+  This is done below.)
+\end{remark}
+\begin{proof}[Proof of Theorem~\ref{t:3bsm} part~\ref{p:3bsm1}]
+  If $c(t, S(t))$ is the arbitrage free price, then, by definition 
+  \begin{equation}\label{e:3ceqx}
+    c(t, S(t)) = X(t)\,,
+  \end{equation}
+  where $X(t)$ is the value of a replicating portfolio.
+  %that holds~$\Delta(t)$ shares of the asset and the remaining $X(t) - \Delta(t) S(t)$ in the money market account.
+  Since our portfolio holds $\Delta(t)$ shares of $S$ and $X(t) - \Delta(t) S(t)$ in a money market account, the evolution of the value of this portfolio is given by
+  \begin{align*}
+    dX(t) &= \Delta(t) \, dS(t) + r \paren[\big]{X(t) - \Delta(t) S(t)} \, dt
+    \\
+      &= \paren[\big]{ r X(t) + (\alpha - r) \Delta(t) S(t) } \, dt
+	+ \sigma \Delta(t) S(t) \, dW(t)\,.
+  \end{align*}
+  Also, by It\^o's formula we compute
+  \begin{align*}
+    d c(t, S(t))
+      &= \partial_t c(t, S(t)) \, dt + \partial_x c(t, S(t)) \, dS(t) + \frac{1}{2} \partial_x^2 c(t, S(t)) \, d\qv{S}(t)\,,
+    \\
+      &= \paren[\Big]{\partial_t c + \alpha S \partial_x c + \frac{1}{2} \sigma^2 S^2 \partial_x^2 c} \, dt
+	+ \partial_x c\, \sigma S \, dW(t)
+  \end{align*}
+  where we suppressed the $(t, S(t))$ argument in the last line above for convenience.
+
+  Equating $dc(t, S(t)) = dX(t)$ gives
+  \begin{multline*}
+    \paren[\big]{ r X(t) + (\alpha - r) \Delta(t) S(t) } \, dt
+      + \sigma \Delta(t) S(t) \, dW(t)
+    \\
+      = \paren[\Big]{\partial_t c + \alpha S \partial_x c + \frac{1}{2} \sigma^2 S^2 \partial_x^2 c} \, dt
+	+ \partial_x c\, \sigma S \, dW(t)\,.
+  \end{multline*}
+  Using uniqueness of the semi-martingale decomposition (Proposition~\ref{p:3smuniq}) we can equate the $dW$ and the $dt$ terms respectively.
+  Equating the $dW$ terms gives the delta hedging rule~\eqref{e:3DH}.
+  Writing $S(t) = x$ for convenience, equating the $dt$ terms and using~\eqref{e:3ceqx} gives~\eqref{e:3BS}.
+  Since the payout of the option is $(S(T) - K)^+$ at maturity, equation~\eqref{e:3TC} is clearly satisfied.
+
+  Finally if $S(t_0) = 0$ at one particular time, then we must have $S(t) = 0$ at all times, otherwise we would have an arbitrage opportunity.
+  (This can be checked directly from the formula~\eqref{e:3gbmFor} of course.)
+  Consequently the fair price of the option when $S = 0$ is $0$, giving the \emph{boundary condition}~\eqref{e:3cBC}.
+  Hence~\eqref{e:3BS}--\eqref{e:3TC} are all satisfied, finishing the proof.
+\end{proof}
+\begin{proof}[Proof of Theorem~\ref{t:3bsm} part~\ref{p:3bsm2}]
+  For the converse, we suppose $c$ satisfies the system~\eqref{e:3BS}--\eqref{e:3TC}.
+  Choose $\Delta(t)$ by the delta hedging rule~\eqref{e:3DH}, and let $X$ be a portfolio with initial value $X(0) = c(0, S(0))$ that holds $\Delta(t)$ shares of the asset at time $t$ and the remaining $X(t) - \Delta(t) S(t)$ in cash.
+  We claim that $X$ is a replicating portfolio (i.e.\ $X(T) = (S(T) - K)^+$ almost surely) and $X(t) = c(t, S(t))$ for all $t \leq T$.
+  Once this is established $c(t, S(t))$ is the arbitrage free price as desired.
+
+  To show $X$ is a replicating portfolio, first claim that $X(t) = c(t, S(t))$ for all $t < T$.
+  To see this, let $Y(t) = e^{-r t} X(t)$ be the discounted value of $X$.
+  (That is, $Y(t)$ is the value of $X(t)$ converted to cash at time $t = 0$.)
+  By It\^o's formula, we compute
+  \begin{align*}
+    dY(t) &= -r Y(t) \, dt + e^{-rt} dX(t)
+    \\
+      &= e^{-rt} (\alpha - r) \Delta(t) S(t) \, dt
+	  + e^{-rt} \sigma \Delta(t) S(t) \, dW(t)\,.
+  \end{align*}
+
+  Similarly, using It\^o's formula, we compute
+  \begin{equation*}
+    d \paren[\big]{ e^{-rt} c(t, S(t)) }
+      = e^{-rt} \paren[\Big]{-r c + \partial_t c + \alpha S \partial_x c + \frac{1}{2} \sigma^2 S^2 \partial_x^2 c} \, dt
+	+ \partial_x c\, \sigma S \, dW(t)\,.
+  \end{equation*}
+  Using~\eqref{e:3BS} this gives
+  \begin{equation*}
+    d \paren[\big]{ e^{-rt} c(t, S(t)) }
+      = e^{-rt} (\alpha - r) S \partial_x c \, dt
+	+ \partial_x c\, \sigma S \, dW(t)
+      = dY(t)\,,
+  \end{equation*}
+  since $\Delta(t) = \partial_x c(t, S(t))$ by choice.
+  This forces
+  \begin{multline*}
+    e^{-rt} X(t)
+      = X(0) + \int_0^t dY(s)
+      = X(0) + \int_0^t d\paren[\big]{ e^{-rs} c(s, S(s)) }
+    \\
+      = X(0) + e^{-rt}c(t, S(t)) - c(0, S(0))
+      = e^{-rt}c(t, S(t))\,,
+  \end{multline*}
+  since we chose $X(0) = c(0, S(0))$.
+  This forces $X(t) = c(t, S(t))$ for all $t < T$, and by continuity also for $t = T$.
+  Since $c(T, S(T)) = (S(T) - K)^+$ we have $X(T) = (S(T) - K)^+$ showing $X$ is a replicating portfolio, concluding the proof.
+\end{proof}
+\begin{remark}
+  In order for the application of It\^o's formula to be valid above, we need $c \in C^{1,2}$.
+  This is certainly false at time $T$, since $c(T, x) = (x - K)^+$ which is not even differentiable, let alone twice continuously differentiable.
+  However, if $c$ satisfies the system~\eqref{e:3BS}--\eqref{e:3TC}, then it turns out that for every $t < T$ the function $c$ will be infinitely differentiable with respect to $x$.
+  This is why our proof first shows that $c(t, S(t)) = X(t)$ for $t < T$ and not directly that $c(t, S(t)) = X(t)$ for all $t \leq T$.
+\end{remark}
+\begin{remark}[Put Call Parity]
+  The same argument can be used to compute the arbitrage free price of European put options (i.e.\ the option to sell at the strike price, instead of buying).
+  However, once the price of the price of a call option is computed, the \emph{put call parity} can be used to compute the price of a put.
+
+  Explicitly let $p = p(t, x)$ be a function such that at any time $t \leq T$, $p(t, S(t))$ is the arbitrage free price of a European put option with strike price $K$.
+  Consider a portfolio $X$ that is long a call and short a put (i.e.\ buy one call, and sell one put).
+  The value of this portfolio at time $t < T$ is
+  \begin{equation*}
+    X(t) = c(t, S(t)) - p(t, S(t))\,
+  \end{equation*}
+  and at maturity we have%
+  \footnote{
+    A \emph{forward contract} requires the holder to buy the asset at price $K$ at maturity.
+    The value of this contract at maturity is exactly $S(T) - K$, and so a portfolio that is long a put and short a call has exactly the same cash flow as a forward contract.%
+  }
+  \begin{equation*}
+    X(T) = (S(T) - K)^+ - (S(T) - K)^- = S(T) - K\,.
+  \end{equation*}
+  This payoff can be replicated using a portfolio that holds one share of the asset and borrows $K e^{-rT}$ in cash (with return rate $r$) at time $0$.
+  Thus, in an arbitrage free market, we should have
+  \begin{equation*}
+    c(t, S(t)) - p(t, S(t)) = X(t) = S(t) - K e^{-r(T-t)}\,.
+  \end{equation*}
+  Writing $x$ for $S(t)$ this gives the \emph{put call parity} relation
+  \begin{equation*}
+    c(t, x) - p(t, x) = x - K e^{-r(T-t)}\,.
+  \end{equation*}
+  Using this the price of a put can be computed from the price of a call.
+\end{remark}
+
+We now turn to understanding properties of $c$.
+%We will prove this by using the formula~\eqref{e:3c} and differentiating.
+The partial derivatives of $c$ with respect to $t$ and $x$ measure the sensitivity of the option price to changes in the time to maturity and spot price of the asset respectively.
+These are called ``the Greeks'':
+\begin{asparaenum}
+  \item
+    The \emph{delta} is defined to be $\partial_x c$, and is given by
+    \begin{equation*}
+      \partial_x c = N(d_+) + x N'(d_+) d_+' - Ke^{r \tau} N'(d_-)d_-'\,.
+    \end{equation*}
+    where $\tau = T - t$ is the time to maturity.
+    Recall~$d_\pm = d_\pm( \tau, x )$, and we suppressed the $(\tau, x)$ argument above for notational convenience.
+    Using the formulae~\eqref{e:3c}--\eqref{e:3N} one can verify 
+    \begin{equation*}
+      d_+' = d_-' = \frac{1}{x \sigma \sqrt{\tau}}
+      \qquad\text{and}\qquad
+      x N'(d_+)  = Ke^{r \tau} N'(d_-)\,,
+    \end{equation*}
+    and hence the delta is given by
+    \begin{equation*}
+      \partial_x c = N(d_+)\,.
+    \end{equation*}
+    Recall that the \emph{delta hedging rule} (equation~\eqref{e:3DH}) explicitly tells you that the replicating portfolio should hold precisely $\partial_x c(t, S(t))$ shares of the risky asset and the remainder in cash.
+
+  \item
+    The \emph{gamma} is defined to be $\partial_x^2 c$, and is given by
+    \begin{equation*}
+      \partial_x^2 c
+	= N'(d_+) d_+' 
+	= \frac{1}{x \sigma \sqrt{2 \pi \tau}}
+	  \exp\paren[\Big]{ \frac{-d_+^2}{2} } \,.
+    \end{equation*}
+
+  \item
+    Finally the \emph{theta} is defined to be $\partial_t c$, and simplifies to
+    \begin{equation*}
+      \partial_t c = -r K e^{-r \tau} N(d_-)
+	- \frac{\sigma x}{2 \sqrt{\tau}} N'(d_+)
+    \end{equation*}
+\end{asparaenum}
+
+\begin{proposition}
+  The function $c(t, x)$ is convex and increasing as a function of $x$, and is \emph{decreasing} as a function of $t$.
+\end{proposition}
+\begin{proof}
+  This follows immediately from the fact that $\partial_x c > 0$, $\partial_x^2 c > 0$ and $\partial_t c < 0$.
+\end{proof}
+
+\begin{remark}[Hedging a short call]
+  Suppose you sell a call option valued at $c(t, x)$, and want to create a replicating portfolio.
+  The delta hedging rule calls for $x \partial_x c(t, x)$ of the portfolio to be invested in the asset, and the rest in the money market account.
+  Consequently the value of your money market account is
+  \begin{equation*}
+    c(t, x) - x \partial_x c
+      = x N(d_+) - K e^{-r \tau} N(d_-) - x N(d_+)
+      = - K e^{-r \tau} N(d_-) < 0\,.
+  \end{equation*}
+  Thus to properly hedge a short call you will have to borrow from the money market account and invest it in the asset.
+  As $t \to T$ you will end up selling the asset if $x < K$, and buying it if $x < K$, so that at maturity you will hold the asset if $x > K$ and not hold it if $x < K$.
+  To hedge a long call you do the opposite.
+\end{remark}
+\begin{remark}[Delta neutral and long gamma]
+  TODO
+\end{remark}
 \end{document}
