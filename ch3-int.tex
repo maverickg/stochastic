@@ -5,11 +5,11 @@
 
 \section{Motivation}
 Suppose $\Delta(t)$ is your position at time $t$ on a security whose price is $S(t)$.
-If you only trade this security at times $0 = t_0 < t_1 < t_2 < \cdots < t_n = T$, then the value of your winnings up to time $T$ is exactly
+If you only trade this security at times $0 = t_0 < t_1 < t_2 < \cdots < t_n = T$, then the value of your wealth up to time $T$ is exactly
 \begin{equation*}
   X(t_n) = \sum_{i=0}^{n-1} \Delta(t_i) ( S(t_{i+1}) - S(t_i) )
 \end{equation*}
-If you are trading this continuously in time, you'd expect that a ``simple'' limiting procedure should show that your winnings are given by the \emph{Riemann-Stieltjes} integral:
+If you are trading this continuously in time, you'd expect that a ``simple'' limiting procedure should show that your wealth is given by the \emph{Riemann-Stieltjes} integral:
 \begin{equation*}%\label{e:3stLim}
   X(T) = 
     \lim_{\norm{P} \to 0}
@@ -171,7 +171,7 @@ This property in fact characterizes the quadratic variation.
 The above is in fact a characterization of the quadratic variation of martingales.
 
 \begin{theorem}\label{t:3qv2}
-  If $A(t)$ is any continuous, increasing, adapted process such that $M(t)^2 - A(t)$ is a martingale, then $A = \qv{M}$.
+  If $A(t)$ is any continuous, increasing, adapted process such that $A(0) = 0$ and $M(t)^2 - A(t)$ is a martingale, then $A = \qv{M}$.
 \end{theorem}
 
 The proof of these theorems are a bit technical and go beyond the scope of these notes.
@@ -449,7 +449,7 @@ The second integral the It\^o integral we constructed in the previous section.
 
 \begin{proposition}\label{p:3smuniq}
   The semi-martingale decomposition of $X$ is unique.
-  That is, if $X = B_1 + M_1 = B_2 + M_2$ where $B_1, B_2$ are continuous adapted processes with bounded variation, and $M_1, M_2$ are continuous (square integrable) martingales, then $B_1 = B_2$ and $M_1 = M_2$.
+  That is, if $X = B_1 + M_1 = B_2 + M_2$ where $B_1, B_2$ are continuous adapted processes with finite first variation, and $M_1, M_2$ are continuous (square integrable) martingales, then $B_1 = B_2$ and $M_1 = M_2$.
 \end{proposition}
 \begin{proof}
   Set $M = M_1 - M_2$ and $B = B_1 - B_2$, and note that $M = -B$.
@@ -866,7 +866,7 @@ that $M^2 - \qv{M}$ is a martingale.
       (Recall $\sign(x) = 1$ if $x > 0$, $\sign(x) = -1$ if $x < 0$ and $\sign(x) = 0$ if $x = 0$.)
   \end{parts}
 \end{problem}
-\section{The Black Scholes Merton equation (unfinished).}
+\section{The Black Scholes Merton equation.}
 
 The price of an asset with a constant rate of return~$\alpha$ is given by
 \begin{equation*}
@@ -925,7 +925,7 @@ In particular, the option price does not depend on the price history of $S$.
   Consider a European call option with strike price $K$ and maturity $T$.
   \begin{enumerate}
     \item\label{p:3bsm1}
-      If $c = c(x, t)$ is a function such that at any time $t \leq T$, the arbitrage free price of this option is $c(t, S(t))$, then
+      If $c = c(x, t)$ is a function such that at any time $t \leq T$, the arbitrage free price of this option is $c(t, S(t))$, then $c$ satisfies
       \begin{alignat}{2}
 	\span\label{e:3BS}
 	  \partial_t c + r x \partial_x c + \frac{\sigma^2 x^2}{2} \partial_x^2 c - r c
@@ -1212,10 +1212,186 @@ These are called ``the Greeks'':
       = - K e^{-r \tau} N(d_-) < 0\,.
   \end{equation*}
   Thus to properly hedge a short call you will have to borrow from the money market account and invest it in the asset.
-  As $t \to T$ you will end up selling the asset if $x < K$, and buying it if $x < K$, so that at maturity you will hold the asset if $x > K$ and not hold it if $x < K$.
+  As $t \to T$ you will end up selling shares of the asset if $x < K$, and buying shares of it if $x > K$, so that at maturity you will hold the asset if $x > K$ and not hold it if $x < K$.
   To hedge a long call you do the opposite.
 \end{remark}
-\begin{remark}[Delta neutral and long gamma]
-  TODO
+\begin{remark}[Delta neutral and Long Gamma]
+  Suppose at some time $t$ the price of a stock is $x_0$.
+  We short $\partial_x c(t, x_0)$ shares of this stock buy the call option valued at $c(t, x_0)$.
+  We invest the balance $M = x_0 \partial_x c(t, x_0) - c(t, x_0)$ in the money market account.
+  Now if the stock price changes to $x$, \emph{and we do not change our position}, then the value of our portfolio will be
+  \begin{align*}
+    c(t, x) - \partial_x c(t, x_0) x + M
+      &= c(t, x) - x \partial_x c(t, x_0) + x_0 \partial_x c(t, x_0) - c(t, x_0)
+    \\
+      &= c(t, x) - \paren[\big]{c(t, x_0) + (x - x_0) \partial_x c(t, x_0) }\,.
+  \end{align*}
+  Note that the line $y = c(t, x_0) + (x - x_0) \partial_x c(t, x_0)$ is the equation for the tangent to the curve $y = c(t, x)$ at the point $(x_0, c(t, x_0))$.
+  For this reason the above portfolio is called \emph{delta neutral}.
+
+  Note that any convex function lies entirely above its tangent.
+  Thus, under instantaneous changes of the stock price (both rises and falls), we will have
+  \begin{equation*}
+    c(t, x) - \partial_x c(t, x_0) x + M > 0\,,
+    \quad\text{both for $x > x_0$ and $x < x_0$.}
+  \end{equation*}
+  For this reason the above portfolio is called \emph{long gamma}.
+
+  Note, even though under instantaneous price changes the value of our portfolio always rises, this is \emph{not} an arbitrage opportunity.
+  The reason for this is that as time increases $c$ decreases since $\partial_t c < 0$.
+  The above instantaneous argument assumed $c$ is constant in time, which it most certainly is not!
 \end{remark}
+\section{Multi-dimensional It\^o calculus (unfinished).}
+
+Finally we conclude this chapter by studying It\^o calculus in higher dimensions.
+Let $X, Y$ be It\^o process.
+We typically expect $X,Y$ will have finite and non-zero quadratic variation, and hence both the increments $X(t +\delta t) - X(t)$ and $Y(t + \delta t) - Y(t)$ should typically be of size $\sqrt{\delta}$.
+If we multiply these and sum over some finite interval $[0, T]$, then we would have roughly $T / \delta t$ terms each of size $\delta t$, and expect that this converges as $\delta t \to 0$.
+The limit is called the joint quadratic variation.
+
+\begin{definition}
+  Let $X$ and $Y$ be two It\^o processes.
+  We define the \emph{joint quadratic variation} of $X, Y$, denoted by $\jqv{X, Y}$ by 
+  \begin{equation*}
+    \jqv{X,Y}(T) = \lim_{\norm{P} \to 0} \sum_{i=0}^{n-1}(X(t_{i+1}) - X(t_i)) (Y(t_{i+1}) - Y(t_i))\,,
+  \end{equation*}
+  where $P = \set{0 = t_1 < t_1 \cdots < t_n = T}$ is a partition of $[0, T]$.
+\end{definition}
+
+Using the identity
+\begin{equation*}
+  4ab = (a+b)^2 - (a - b)^2\,
+\end{equation*}
+we quickly see that
+\begin{equation}\label{e:3plgm}
+  \jqv{X,Y} = \frac{1}{4} \paren[\big]{ \qv{X+Y} - \qv{X-Y} }\,.
+\end{equation}
+Using this and the properties we already know about quadratic variation, we can quickly deduce the following.
+\begin{proposition}[Product rule]
+  If $X$ and $Y$ are two It\^o processes then
+  \begin{equation}\label{e:3prod}
+    d(XY) = X \, dY + Y \, dX + d\jqv{X,Y}\,.
+  \end{equation}
+\end{proposition}
+\begin{proof}
+  By It\^o's formula
+  \begin{align*}
+    d(X+Y)^2 &= 2 (X + Y) \, d(X+Y) + d\qv{X+Y}\,
+    \\
+      &= 2 X \, dX + 2 Y \, dY + 2 X \, dY + 2 Y \, dX + d\qv{X+Y}\,.
+  \end{align*}
+  Similarly 
+  \begin{equation*}
+    d(X-Y)^2 = 2 X \, dX + 2 Y \, dY - 2 X \, dY - 2 Y \, dX + d\qv{X-Y}\,.
+  \end{equation*}
+  Since 
+  \begin{equation*}
+    4 \, d (XY) = d(X+Y)^2 - d( X-Y)^2\,,
+  \end{equation*}
+  we obtain~\eqref{e:3prod} as desired.
+\end{proof}
+
+For integrals with respect to It\^o processes, we can compute the joint quadratic variation explicitly.
+\begin{proposition}
+  Let $X_1, X_2$ be two It\^o processes, $\Delta_1$, $\Delta_2$ be two adapted processes and let $I_j$ be the integral defined by $I_j(t) = \int_0^t \Delta_j(s) \, ds$ for $j \in \set{1, 2}$.
+  Then
+  \begin{equation*}
+    \jqv{I_1, I_2}(t) = \int_0^t \Delta_1(s) \Delta_2(s) \, d\jqv{X_1, X_2}(s) \,.
+  \end{equation*}
+\end{proposition}
+\begin{proof}
+  This follows immediately from~\eqref{e:3plgm}.
+\end{proof}
+
+We've seen earlier (Theorems~\ref{t:3qv1}--\ref{t:3qv2}) that the quadratic variation of a martingale $M$ is the unique increasing process that make $M^2 - \qv{M}$ a martingale.
+A similar result holds for the joint quadratic variation.
+\begin{proposition}
+  Suppose $M, N$ are two continuous martingales with respect to a common filtration $\set{\mathcal F_t}$ such that $\E M(t)^2, \E N(t)^2 < \infty$.
+  \begin{enumerate}
+    \item
+      The process $MN - \jqv{M,N}$ is also a martingale with respect to the same filtration.
+    \item
+      Moreover, if $A$ is any continuous adapted process with finite first variation such that $A(0) = 0$ and $MN - A$ is a martingale with respect to $\set{\mathcal F_t}$, then $A = \jqv{M,N}$.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  The first part follows immediately from Theorem~\ref{t:3qv1} and the fact that
+  \begin{equation*}
+    4 \paren[\big]{ MN - \jqv{M,N} }
+      = (M+N)^2 - \qv{M+N} - \paren[\big]{(M-N)^2 - \qv{M-N}}\,.
+  \end{equation*}
+  The second part follows from the first part and uniqueness of the semi-martingale decomposition (Proposition~\ref{p:3smuniq}).
+\end{proof}
+\begin{corollary}
+  If $W_1$ and $W_2$ are two independent Brownian motions then $\jqv{W_1,W_2} = 0$.
+\end{corollary}
+\begin{proof}
+  Let $\set{\mathcal F_t}$ be the filtration generated by both $W_1$ and $W_2$.
+  Clearly $W_1$ and $W_2$ are martingales with respect to $\set{\mathcal F_t}$.
+  Thus to check $\jqv{W_1,W_2} = 0$, it suffices to check $W_1 W_2$ is a martingale.
+  For this
+  \begin{align*}
+    \E( W_1(t) W_2(t) \given \mathcal F_s )
+      &= W_1(s) W_2(s)
+	+ \E \paren[\big]{ (W_1(t) - W_1(s)) (W_2(t) - W_2(s)) \given \mathcal F_s }
+    \\
+	&\qquad+ \E \paren[\big]{ (W_1(t) - W_1(s)) W_2(s)  \given \mathcal F_s }
+    \\
+	&\qquad+ \E \paren[\big]{ W_1(s) (W_2(t) - W_2(s)) \given \mathcal F_s }
+    \\
+      &= W_1(s) W_2(s)\,.
+      \qedhere
+  \end{align*}
+\end{proof}
+\begin{remark}
+  If $X$ and $Y$ are independent, we know $\E XY = \E X \E Y$.
+  However, we \emph{need not} have $\E (XY \given \mathcal F) = \E(X \given F) \E (Y \given F)$, so previous proof \emph{can not} be shortened into simply saying
+  \begin{equation*}
+    \E \paren[\big]{ W_1(t) W_2(t) \given \mathcal F_s }
+      = \E \paren{ W_1(t) \given \mathcal F_s }
+	  \E \paren{ W_2(t) \given \mathcal F_s }\,,
+  \end{equation*}
+  holds because $W_1$ and $W_2$ are independent.
+\end{remark}
+
+We now define a multi-dimensional Brownian motion with the aim of working towards the multi-dimensional It\^o formula.
+\begin{definition}
+  We say $W = (W_1, W_2, \dots, W_d)$ is a standard $d$-dimensional Brownian motion if:
+  \begin{enumerate}
+    \item
+      Each coordinate $W_i$ is a standard ($1$-dimensional) Brownian motion.
+    \item
+      If $i \neq j$, the processes $W_i$ and $W_j$ are independent.
+  \end{enumerate}
+\end{definition}
+
+When working with a multi-dimensional Brownian motion, we usually choose the filtration to be that generated by \emph{all} the coordinates.
+
+\begin{definition}
+  Let $W$ be a $d$-dimensional Brownian motion.
+  We define the filtration $\set{\mathcal F_t^W}$ by
+  \begin{equation*}
+    \mathcal F_t^W = \sigma\paren[\Big]{ \bigcup_{\substack{s \leq t,\\i \in \set{1, \dots, d}}} \sigma(W_i(s)) }
+  \end{equation*}
+\end{definition}
+
+With $\set{\mathcal F_t^W}$ defined above note that:
+\begin{enumerate}
+  \item
+    Each coordinate $W_i$ is a martingale with respect to $\set{\mathcal F_t^W}$.
+
+  \item
+    For every $s < t$, the increment of each coordinate $W_i(t) - W_i(s)$ is independent of $\set{\mathcal F_s^W}$.
+\end{enumerate}
+
+Consider now a $d$-dimensional Brownian motion, and $n$ It\^o processes $X_1$, \dots, $X_n$ which we write (in differential form) as
+\begin{equation*}
+  dX_i(t) = b_i(t) \, dt + \sum_{j=1}^{d} \sigma_{i,j}(t) \, dW_j(t)\,,
+\end{equation*}
+where each $b_i$ and $\sigma_{i,j}$ are adapted processes.
+For brevity, we will often write $b$ for the vector process $(b_1, \dots, b_n)$, $\sigma$ for the \emph{matrix} process $(\sigma_{i,j})$ and $X$ for the $n$-dimensional It\^o process $(X_1, \dots, X_n)$.
+\begin{theorem}[It\^o-Doeblin formula]
+  Let $f\colon [0, \infty)\times \R^n$
+\end{theorem}
+
 \end{document}
