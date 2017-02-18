@@ -819,7 +819,7 @@ that $M^2 - \qv{M}$ is a martingale.
   \end{equation*}
   is a martingale.
 \end{problem}
-\begin{problem}
+\begin{problem}\label{pr:3levy}
   Suppose $\sigma = \sigma(t)$ is a deterministic (i.e.\ non-random) process, and $X$ is the It\^o process defined by
   \begin{equation*}
     X(t) = \int_0^t \sigma(u) \, dW(u)\,.
@@ -1241,7 +1241,7 @@ These are called ``the Greeks'':
   The reason for this is that as time increases $c$ decreases since $\partial_t c < 0$.
   The above instantaneous argument assumed $c$ is constant in time, which it most certainly is not!
 \end{remark}
-\section{Multi-dimensional It\^o calculus (unfinished).}
+\section{Multi-dimensional It\^o calculus.}
 
 Finally we conclude this chapter by studying It\^o calculus in higher dimensions.
 Let $X, Y$ be It\^o process.
@@ -1293,7 +1293,7 @@ Using this and the properties we already know about quadratic variation, we can 
 
 For integrals with respect to It\^o processes, we can compute the joint quadratic variation explicitly.
 \begin{proposition}
-  Let $X_1, X_2$ be two It\^o processes, $\Delta_1$, $\Delta_2$ be two adapted processes and let $I_j$ be the integral defined by $I_j(t) = \int_0^t \Delta_j(s) \, ds$ for $j \in \set{1, 2}$.
+  Let $X_1, X_2$ be two It\^o processes, $\Delta_1$, $\Delta_2$ be two adapted processes and let $I_j$ be the integral defined by $I_j(t) = \int_0^t \Delta_j(s) \, d X_i(s)$ for $j \in \set{1, 2}$.
   Then
   \begin{equation*}
     \jqv{I_1, I_2}(t) = \int_0^t \Delta_1(s) \Delta_2(s) \, d\jqv{X_1, X_2}(s) \,.
@@ -1302,6 +1302,98 @@ For integrals with respect to It\^o processes, we can compute the joint quadrati
 \begin{proof}
   This follows immediately from~\eqref{e:3plgm}.
 \end{proof}
+
+With this, we can state the higher dimensional It\^o formula.
+Like the one dimensional It\^o formula, this is a generalization of the chain rule and has an extra correction term that involves the joint quadratic variation.
+
+\begin{theorem}[It\^o-Doeblin formula]
+  Let $X_1$, \dots, $X_n$ be $n$ It\^o processes and set $X = (X_1, \dots, X_n)$ .
+  Let $f\colon [0, \infty)\times \R^n$ be $C^1$ in the first variable, and $C^2$ in the remaining variables.
+  Then
+  \begin{multline*}
+    f(T, X(T)
+      = f(0, X(0))
+	+ \int_0^T \partial_t f(t, X(t)) \, dt 
+	+ \sum_{i=1}^{N} \int_0^T \partial_i f(t, X(t)) \, dX_i(t)
+    \\
+	+ \frac{1}{2} \sum_{i,j=1}^N \int_0^T \partial_i \partial_j f(t, X(t)) \, d\jqv{X_i, X_j}(t)\,,
+  \end{multline*}
+\end{theorem}
+\begin{remark}
+  Here we think of $f = f(t, x_1, \dots, x_n)$, often abbreviated as $f(t, x)$.
+  The $\partial_i f$ appearing in the It\^o formula above is the partial derivative of $f$ with respect to $x_i$.
+  As before, the $\partial_t f$ and $\partial_i f$ terms above are from the usual chain rule, and the last term is the extra It\^o correction.
+\end{remark}
+\begin{remark}
+  In differential form It\^o's formula says
+  \begin{multline*}
+    d\paren[\big]{ f(t, X(t)}
+      = \partial_t f(t, X(t)) \, dt 
+	+ \sum_{i=1}^{n} \partial_i f(t, X(t)) \, dX_i(t)
+    \\
+	+ \frac{1}{2} \sum_{i,j = 1}^n
+	  \int_0^T \partial_i \partial_j f(t, X(t)) \, d\jqv{X_i, X_j}(t)\,.
+  \end{multline*}
+  For compactness, we will often omit the $(t, X(t))$ and write the above as
+  \begin{equation*}
+    d\paren[\big]{ f(t, X(t)}
+      = \partial_t f \, dt 
+	+ \sum_{i=1}^{n} \partial_i f \, dX_i(t)
+	+ \frac{1}{2} \int_0^T \partial_i \partial_j f \, d\jqv{X_i, X_j}(t)\,.
+  \end{equation*}
+\end{remark}
+\begin{remark}
+  We will most often use this in two dimensions.
+  In this case, writing $X$ and $Y$ for the two processes, the It\^o formula reduces to
+  \begin{multline*}
+    d\paren[\big]{f(t, X(t), Y(t))}
+      = \partial_t f \, dt
+	+ \partial_x f \, dX(t)
+	+ \partial_y f \, dY(t)
+    \\
+	+ \frac{1}{2} \paren[\big]{
+	    \partial_x^2 f \, d\qv{X}(t)
+	    + 2 \partial_x \partial_y f \, d\jqv{X,Y}(t)
+	    + \partial_y^2 f \, d\qv{Y}(t)
+	}\,.
+  \end{multline*}
+\end{remark}
+
+\begin{proof}[Intuition behind the It\^o formula]
+  Let's assume we only have two It\^o processes $X$, $Y$ and $f = f(x, y)$ doesn't depend on $t$.
+  Let $P = \set{0 = t_0 < t_1 \cdots < t_m = T}$ be a partition of the interval $[0, T]$ and write
+  \begin{equation*}
+    f(X(T), Y(T)) - f(X(0), Y(0))
+      = \sum_{i=0}^{m-1}
+	  f(\xi_{i+1})
+	  - f(\xi_i)\,,
+  \end{equation*}
+  where we write $\xi_i = (X(t_i), Y(t_i))$ for compactness.
+  Now by Taylor's theorem,
+  \begin{align*}
+    \MoveEqLeft
+    f(\xi_{i+1}) - f(\xi_i)
+      = \partial_x f(\xi_i) \, \Delta_i X
+	+ \partial_y f(\xi_i) \, \Delta_i Y
+    \\
+      &\quad\mathbin+ \frac{1}{2} \paren[\Big]{
+	    \partial_x^2 f(\xi_i) (\Delta_i X)^2
+	    + 2 \partial_x \partial_y f(\xi_i) \, \Delta_i X \, \Delta_i Y
+	    + \partial_y^2 f(\xi_i) (\Delta_i Y)^2
+	}
+    \\
+      &\quad\mathbin + \text{higher order terms.}
+  \end{align*}
+  Here $\Delta_i X = X(t_{i+1}) - X(t_i)$ and $\Delta_i Y = Y(t_{i+1}) - Y(t_i)$.
+  Summing over $i$, the first two terms converge to $\int_0^T f(t) \, dX(t)$ and $\int_0^T f(t) \, dY(t)$ respectively.
+  The terms involving $(\Delta_i X)^2$ should to $\int_0^T \partial_x^2 f \, d\qv{X}$ as we had with the one dimensional It\^o formula.
+  Similarly, the terms involving $(\Delta_i Y)^2$ should to $\int_0^T \partial_y^2 f \, d\qv{Y}$ as we had with the one dimensional It\^o formula.
+  For the cross term, we can use the identity~\eqref{e:3plgm} and quickly check that it converges to $\int_0^T \partial_x \partial_y f \, d\jqv{X, Y}$.
+  The higher order terms are typically of size $(t_{i+1} - t_i)^{3/2}$ and will vanish as $\norm{P} \to 0$.
+\end{proof}
+
+The most common use of the multi-dimensional It\^o formula is when the It\^o processes are specified as a combination of It\^o integrals with respect to different Brownian motions.
+Thus our next goal is to find an effective way to to compute the joint quadratic variations in this case.
 
 We've seen earlier (Theorems~\ref{t:3qv1}--\ref{t:3qv2}) that the quadratic variation of a martingale $M$ is the unique increasing process that make $M^2 - \qv{M}$ a martingale.
 A similar result holds for the joint quadratic variation.
@@ -1323,38 +1415,56 @@ A similar result holds for the joint quadratic variation.
   The second part follows from the first part and uniqueness of the semi-martingale decomposition (Proposition~\ref{p:3smuniq}).
 \end{proof}
 \begin{corollary}
-  If $W_1$ and $W_2$ are two independent Brownian motions then $\jqv{W_1,W_2} = 0$.
+  Let $M, N$ be two (continuous) martingales with respect to a common filtration~$\set{\mathcal F_t}$.
+  If $M,N$ are independent, then $\jqv{M,N} = 0$.
 \end{corollary}
+\begin{remark}
+  If $X$ and $Y$ are independent, we know $\E XY = \E X \E Y$.
+  However, we \emph{need not} have $\E (XY \given \mathcal F) = \E(X \given F) \E (Y \given F)$.
+  So we can not prove the above result by simply saying
+  \begin{equation*}
+    \E \paren[\big]{ M(t) N(t) \given \mathcal F_s }
+      = \E \paren{ M(t) \given \mathcal F_s }
+	  \E \paren{ N(t) \given \mathcal F_s }
+      = M(s) N(s)
+      \quad\text{``QED''}
+  \end{equation*}
+  because $M$ and $N$ are independent.
+  This reasoning is incorrect, even though the conclusion is correct.
+\end{remark}
 \begin{proof}
-  Let $\set{\mathcal F_t}$ be the filtration generated by both $W_1$ and $W_2$.
-  Clearly $W_1$ and $W_2$ are martingales with respect to $\set{\mathcal F_t}$.
-  Thus to check $\jqv{W_1,W_2} = 0$, it suffices to check $W_1 W_2$ is a martingale.
+  To check $\jqv{M,N} = 0$, it suffices to check $M N$ is a martingale.
   For this
   \begin{align*}
-    \E( W_1(t) W_2(t) \given \mathcal F_s )
-      &= W_1(s) W_2(s)
-	+ \E \paren[\big]{ (W_1(t) - W_1(s)) (W_2(t) - W_2(s)) \given \mathcal F_s }
+    \E( M(t) N(t) \given \mathcal F_s )
+      &= M(s) N(s)
+	+ \E \paren[\big]{ (M(t) - M(s)) (N(t) - N(s)) \given \mathcal F_s }
     \\
-	&\qquad+ \E \paren[\big]{ (W_1(t) - W_1(s)) W_2(s)  \given \mathcal F_s }
+	&\qquad+ \E \paren[\big]{ (M(t) - M(s)) N(s)  \given \mathcal F_s }
     \\
-	&\qquad+ \E \paren[\big]{ W_1(s) (W_2(t) - W_2(s)) \given \mathcal F_s }
+	&\qquad+ \E \paren[\big]{ M(s) (N(t) - N(s)) \given \mathcal F_s }
     \\
-      &= W_1(s) W_2(s)\,.
+      &= M(s) N(s)\,.
       \qedhere
   \end{align*}
 \end{proof}
 \begin{remark}
-  If $X$ and $Y$ are independent, we know $\E XY = \E X \E Y$.
-  However, we \emph{need not} have $\E (XY \given \mathcal F) = \E(X \given F) \E (Y \given F)$, so previous proof \emph{can not} be shortened into simply saying
+  The converse is false.
+  If $\jqv{M,N} = 0$, it does \emph{not} mean that $M$ and $N$ are independent.
+  For example, if
   \begin{equation*}
-    \E \paren[\big]{ W_1(t) W_2(t) \given \mathcal F_s }
-      = \E \paren{ W_1(t) \given \mathcal F_s }
-	  \E \paren{ W_2(t) \given \mathcal F_s }\,,
+    M(t) = \int_0^t \one_{\set{W(s) < 0}} \, dW(s)\,,
+    \qquad\text{and}\qquad
+    N(t) = \int_0^t \one_{\set{W(s) \geq 0}} \, dW(s)\,,
   \end{equation*}
-  holds because $W_1$ and $W_2$ are independent.
+  then clearly $\jqv{M,N} = 0$.
+  However,
+  \begin{equation*}
+    M(t) + N(t) = \int_0^t 1 \, dW(s) = W(t)\,,
+  \end{equation*}
+  so they can not be independent.
 \end{remark}
 
-We now define a multi-dimensional Brownian motion with the aim of working towards the multi-dimensional It\^o formula.
 \begin{definition}
   We say $W = (W_1, W_2, \dots, W_d)$ is a standard $d$-dimensional Brownian motion if:
   \begin{enumerate}
@@ -1384,14 +1494,167 @@ With $\set{\mathcal F_t^W}$ defined above note that:
     For every $s < t$, the increment of each coordinate $W_i(t) - W_i(s)$ is independent of $\set{\mathcal F_s^W}$.
 \end{enumerate}
 
-Consider now a $d$-dimensional Brownian motion, and $n$ It\^o processes $X_1$, \dots, $X_n$ which we write (in differential form) as
+\begin{remark}
+  Since $W_i$ is independent of $W_j$ when $i \neq j$, we know $\jqv{W_i, W_j} = 0$ if $i \neq j$.
+  When $i = j$, we know $d\jqv{W_i, W_j} = dt$.
+  We often express this concisely as
+  \begin{equation*}
+    d\jqv{W_i, W_j}(t) = \one_{\set{i = j}} \, dt\,.
+  \end{equation*}
+\end{remark}
+
+An extremely important fact about Brownian motion is that the converse of the above is also true.
+
+\begin{theorem}[L\'evy]
+  If $M = (M_1, M_2, \dots, M_d)$ is a continuous martingale such that $M(0) = 0$ and
+  \begin{equation*}
+    d\jqv{M_i, M_j}(t) = \one_{\set{i = j}} \, dt\,,
+  \end{equation*}
+  then $M$ is a $d$-dimensional Brownian motion.
+\end{theorem}
+\begin{proof}
+  The main idea behind the proof is to compute the moment generating function (or characteristic function) of $M$, in the same way as in Problem~\ref{pr:3levy}.
+  This can be used to show that $M(t) - M(s)$ is independent of $\mathcal F_s$ and $M(t) \sim N(0, t I)$, where $I$ is the $d \times d$ identity matrix.
+\end{proof}
+
+\begin{example}
+  If $W$ is a $2$-dimensional Brownian motion, then show that
+  \begin{equation*}
+    B = \int_0^t \frac{W_1(s)}{\abs{W(t)}} \, dW_1(s)
+	+ \int_0^t \frac{W_2(s)}{\abs{W(t)}} \, dW_2(s)\,,
+  \end{equation*}
+  is also a Brownian motion.
+\end{example}
+\begin{proof}
+  Since $B$ is the sum of two It\^o integrals, it is clearly a continuous martingale.
+  Thus to show that $B$ is a Brownian motion, it suffices to show that $\qv{B}(t) = t$.
+  For this, define
+  \begin{equation*}
+    X(t) = \int_0^t \frac{W_1(s)}{\abs{W(t)}} \, dW_1(s)
+    \qquad\text{and}\qquad
+    Y(t) = \int_0^t \frac{W_2(s)}{\abs{W(t)}} \, dW_2(s)\,,
+  \end{equation*}
+  and note
+  \begin{multline*}
+    d\qv{B}(t) = d\qv{X+Y}(t)
+      = d\qv{X}(t) + d\qv{Y}(t) + 2d\jqv{X, Y}(t)
+    \\
+      = \paren[\Big]{\frac{W_1(t)^2}{\abs{W(t)}^2}
+	+ \frac{W_2(t)^2}{\abs{W(t)}^2}} \, dt
+	+ 0
+      = \, dt\,.
+  \end{multline*}
+  So by L\'evy's criterion, $B$ is a Brownian motion.
+\end{proof}
+
+\begin{example}
+  Let $W$ be a $2$-dimensional Brownian motion and define
+  \begin{equation*}
+    X = \ln( \abs{W}^2 ) = \ln (W_1^2 + W_2^2 )\,.
+  \end{equation*} 
+  Compute $dX$.
+  Is $X$ a martingale?
+\end{example}
+\begin{sol}
+  This is a bit tricky.
+  First, if we set $f(x) = \ln \abs{x}^2 = \ln( x_1^2 + x_2^2 )$, then it is easy to check
+  \begin{equation*}
+    \partial_i f = \frac{2 x_i}{\abs{x}^2}
+    \qquad\text{and}\qquad
+    \partial_1^2 f + \partial_2^2 f = 0\,.
+  \end{equation*}
+  Consequently,
+  \begin{equation*}
+    dX(t)
+      = \frac{2 W_1(t)}{\abs{W}^2} \, dW_1(t)
+	+ \frac{2 W_2(t)}{\abs{W}^2} \, dW_2(t)\,.
+  \end{equation*}
+  With this one would be tempted to say that since there are no $dt$ terms above, $X$ is a martingale.
+  This, however, is false!
+  Martingales have constant expectation, but
+  \begin{equation*}
+    \E X(t) 
+      = \frac{1}{2 \pi t} \iint_{\R^2}
+	  \ln\paren[\big]{x_1^2 + x_2^2}
+	  \exp\paren[\Big]{-\frac{x_1^2 + x_2^2}{2t}} \, dx_1 \, dx_2
+  \end{equation*}
+  which one can check converges to $\infty$ as $t \to \infty$.
+  Thus $\E X(t)$ is not constant in $t$, and so $X$ can not be a martingale.
+\end{sol}
+\begin{remark}
+  We have repeatedly used the fact that It\^o integrals are martingales.
+  The example above obtains $X$ as an It\^o integral, but can not be a martingale.
+  The reason this doesn't contradict Theorem~\ref{t:3ipconv} is that in order for It\^o integral $\int_0^t \sigma(s) \, dW(s)$ to be defined, we only need the finiteness condition $\int_0^t \sigma(s)^2 \, ds < \infty$ almost surely.
+  However, for an It\^o integral to be a martingale, we need the stronger condition $\E \int_0^t \sigma(s)^2 \, ds < \infty$ (given in~\eqref{e:3Dsq}) to hold.
+  This is precisely what fails in the previous example.
+  The process $X$ above is an example of a \emph{local martingale} that is not a martingale, and we will encounter a similar situation when we study exponential martingales and risk neutral measures.
+\end{remark}
+
+\begin{example}
+  Let $f = f(t, x_1, \dots, x_d) \in C^{1,2}$ and $W$ be a $d$-dimensional Brownian motion.
+  Then It\^o's formula gives
+  \begin{equation*}
+    d\paren[\big]{ f(t, W(t)) }
+      = \paren[\Big]{ \partial_t f( t, W(t)) + \frac{1}{2} \lap f( t, W(t) ) } \, dt
+	+ \sum_{i=1}^d \partial_i f(t, W(t)) \, dW_i(t)\,.
+  \end{equation*}
+  Here $\lap f = \sum_1^d \partial_i^2 f$ is the Laplacian of $f$.
+\end{example}
+
+\begin{example}
+Consider a $d$-dimensional Brownian motion~$W$, and $n$ It\^o processes $X_1$, \dots, $X_n$ which we write (in differential form) as
 \begin{equation*}
-  dX_i(t) = b_i(t) \, dt + \sum_{j=1}^{d} \sigma_{i,j}(t) \, dW_j(t)\,,
+  dX_i(t) = b_i(t) \, dt + \sum_{k=1}^{d} \sigma_{i,k}(t) \, dW_k(t)\,,
 \end{equation*}
 where each $b_i$ and $\sigma_{i,j}$ are adapted processes.
 For brevity, we will often write $b$ for the vector process $(b_1, \dots, b_n)$, $\sigma$ for the \emph{matrix} process $(\sigma_{i,j})$ and $X$ for the $n$-dimensional It\^o process $(X_1, \dots, X_n)$.
-\begin{theorem}[It\^o-Doeblin formula]
-  Let $f\colon [0, \infty)\times \R^n$
-\end{theorem}
+
+Now to compute $\jqv{X_i, X_j}$ we observe that $d\jqv{W_i, W_j} =  dt$ if $i = j$ and $0$ otherwise.
+Consequently,
+\begin{equation*}
+  d \jqv{X_i, X_j}(t)
+    = \sum_{k,l=1}^d \sigma_{i,k} \sigma_{j,l} \one_{\set{k=l}} \, dt
+    = \sum_{k=1}^d \sigma_{i,k}(t) \sigma_{j, k}(t) \, dt\,.
+\end{equation*}
+Thus if $f$ is any $C^{1,2}$ function, It\^o formula gives
+\begin{equation*}
+  d\paren[\Big]{ f(t, X(t)) }
+    = \paren[\Big]{\partial_t f + \sum_{i=1}^{n} b_i \partial_i f} \, dt
+      + \sum_{i=1}^{n} \sigma_i \partial_i f \, dW_i(t)
+      + \frac{1}{2} \sum_{i,j=1}^n a_{i,j} \partial_i \partial_j f \, dt
+\end{equation*}
+where
+\begin{equation*}
+  a_{i,j}(t) = \sum_{k=1}^{N} \sigma_{i,k}(t) \sigma_{j, k}(t)\,.
+\end{equation*}
+In matrix notation, the matrix $a = \sigma \sigma^T$, where $\sigma^T$ is the transpose of the matrix $\sigma$.
+\end{example}
+
+\iffalse
+\begin{proposition}
+  If $b$ be any adapted process, $W$ is a one dimensional Brownian motion, and
+  \begin{equation*}
+    X(t)
+      = \paren[\Big]{W(t) + \int_0^t b(s) \, ds}
+	  \exp\paren[\Big]{
+	    - \int_0^t b(s) \, dW(s)
+	    - \frac{1}{2}\int_0^t b(s)^2 \, ds
+	  }\,,
+  \end{equation*}
+  then $X$ is a martingale.
+\end{proposition}
+\begin{proof}
+  Define
+  \begin{equation*}
+    Y(t) = \paren[\Big]{W(t) + \int_0^t b(s) \, ds}
+    \quad\text{and}\quad
+    Z(t) = \exp\paren[\Big]{
+	    - \int_0^t b(s) \, dW(s)
+	    - \frac{1}{2}\int_0^t b(s)^2 \, ds
+	  }\,.
+  \end{equation*}
+\end{proof}
+\fi
+
 
 \end{document}
