@@ -1,0 +1,32 @@
+%&subfile
+\begin{document}
+\ifstandalonechapter\setcounter{chapter}{3}\fi
+\chapter{Risk Neutral Measures}
+
+Our aim in this section is to show how risk neutral measures can be used to price derivative securities.
+The key advantage is that under a risk neutral measure the discounted hedging portfolio becomes a martingale.
+Thus the price of any derivative security can be computed by conditioning the payoff at maturity.
+We will use this to provide an elegant derivation of the Black-Scholes formula, and discuss the fundamental theorems of asset pricing.
+
+\section{Change of measure (unfinished).}
+
+\begin{definition}
+  Let $\Omega$ be 
+  Two probability measures $\P$ and $\tilde \P$ are said to be equivalent if $\P(A) = 0$ if and only if $\tilde \P(A) = 0$.
+\end{definition}
+
+The \emph{Radon-Nikodym} theorem guarantees that two measures are equivalent if and only if there exists a strictly positive random variable $Z$ TODO
+
+\begin{itemize}
+  \item
+    RN theorem, $d\tilde \P = Z d\P$ notation.
+
+  \item
+    $Z > 0$ a $\P$-martingale, define $\tilde \P = \tilde P_T$ by $d\tilde P = Z(T) d\P$.
+
+  \item
+    Say $Z(T)$ is $\mathcal F_T$ measurable
+\end{itemize}
+
+
+\end{document}

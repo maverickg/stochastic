@@ -1397,7 +1397,7 @@ Thus our next goal is to find an effective way to to compute the joint quadratic
 
 We've seen earlier (Theorems~\ref{t:3qv1}--\ref{t:3qv2}) that the quadratic variation of a martingale $M$ is the unique increasing process that make $M^2 - \qv{M}$ a martingale.
 A similar result holds for the joint quadratic variation.
-\begin{proposition}
+\begin{proposition}\label{p:3jqv}
   Suppose $M, N$ are two continuous martingales with respect to a common filtration $\set{\mathcal F_t}$ such that $\E M(t)^2, \E N(t)^2 < \infty$.
   \begin{enumerate}
     \item
@@ -1414,39 +1414,68 @@ A similar result holds for the joint quadratic variation.
   \end{equation*}
   The second part follows from the first part and uniqueness of the semi-martingale decomposition (Proposition~\ref{p:3smuniq}).
 \end{proof}
-\begin{corollary}
+\begin{proposition}
   Let $M, N$ be two (continuous) martingales with respect to a common filtration~$\set{\mathcal F_t}$.
   If $M,N$ are independent, then $\jqv{M,N} = 0$.
-\end{corollary}
+\end{proposition}
 \begin{remark}
   If $X$ and $Y$ are independent, we know $\E XY = \E X \E Y$.
   However, we \emph{need not} have $\E (XY \given \mathcal F) = \E(X \given F) \E (Y \given F)$.
   So we can not prove the above result by simply saying
-  \begin{equation*}
+  \begin{equation}\label{e:3MNwrong}
     \E \paren[\big]{ M(t) N(t) \given \mathcal F_s }
       = \E \paren{ M(t) \given \mathcal F_s }
 	  \E \paren{ N(t) \given \mathcal F_s }
       = M(s) N(s)
-      \quad\text{``QED''}
-  \end{equation*}
+  \end{equation}
   because $M$ and $N$ are independent.
+  Thus  $MN$ is a martingale, and hence $\jqv{M,N} = 0$ by Proposition~\ref{p:3jqv}.
+
   This reasoning is incorrect, even though the conclusion is correct.
+  If you're not convinced, let me add that there exist martingales that are \emph{not continuous} which are independent and have nonzero joint quadratic variation.
+  The above argument, if correct, would certainly also work for martingales that are not continuous.
+  The error in the argument is that the first equality in~\eqref{e:3MNwrong} need not hold even though $M$ and $N$ are independent.
 \end{remark}
 \begin{proof}
-  To check $\jqv{M,N} = 0$, it suffices to check $M N$ is a martingale.
-  For this
-  \begin{align*}
-    \E( M(t) N(t) \given \mathcal F_s )
-      &= M(s) N(s)
-	+ \E \paren[\big]{ (M(t) - M(s)) (N(t) - N(s)) \given \mathcal F_s }
-    \\
-	&\qquad+ \E \paren[\big]{ (M(t) - M(s)) N(s)  \given \mathcal F_s }
-    \\
-	&\qquad+ \E \paren[\big]{ M(s) (N(t) - N(s)) \given \mathcal F_s }
-    \\
-      &= M(s) N(s)\,.
-      \qedhere
-  \end{align*}
+  Let $P = \set{0 = t_0 < t_1 < \cdots < t_n = T}$ be a partition of $[0,T]$, $\Delta_i M = M(t_{i+1}) - M(t_i)$ and $\Delta_i N = N(t_{i+1}) - N(t_i)$.
+  Observe
+  \begin{multline}\label{e:3DiMDiN}
+    \E \paren[\Big]{ \sum_{i=0}^{n-1} \Delta_i M \, \Delta_i N }^2
+      = \E \sum_{i = 0}^{n-1} (\Delta_i M)^2 (\Delta_i N)^2
+      \\
+	+ 2 \E \sum_{j=0}^{n-1} \sum_{i=0}^{j-1} \Delta_i M \, \Delta_i N \Delta_j M \, \Delta_j N\,.
+  \end{multline}
+
+  We claim the cross term vanishes because of independence of $M$ and $N$.
+  Indeed,
+  \begin{multline*}
+    \E \Delta_i M \, \Delta_i N \Delta_j M \, \Delta_j N
+      = \E \paren[\big]{\Delta_i M \, \Delta_j M } 
+	\E \paren[\big]{\Delta_i N \, \Delta_j N }
+      \\
+      = \E \paren[\big]{\Delta_i M \E \paren{ \Delta_j M \given \mathcal F_{t_j} } }
+	\E \paren[\big]{\Delta_i N \, \Delta_j N }
+      = 0\,.
+  \end{multline*}
+  Thus from~\eqref{e:3DiMDiN}
+  \begin{equation*}
+    \E \paren[\Big]{ \sum_{i=0}^{n-1} \Delta_i M \, \Delta_i N }^2
+      = \E \sum_{i = 0}^{n-1} (\Delta_i M)^2 (\Delta_i N)^2
+      \leq \E \paren[\Big]{ \max_i (\Delta_i M)^2} \paren[\Big]{ \sum_{i = 0}^{n-1} (\Delta_i N)^2 }
+  \end{equation*}
+  As $\norm{P} \to 0$, $\max_i \Delta_i M \to 0$ because $M$ is continuous, and $\sum_i (\Delta_i N)^2 \to \qv{N}(T)$.
+  Thus we expect%
+  \footnote{%
+    For this step we need to use $\lim_{\norm{P} \to 0} \E (\cdots) = \E \lim_{\norm{P} \to 0} (\cdots)$.
+    To make this rigorous we need to apply the Lebesgue dominated convergence theorem.
+    This is done by first assuming $M$ and $N$ are bounded, and then choosing a \emph{localizing sequence} of stopping times, and a full discussion goes beyond the scope of these notes.
+  }
+  \begin{equation*}
+    \E \jqv{M,N}(T)
+      = \lim_{\norm{P} \to 0} \E \paren[\Big]{ \sum_{i=0}^{n-1} \Delta_i M \, \Delta_i N }^2
+      = 0\,,
+  \end{equation*}
+  finishing the proof.
 \end{proof}
 \begin{remark}
   The converse is false.
