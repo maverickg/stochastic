@@ -2,31 +2,374 @@
 \begin{document}
 \ifstandalonechapter\setcounter{chapter}{3}\fi
 \chapter{Risk Neutral Measures}
+%\ifstandalonechapter
+%  \makeatletter
+%   \@bsphack\begingroup
+%   \def\@currentlabel{asdf}%
+%   \label{t:3ipconv}%
+%   \endgroup\@esphack
+%  \makeatother
+%\fi
 
 Our aim in this section is to show how risk neutral measures can be used to price derivative securities.
 The key advantage is that under a risk neutral measure the discounted hedging portfolio becomes a martingale.
 Thus the price of any derivative security can be computed by conditioning the payoff at maturity.
 We will use this to provide an elegant derivation of the Black-Scholes formula, and discuss the fundamental theorems of asset pricing.
 
-\section{Change of measure (unfinished).}
+\section{The Girsanov Theorem.}
 
 \begin{definition}
-  Let $\Omega$ be 
-  Two probability measures $\P$ and $\tilde \P$ are said to be equivalent if $\P(A) = 0$ if and only if $\tilde \P(A) = 0$.
+  Two probability measures $\P$ and $\tilde \P$ are said to be equivalent if for every event $A$, $\P(A) = 0$ if and only if $\tilde \P(A) = 0$.
 \end{definition}
 
-The \emph{Radon-Nikodym} theorem guarantees that two measures are equivalent if and only if there exists a strictly positive random variable $Z$ TODO
+\begin{example}
+  Let $Z$ be a random variable such that $\E Z = 1$ and $Z > 0$.
+  Define a new measure $\tilde\P$ by
+  \begin{equation}\label{e:4pti}
+    \tilde \P(A) = \E Z \one_A = \int_A Z \, d\P\,.
+  \end{equation}
+  for every event $A$.
+  Then $\P$ and $\tilde\P$ are equivalent.
+\end{example}
 
-\begin{itemize}
-  \item
-    RN theorem, $d\tilde \P = Z d\P$ notation.
+\begin{remark}
+  The assumption $\E Z = 1$ above is required to guarantee $\tilde \P(\Omega) = 1$.
+\end{remark}
 
-  \item
-    $Z > 0$ a $\P$-martingale, define $\tilde \P = \tilde P_T$ by $d\tilde P = Z(T) d\P$.
+\begin{definition}
+  When $\tilde\P$ is defined by~\eqref{e:4pti}, we say
+  \begin{equation*}
+    d\, \tilde\P = Z \, d\P
+    \qquad\text{or}\qquad
+    Z = \frac{d\tilde\P}{d\P}\,,
+  \end{equation*}
+  and $Z$ is called the \emph{density} of $\tilde\P$ with respect to $\P$.
+\end{definition}
 
-  \item
-    Say $Z(T)$ is $\mathcal F_T$ measurable
-\end{itemize}
+\begin{theorem}[Radon-Nikodym]
+  Two measures $\P$ and $\tilde\P$ are equivalent if and only if there exists a random variable $Z$ such that $\E Z = 1$, $Z > 0$ and $\tilde\P$ is given by~\eqref{e:4pti}.
+\end{theorem}
+
+The proof of this requires a fair amount of machinery from Lebesgue integration and goes beyond the scope of these notes. 
+(This is exactly the result that is used to show that conditional expectations exist.)
+However, when it comes to risk neutral measures, it isn't essential since in most of our applications the density will be explicitly chosen.
+
+Suppose now $T>0$ is fixed, and $Z$ is a martingale.
+Define a new measure $\tilde\P = \tilde\P_T$ by
+\begin{equation*}
+  d\tilde\P = d\tilde\P_T = Z(T) d\P\,.
+\end{equation*}
+We will denote expectations and conditional expectations with respect to the new measure by $\tilde \E$.
+That is, given a random variable $X$,
+\begin{equation*}
+  \tilde\E X = \E Z(T) X = \int Z(T) X \, d\P\,.
+\end{equation*}
+Also, given a $\sigma$-algebra $\mathcal F$, $\tilde \E(X \given \mathcal F)$ is the unique $\mathcal F$-measurable random variable such that
+\begin{equation}\label{e:4pav}
+  \int_F \tilde \E (X \given \mathcal F) \, d\tilde\P
+  = \int_F X  \, d\tilde\P\,,
+\end{equation}
+holds for all $\mathcal F$ measurable events $F$.
+Of course, equation~\eqref{e:4pav} is equivalent to requiring
+\begin{gather}\label{e:4pavPrime}
+  \tag{\ref{e:4pav}$'$}
+  \int_F Z(T) \tilde \E (X \given \mathcal F) \, d\P
+  = \int_F Z(T) \tilde X  \, d\P\,,
+\end{gather}
+for all $\mathcal F$ measurable events $F$.
+
+The main goal of this section is to prove the Girsanov theorem.
+\begin{theorem}[Cameron, Martin, Girsanov]\label{t:4girsanov}
+  Let $b(t) = (b_1(t), b_2(t), \dots, b_d(t))$ be a $d$-dimensional adapted process, $W$ be a $d$-dimensional Brownian motion, and define
+  \begin{equation*}
+    \tilde W(t) = W(t) + \int_0^t b(s) \, ds\,.
+  \end{equation*}
+  Let $Z$ be the process defined by
+  \begin{equation*}
+    Z(t) = \exp\paren[\Big]{ -\int_0^t b(s) \cdot dW(s) - \frac{1}{2}\int_0^t \abs{b(s)}^2 \, ds}\,,
+  \end{equation*}
+  and define a new measure $\tilde P = \tilde P_T$ by $d\tilde\P = Z(T) \, d\P$.
+  If $Z$ is a martingale then $\tilde W$ is a Brownian motion under the measure $\tilde \P$ up to time $T$.
+\end{theorem}
+\begin{remark}
+  Above
+  \begin{equation*}
+    \int_0^t b(s) \cdot dW(s) \defeq \sum_{i=1}^{d} b_i(s) dW_i(s)
+    \qquad\text{and}\qquad
+    \abs{b(s)}^2 = \sum_{i=1}^{d} b_i(s)^2\,.
+  \end{equation*}
+\end{remark}
+\begin{remark}
+  Note $Z(0) = 1$, and if $Z$ is a martingale then $\E Z(T) = 1$ ensuring $\tilde P$ is a probability measure.
+  You might, however, be puzzled at need for the assumption that $Z$ is a martingale.
+  Indeed, let $M(t) = \int_0^t b(s) \cdot dW(s)$, and $f(t, x) = \exp(-x - \frac{1}{2} \int_0^t b(s)^2 \, ds )$.
+  Then, by It\^o's formula,
+  \begin{align*}
+    dZ(t)
+      &= d\paren[\big]{ f(t, M(t)) }
+      = \partial_t f \, dt + \partial_x f \, dM(t)  + \frac{1}{2} \partial_x^2 f \, d\qv{M}(t)
+    \\
+      &= -\frac{1}{2} Z(t) \abs{b(t)}^2 \, dt
+	-Z(t) b(t) \cdot dW(t) 
+	+ \frac{1}{2} Z(t) \abs{b(t)}^2 \, dt\,,
+  \end{align*}
+  and hence
+  \begin{equation}\label{e:4dz}
+      dZ(t) = -Z(t) b(t) \cdot dW(t)\,.
+  \end{equation}
+  Thus you might be tempted to say that $Z$ is always a martingale, assuming it explicitly is unnecessary.
+  However, we recall from Chapter~\ref{3c:3int}, Theorem~\ref{3t:3ipconv} in that It\^o integrals are only guaranteed to be martingales under the square integrability condition
+  \begin{equation}\label{e:4fin}
+    \E \int_0^T \abs{Z(s) b(s)}^2 \, ds < \infty\,.
+  \end{equation}
+  Without this finiteness condition, It\^o integrals are only \emph{local martingales}, whose expectation need not be constant, and so $\E Z(T) = 1$ is not guaranteed.
+  Indeed, there are many examples of processes $b$ where the finiteness condition~\eqref{e:4fin} does \emph{not} hold and we have $\E Z(T) < 1$ for some $T > 0$.
+\end{remark}
+
+\begin{remark}
+  In general the process $Z$ above is always a super-martingale, and hence $\E Z(T) \leq 1$.
+  Two conditions that guarantee $Z$ is a martingale are the Novikov and Kazamaki conditions:
+  If either
+  \begin{equation*}
+    \E \exp\paren[\Big]{ \frac{1}{2} \int_0^t \abs{b(s)}^2 \, ds } < \infty
+    \quad\text{or}\quad
+    \E \exp\paren[\Big]{ \frac{1}{2} \int_0^t b(s) \cdot dW(s) } < \infty\,,
+  \end{equation*}
+  then $Z$ is a martingale and hence $\E Z(T) = 1$ for all $T > 0$.
+  Unfortunately, in many practical situations these conditions do not apply, and you have to show $Z$ is a martingale by hand.
+\end{remark}
+\begin{remark}
+  The components $b_1$, \dots, $b_d$ of the process $b$ are not required to be independent.
+  Yet, under the new measure, the process $\tilde W$ is a Brownian motion and hence has \emph{independent} components.
+\end{remark}
+
+The main idea behind the proof of the Girsanov theorem is the following:
+Clearly $\jqv{\tilde W_i, \tilde W_j} = \jqv{W_i, W_j} = \one_{i= j} t$.
+Thus if we can show that $\tilde W$ is a martingale \emph{with respect to the new measure $\tilde P$}, then L\'evy's criterion will guarantee $\tilde W$ is a Brownian motion.
+We now develop the tools required to check when processes are martingales under the new measure.
+
+\begin{lemma}
+  Let $0 \leq s \leq t \leq T$.
+  If $X$ is a $\mathcal F_t$-measurable random variable then
+  \begin{equation}\label{e:4eti}
+    \tilde\E\paren[\big]{ X \given \mathcal F_s }
+      = \frac{1}{Z(s)} \E \paren[\big]{ Z(t) X \given \mathcal F_s }
+  \end{equation}
+\end{lemma}
+\begin{proof}
+  Let $A \in \mathcal F_s$ and observe that
+  \begin{multline*}
+    \int_A \tilde\E( X \given \mathcal F_s ) \, d\tilde P
+      = \int_A Z(T) \tilde\E( X \given \mathcal F_s ) \, d\P
+    \\
+      = \int_A \E\paren[\big]{
+	  Z(T) \tilde\E( X \given \mathcal F_s ) \given \mathcal F_s} \, d\P
+      = \int_A Z(s) \tilde\E( X \given \mathcal F_s )\, d\P\,.
+  \end{multline*}
+  Also,
+  \begin{multline*}
+    \int_A \tilde\E( X \given \mathcal F_s ) \, d\tilde P
+      = \int_A X \, d\tilde \P
+      = \int_A X Z(T) \, d\P
+      = \int_A \E\paren[\big]{ X Z(T) \given \mathcal F_t } \, d\P
+  \\
+      = \int_A Z(t) X \, d\P
+      = \int_A \E\paren[\big]{ Z(t) X \given \mathcal F_s} \, d\P
+  \end{multline*}
+  Thus 
+  \begin{equation*}
+    \int_A Z(s) \tilde\E( X \given \mathcal F_s )\, d\P
+      = \int_A \E\paren[\big]{ Z(t) X \given \mathcal F_s} \, d\P\,,
+  \end{equation*}
+  for every $\mathcal F_s$ measurable event $A$.
+  Since the integrands are both $\mathcal F_s$ measurable this forces them to be equal, giving~\eqref{e:4eti} as desired.
+\end{proof}
+
+\begin{lemma}\label{l:4pmg}
+  An adapted process $M$ is a martingale under $\tilde\P$ if and only if $MZ$ is a martingale under $\P$.
+\end{lemma}
+\begin{proof}
+  Suppose first $MZ$ is a martingale with respect to $\P$.
+  Then
+  \begin{equation*}
+    \tilde\E( M(t) \given \mathcal F_s )
+      = \frac{1}{Z(s)} \tilde\E( Z(t) M(t) \given \mathcal F_s )
+      = \frac{1}{Z(s)} Z(s) M(s) = M(s)\,,
+  \end{equation*}
+  showing $M$ is a martingale with respect to $\P$.
+
+  Conversely, suppose $M$ is a martingale with respect to $\tilde P$.
+  Then
+  \begin{equation*}
+    \E\paren[\big]{ M(t) Z(t) \given \mathcal F_s }
+      = Z(s) \tilde\E\paren{ M(t) \given \mathcal F_s }
+      = Z(s) M(s)\,,
+  \end{equation*}
+  and hence $ZM$ is a martingale with respect to $\P$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{t:4girsanov}]
+  Clearly $\tilde W$ is continuous and
+  \begin{equation*}
+    d\jqv{\tilde W_i, \tilde W_j}(t) 
+      = d\jqv{W_i, W_j}(t)
+      = \one_{i = j} \, dt\,.
+  \end{equation*}
+  Thus if we show that each $\tilde W_i$ is a martingale (under $\tilde \P$), then by L\'evy's criterion, $\tilde W$ will be a Brownian motion under $\tilde\P$.
+
+  We now show that each $\tilde W_i$ is a martingale under $\tilde P$.
+  By Lemma~\ref{l:4pmg}, $\tilde W_i$ is a martingale under $\tilde P$ if and only if $Z \tilde W_i$ is a martingale under $\P$.
+  To show $Z \tilde W_i$ is a martingale under $\P$, we use the product rule and~\eqref{e:4dz} to compute
+  \begin{multline*}
+    d \paren[\big]{ Z \tilde W_i }
+      = Z \, d\tilde W_i  + \tilde W_i \, dZ + d\jqv{Z, \tilde W_i}
+  \\
+      = Z \, dW_i  + Z b_i \, dt  - \tilde W_i Z b \cdot dW - b_i Z \, dt
+      = Z \, dW_i - \tilde W_i Z b \cdot dW \,.
+  \end{multline*}
+  Thus $Z \tilde W_i$ is a martingale%
+  \footnote{%
+    Technically, we have to check the square integrability condition to ensure that $Z \tilde W_i$ is a martingale, and not a \emph{local martingale}.
+    This, however, follows quickly from the Cauchy-Schwartz inequality and our assumption.
+  }
+  under $\P$, and by Lemma~\ref{l:4pmg}, $\tilde W_i$ is a martingale under~$\tilde\P$.
+  This finishes the proof.
+\end{proof}
 
 
+\section{Risk Neutral Pricing (unfinished)}
+
+Consider a stock whose price is modelled by a generalized geometric Brownian motion
+\begin{equation*}
+  dS(t) = \alpha(t) S(t) \, dt + \sigma(t) S(t) \, dW(t)\,,
+\end{equation*}
+where $\alpha(t)$, $\sigma(t)$ are the (time dependent) mean return rate and volatility respectively.
+Here $\alpha$ and $\sigma$ are no longer constant, but allowed to be \emph{adapted processes}.
+We will, however, assume $\sigma(t) > 0$.
+
+Suppose an investor has access to a money market account with variable interest rate $R(t)$.
+Again, the interest rate $R$ need not be constant, and is allowed to be any adapted process.
+Define the \emph{discount process} $D$ by
+\begin{equation*}
+  D(t) = \exp\paren[\Big]{ - \int_0^t R(s) \, ds }\,,
+\end{equation*}
+and observe
+\begin{equation*}
+  dD(t) = -D(t) R(t) \, dt\,.
+\end{equation*}
+Since the price of one share of the money market account at time $t$ is $1/D(t)$ times the price of one share at time $0$, it is natural to consider the \emph{discounted stock price} $D S$.
+
+\begin{definition}
+  A \emph{risk neutral measure} is a measure $\tilde\P$ that is equivalent to $\P$ under which the discounted stock price process $D(t) S(t)$ is a martingale.
+\end{definition}
+
+As we will shortly see, the \emph{existence} of a risk neutral measure implies there is no arbitrage opportunity.
+Moreover, \emph{uniqueness} of a risk neutral measure implies that every derivative security can be hedged.
+These are the \emph{fundamental theorems of asset pricing}, which will be developed later.
+
+Using the Girsanov theorem, we can compute the risk neutral measure explicitly.
+Observe
+\begin{align*}
+  d\paren[\big]{D(t) S(t)}
+    &= -R D S \, dt + D \, dS
+    = (\alpha-R) D S \, dt + D S \sigma \, dW(t)
+  \\
+    &= \sigma(t) D(t) S(t) \paren[\Big]{
+	  \theta(t) \, dt + dW(t) }
+\end{align*}
+where
+\begin{equation*}
+  \theta(t) \defeq \frac{\alpha(t) - R(t)}{\sigma(t)}
+\end{equation*}
+is known as the \emph{market price of risk}.
+
+Define a new process $\tilde W$ by
+\begin{equation*}
+  d\tilde W(t) = \theta(t) \, dt + dW(t)\,,
+\end{equation*}
+and observe
+\begin{equation}\label{e:4DS}
+  d\paren[\big]{ D(t) S(t) } \, dt = \sigma(t) D(t) S(t) \, d\tilde W(t)\,.
+\end{equation}
+
+\begin{proposition}
+  If $Z$ is the process defined by
+  \begin{equation*}
+    Z(t) = \exp\paren[\Big]{
+      -\int_0^t \theta(s) \, dW(s) - \frac{1}{2} \int_0^t \theta(s)^2 \, ds
+    }\,,
+  \end{equation*}
+  then the measure $\tilde\P = \tilde\P_T$ defined by $d\tilde\P = Z(T) \, d\P$ is a risk neutral measure.
+\end{proposition}
+\begin{proof}
+  By the Girsanov theorem~\ref{t:4girsanov} we know $\tilde W$ is a Brownian motion under~$\tilde\P$.
+  Thus using~\eqref{e:4DS} we immediately see that the discounted stock price is a martingale.
+\end{proof}
+
+Our next aim is to develop \emph{risk neutral pricing formula}.
+%For instance, $V(T) = (S(T) - K)^+$ represents the payoff of a European call option with strike price $K$.
+
+\begin{theorem}[Risk Neutral Pricing formula]\label{t:4rnp}
+  Let $V(T)$ be a $\mathcal F_T$-measurable random variable that represents the payoff of a derivative security, and let $\tilde \P = \tilde\P$ be the risk neutral measure above.
+  The arbitrage free price at time $t$ of a derivative security with payoff $V(T)$ and maturity $T$ is given by
+  \begin{equation}\label{e:4rnp}
+    V(t) = \tilde\E \paren[\Big]{\exp\paren[\Big]{-\int_t^T R(s) \, ds} V(T) \given \mathcal F_T }\,.
+  \end{equation}
+\end{theorem}
+\begin{remark}
+  It is important to note that the price $V(t)$ above is the arbitrage free price of the security, under the standard measure $\P$, and not under the risk neutral measure $\tilde \P$.
+  The risk neutral measure is a tool that is used to determine the actual (arbitrage free) price of a security under the standard measure and not in some bizarre ``risk neutral world'' as many people \emph{incorrectly} say. 
+\end{remark}
+
+As we will see shortly, the reason for this formula is that under the risk neutral measure, the discounted replicating portfolio becomes a martingale.
+To understand why this happens we note
+\begin{equation}\label{e:4dS}
+  dS(t) = \alpha(t) S(t) \, dt + \sigma(t) S(t) \, dW(t)
+    = R(t) S(t) \, dt + \sigma(t) S(t) \, d\tilde W\,.
+\end{equation}
+Under the standard measure $\P$ this isn't much use, since $\tilde W$ isn't a martingale.
+However, under the risk neutral measure, the process $\tilde W$ is a Brownian motion and hence certainly a martingale.
+Moreover, $S$ becomes a geometric Brownian motion under $\tilde\P$ with mean return rate of $S$ exactly the same as that of the money market account.
+The fact that $S$ and the money market account have exactly the same mean return rate (under~$\tilde\P$) is precisely what makes the replicating portfolio (or any self-financing  portfolio for that matter) a martingale (under $\tilde\P$).
+
+\begin{lemma}
+  Let $\Delta$ be any adapted process, and $X(t)$ be the wealth of an investor with that holds $\Delta(t)$ shares of the stock and the rest of his wealth in the money market account.
+  If there is no external cash flow (i.e.\ the portfolio is \emph{self financing}), then the discounted portfolio $D(t) X(t)$ is a martingale under~$\tilde\P$.
+\end{lemma}
+\begin{proof}
+  We know 
+  \begin{equation*}
+    dX(t) = \Delta(t) \, dS(t) + R(t) (X(t) - \Delta(t) S(t)) \, dt\,.
+  \end{equation*}
+  Using~\eqref{e:4dS} this becomes
+  \begin{align*}
+    dX(t) &= \Delta R S \, dt + \Delta \sigma S \, d\tilde W
+      + R X \, dt - R \Delta S \, dt
+    \\
+      &= RX \, dt + \Delta \sigma S \, d\tilde W\,.
+  \end{align*}
+  Thus, by the product rule,
+  \begin{align*}
+    d(DX) &= D \, dX + X \, dD + d\jqv{D,X}
+      = -R D X \, dt + D  RX dt + D \Delta \sigma S \, d\tilde W
+    \\
+      &= D \Delta \sigma S \, d\tilde W\,.
+  \end{align*}
+  Since $\tilde W$ is a martingale under $\tilde\P$, $DX$ must be a martingale under $\tilde\P$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{t:4rnp}]
+  Suppose $X$ is a replicating portfolio.
+  Then by definition we know $V(t) = X(t)$, and by the previous lemma we know $DX$ is a martingale under $\tilde\P$.
+  Thus
+  \begin{equation*}
+    V(t)
+      = X(t)
+      = \frac{1}{D(t)} D(t) X(t)
+      = \frac{1}{D(t)} \tilde\E\paren[\big]{ D(T) X(T) \given \mathcal F_t }
+      = \tilde\E\paren[\Big]{
+	  \frac{D(T) V(T)}{D(t)} \given \mathcal F_t }\,,
+  \end{equation*}
+  which is precisely~\eqref{e:4rnp}.
+\end{proof}
 \end{document}

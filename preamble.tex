@@ -1,7 +1,11 @@
 \documentclass[openany,oneside]{amsbook}
 \usepackage[draft]{marktext}
 \usepackage[draft]{gimac}
-\usepackage{subfiles}
+\usepackage{subfiles,xr}
+\externaldocument[1]{ch1-intro}
+\externaldocument[2]{ch2-bm}
+\externaldocument[3]{ch3-int}
+\externaldocument[4]{ch4-rnm}
 
 % Stochastic calc specific macros
 \DeclarePairedDelimiterX\jqv[1]{[}{]}{#1}

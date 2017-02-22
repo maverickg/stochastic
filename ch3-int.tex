@@ -1,7 +1,7 @@
 %&subfile
 \begin{document}
 \ifstandalonechapter\setcounter{chapter}{2}\fi
-\chapter{Stochastic Integration}
+\chapter{Stochastic Integration}\label{c:3int}
 
 \section{Motivation}
 Suppose $\Delta(t)$ is your position at time $t$ on a security whose price is $S(t)$.
@@ -874,7 +874,7 @@ The price of an asset with a constant rate of return~$\alpha$ is given by
 \end{equation*}
 To account for noisy fluctuations we model stock prices by adding the term $\sigma S(t) \, dW(t)$ to the above:
 \begin{equation}\label{e:3gbm}
-  dS(t) = \alpha S(t) \, dt + \sigma dW(t)\,.
+  dS(t) = \alpha S(t) \, dt + \sigma S(t) dW(t)\,.
 \end{equation}
 The parameter $\alpha$ is called the \emph{mean return rate} or the \emph{percentage drift}, and the parameter $\sigma$ is called the \emph{volatility} or the \emph{percentage volatility}.
 
@@ -1303,6 +1303,14 @@ For integrals with respect to It\^o processes, we can compute the joint quadrati
   This follows immediately from~\eqref{e:3plgm}.
 \end{proof}
 
+Finally, as with quadratic variation, processes of finite variation do not affect the joint quadratic variation.
+\begin{proposition}
+  If $X$ is and It\^o process, and $B$ is a continuous adapted process with finite variation, then $\jqv{X,B} = 0$.
+\end{proposition}
+\begin{proof}
+  Note $\qv{X\pm B} = \qv{X}$ and hence $\jqv{X, B} = 0$.
+\end{proof}
+
 With this, we can state the higher dimensional It\^o formula.
 Like the one dimensional It\^o formula, this is a generalization of the chain rule and has an extra correction term that involves the joint quadratic variation.
 
@@ -1339,7 +1347,7 @@ Like the one dimensional It\^o formula, this is a generalization of the chain ru
     d\paren[\big]{ f(t, X(t)}
       = \partial_t f \, dt 
 	+ \sum_{i=1}^{n} \partial_i f \, dX_i(t)
-	+ \frac{1}{2} \int_0^T \partial_i \partial_j f \, d\jqv{X_i, X_j}(t)\,.
+	+ \frac{1}{2} \partial_i \partial_j f \, d\jqv{X_i, X_j}(t)\,.
   \end{equation*}
 \end{remark}
 \begin{remark}
@@ -1415,7 +1423,7 @@ A similar result holds for the joint quadratic variation.
   The second part follows from the first part and uniqueness of the semi-martingale decomposition (Proposition~\ref{p:3smuniq}).
 \end{proof}
 \begin{proposition}
-  Let $M, N$ be two (continuous) martingales with respect to a common filtration~$\set{\mathcal F_t}$.
+  Let $M, N$ be two continuous martingales with respect to a common filtration~$\set{\mathcal F_t}$ such that $\E M(t)^2 < \infty$ and $\E N(t)^2 < \infty$.
   If $M,N$ are independent, then $\jqv{M,N} = 0$.
 \end{proposition}
 \begin{remark}
@@ -1491,7 +1499,7 @@ A similar result holds for the joint quadratic variation.
   \begin{equation*}
     M(t) + N(t) = \int_0^t 1 \, dW(s) = W(t)\,,
   \end{equation*}
-  so they can not be independent.
+  and with a little work one can show that $M$ and $N$ are not independent.
 \end{remark}
 
 \begin{definition}
