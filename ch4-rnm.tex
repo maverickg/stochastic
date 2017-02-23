@@ -237,7 +237,7 @@ We now develop the tools required to check when processes are martingales under 
 \end{proof}
 
 
-\section{Risk Neutral Pricing (unfinished)}
+\section{Risk Neutral Pricing}
 
 Consider a stock whose price is modelled by a generalized geometric Brownian motion
 \begin{equation*}
@@ -310,15 +310,15 @@ Our next aim is to develop \emph{risk neutral pricing formula}.
 %For instance, $V(T) = (S(T) - K)^+$ represents the payoff of a European call option with strike price $K$.
 
 \begin{theorem}[Risk Neutral Pricing formula]\label{t:4rnp}
-  Let $V(T)$ be a $\mathcal F_T$-measurable random variable that represents the payoff of a derivative security, and let $\tilde \P = \tilde\P$ be the risk neutral measure above.
+  Let $V(T)$ be a $\mathcal F_T$-measurable random variable that represents the payoff of a derivative security, and let $\tilde \P = \tilde\P_T$ be the risk neutral measure above.
   The arbitrage free price at time $t$ of a derivative security with payoff $V(T)$ and maturity $T$ is given by
   \begin{equation}\label{e:4rnp}
-    V(t) = \tilde\E \paren[\Big]{\exp\paren[\Big]{-\int_t^T R(s) \, ds} V(T) \given \mathcal F_T }\,.
+    V(t) = \tilde\E \paren[\Big]{\exp\paren[\Big]{-\int_t^T R(s) \, ds} V(T) \given \mathcal F_t }\,.
   \end{equation}
 \end{theorem}
 \begin{remark}
-  It is important to note that the price $V(t)$ above is the arbitrage free price of the security, under the standard measure $\P$, and not under the risk neutral measure $\tilde \P$.
-  The risk neutral measure is a tool that is used to determine the actual (arbitrage free) price of a security under the standard measure and not in some bizarre ``risk neutral world'' as many people \emph{incorrectly} say. 
+  It is important to note that the price $V(t)$ above is the actual arbitrage free price of the security, and there is no alternate ``risk neutral world'' which you need to teleport to in order to apply this formula.
+  The risk neutral measure is simply a tool that is used in the above formula, which gives the arbitrage free price under the \emph{standard} measure.
 \end{remark}
 
 As we will see shortly, the reason for this formula is that under the risk neutral measure, the discounted replicating portfolio becomes a martingale.
