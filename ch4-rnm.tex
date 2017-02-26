@@ -359,7 +359,7 @@ The fact that $S$ and the money market account have exactly the same mean return
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{t:4rnp}]
-  Suppose $X$ is a replicating portfolio.
+  Suppose $X(t)$ is the wealth of a replicating portfolio at time~$t$.
   Then by definition we know $V(t) = X(t)$, and by the previous lemma we know $DX$ is a martingale under $\tilde\P$.
   Thus
   \begin{equation*}
@@ -372,4 +372,89 @@ The fact that $S$ and the money market account have exactly the same mean return
   \end{equation*}
   which is precisely~\eqref{e:4rnp}.
 \end{proof}
+\begin{remark}
+  Our proof assumes that a security with payoff $V(T)$ \emph{has} a replicating portfolio.
+  This is true in general because of the \emph{martingale representation theorem}: We know It\^o integrals are martingales. The \emph{martingale representation theorem} is a partial converse which guarantees that any martingale (with respect to the Brownian filtration) can be expressed as an It\^o integral with respect to Brownian motion.
+
+  Now we observe by~\eqref{e:4rnp} that
+  \begin{equation*}
+    D(t) V(t) = \tilde\E \paren[\Big]{\exp\paren[\Big]{-\int_0^T R(s) \, ds} V(T) \given \mathcal F_t }\,,
+  \end{equation*}
+  and hence $D(t) V(t)$ is a martingale.
+  Thus, the \emph{martingale representation theorem} can be used to express this as an It\^o integral (with respect to~$\tilde W$).
+  We can use this to show the existence of a replicating portfolio.
+\end{remark}
+\begin{remark}
+  If $V(T) = f(S(T))$ for some function $f$ and $R$ is not random, then the \emph{Markov Property} guarantees $V(t) = c(t, S(t))$ for some function $c$.
+  Equating $c(t, S(t)) = X(t)$, the wealth of a replicating portfolio and using It\^o's formula, we immediately obtain the \emph{Delta hedging rule}
+  \begin{equation*}
+    \Delta(t) = \partial_x c(t, S(t))\,.
+  \end{equation*}
+\end{remark}
+\section{The Black-Scholes formula}
+
+Recall our first derivation of the Black-Scholes formula only obtained a PDE.
+The Black-Scholes formula is the solution to this PDE, which we simply wrote down without motivation.
+Use the risk neutral pricing formula can be used to derive the Black-Scholes formula quickly, and independently of our previous derivation.
+We carry out his calculation in this section.
+
+
+Suppose $\sigma$ and $R$ are deterministic constants, and for notational consistency, set $r = R$.
+The risk neutral pricing formula says that the price of a European call is
+\begin{equation*}
+  c(t, S(t)) = \tilde\E\paren[\Big]{
+    e^{-r(T-t)}	(S(T) - K)^+ \given \mathcal F_t
+  }\,,
+\end{equation*}
+where $K$ is the strike price.
+Since
+\begin{equation*}
+  S(t) = \exp\paren[\Big]{ \paren[\Big]{ r - \frac{\sigma^2}{2}} t + \sigma \tilde W(t) }\,,
+\end{equation*}
+and $\tilde W$ is a Brownian motion under $\tilde\P$, we see
+\begin{align*}
+  c(t, S(t)
+    &= e^{-r\tau} \tilde\E\paren[\Big]{\brak[\Big]{
+	\exp\paren[\Big]{ \paren[\Big]{ r - \frac{\sigma^2}{2} } T + \sigma \tilde W(T)} -K }^+
+      \given \mathcal F_t }
+  \\
+    &= e^{-r\tau} \tilde\E\paren[\Big]{
+      \brak[\Big]{S(t) \exp\paren[\Big]{ \paren[\Big]{r - \frac{\sigma^2}{2}} \tau + \sigma (\tilde W(T) - \tilde W(t))} - K }^+ \given \mathcal F_t }
+  \\
+    &= \frac{e^{-r \tau}}{\sqrt{2\pi}}
+	\int_\R 
+	  \brak[\Big]{S(t) \exp\paren[\Big]{ \paren[\Big]{r - \frac{\sigma^2}{2}} \tau + \sigma \sqrt{\tau} y} - K }^+ \, e^{-y^2 / 2} dy\,,
+\end{align*}
+by the independence lemma.
+Here $\tau = T - t$.
+
+Now set $S(t) = x$,
+\begin{equation*}
+  d_\pm( \tau, x ) \defeq
+  \frac{1}{\sigma \sqrt{\tau}}\paren[\Big]{
+    \ln\paren[\Big]{\frac{x}{K}}
+    + \paren[\Big]{ r \pm \frac{\sigma^2}{2} } \tau
+  }\,,
+\end{equation*}
+and
+\begin{equation*}
+  N(x)
+    = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^x e^{-y^2/2} \, dy
+    = \frac{1}{\sqrt{2\pi}} \int_{-x}^\infty e^{-y^2/2} \, dy\,.
+\end{equation*}
+Observe
+\begin{align*}
+  c(t, x)
+    &= \frac{1}{\sqrt{2\pi}} \int_{-d_-}^\infty 
+	x \exp\paren[\Big]{ \frac{-\sigma^2 \tau}{2} + \sigma\sqrt{\tau} y - \frac{y^2}{2} } \, dy
+	- e^{-r\tau} K N(d_-)
+  \\
+    &= \frac{1}{\sqrt{2\pi}} \int_{-d_-}^\infty 
+	x \exp\paren[\Big]{ \frac{-(y - \sigma \sqrt{\tau})^2}{2}} \, dy
+	- e^{-r\tau} K N(d_-)
+  \\
+    &= x N(d_+) 
+	- e^{-r\tau} K N(d_-)\,,
+\end{align*}
+which is precisely the Black-Scholes formula.
 \end{document}
