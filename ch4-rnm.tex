@@ -88,7 +88,7 @@ The main goal of this section is to prove the Girsanov theorem.
   \begin{equation*}
     Z(t) = \exp\paren[\Big]{ -\int_0^t b(s) \cdot dW(s) - \frac{1}{2}\int_0^t \abs{b(s)}^2 \, ds}\,,
   \end{equation*}
-  and define a new measure $\tilde P = \tilde P_T$ by $d\tilde\P = Z(T) \, d\P$.
+  and define a new measure $\tilde\P = \tilde\P_T$ by $d\tilde\P = Z(T) \, d\P$.
   If $Z$ is a martingale then $\tilde W$ is a Brownian motion under the measure $\tilde \P$ up to time $T$.
 \end{theorem}
 \begin{remark}
@@ -100,7 +100,7 @@ The main goal of this section is to prove the Girsanov theorem.
   \end{equation*}
 \end{remark}
 \begin{remark}
-  Note $Z(0) = 1$, and if $Z$ is a martingale then $\E Z(T) = 1$ ensuring $\tilde P$ is a probability measure.
+  Note $Z(0) = 1$, and if $Z$ is a martingale then $\E Z(T) = 1$ ensuring $\tilde\P$ is a probability measure.
   You might, however, be puzzled at need for the assumption that $Z$ is a martingale.
   Indeed, let $M(t) = \int_0^t b(s) \cdot dW(s)$, and $f(t, x) = \exp(-x - \frac{1}{2} \int_0^t b(s)^2 \, ds )$.
   Then, by It\^o's formula,
@@ -145,7 +145,7 @@ The main goal of this section is to prove the Girsanov theorem.
 
 The main idea behind the proof of the Girsanov theorem is the following:
 Clearly $\jqv{\tilde W_i, \tilde W_j} = \jqv{W_i, W_j} = \one_{i= j} t$.
-Thus if we can show that $\tilde W$ is a martingale \emph{with respect to the new measure $\tilde P$}, then L\'evy's criterion will guarantee $\tilde W$ is a Brownian motion.
+Thus if we can show that $\tilde W$ is a martingale \emph{with respect to the new measure $\tilde\P$}, then L\'evy's criterion will guarantee $\tilde W$ is a Brownian motion.
 We now develop the tools required to check when processes are martingales under the new measure.
 
 \begin{lemma}
@@ -159,7 +159,7 @@ We now develop the tools required to check when processes are martingales under 
 \begin{proof}
   Let $A \in \mathcal F_s$ and observe that
   \begin{multline*}
-    \int_A \tilde\E( X \given \mathcal F_s ) \, d\tilde P
+    \int_A \tilde\E( X \given \mathcal F_s ) \, d\tilde\P
       = \int_A Z(T) \tilde\E( X \given \mathcal F_s ) \, d\P
     \\
       = \int_A \E\paren[\big]{
@@ -168,7 +168,7 @@ We now develop the tools required to check when processes are martingales under 
   \end{multline*}
   Also,
   \begin{multline*}
-    \int_A \tilde\E( X \given \mathcal F_s ) \, d\tilde P
+    \int_A \tilde\E( X \given \mathcal F_s ) \, d\tilde\P
       = \int_A X \, d\tilde \P
       = \int_A X Z(T) \, d\P
       = \int_A \E\paren[\big]{ X Z(T) \given \mathcal F_t } \, d\P
@@ -198,7 +198,7 @@ We now develop the tools required to check when processes are martingales under 
   \end{equation*}
   showing $M$ is a martingale with respect to $\P$.
 
-  Conversely, suppose $M$ is a martingale with respect to $\tilde P$.
+  Conversely, suppose $M$ is a martingale with respect to $\tilde\P$.
   Then
   \begin{equation*}
     \E\paren[\big]{ M(t) Z(t) \given \mathcal F_s }
@@ -217,8 +217,8 @@ We now develop the tools required to check when processes are martingales under 
   \end{equation*}
   Thus if we show that each $\tilde W_i$ is a martingale (under $\tilde \P$), then by L\'evy's criterion, $\tilde W$ will be a Brownian motion under $\tilde\P$.
 
-  We now show that each $\tilde W_i$ is a martingale under $\tilde P$.
-  By Lemma~\ref{l:4pmg}, $\tilde W_i$ is a martingale under $\tilde P$ if and only if $Z \tilde W_i$ is a martingale under $\P$.
+  We now show that each $\tilde W_i$ is a martingale under $\tilde\P$.
+  By Lemma~\ref{l:4pmg}, $\tilde W_i$ is a martingale under $\tilde\P$ if and only if $Z \tilde W_i$ is a martingale under $\P$.
   To show $Z \tilde W_i$ is a martingale under $\P$, we use the product rule and~\eqref{e:4dz} to compute
   \begin{multline*}
     d \paren[\big]{ Z \tilde W_i }
@@ -374,15 +374,18 @@ The fact that $S$ and the money market account have exactly the same mean return
 \end{proof}
 \begin{remark}
   Our proof assumes that a security with payoff $V(T)$ \emph{has} a replicating portfolio.
-  This is true in general because of the \emph{martingale representation theorem}: We know It\^o integrals are martingales. The \emph{martingale representation theorem} is a partial converse which guarantees that any martingale (with respect to the Brownian filtration) can be expressed as an It\^o integral with respect to Brownian motion.
+  This is true in general because of the \emph{martingale representation theorem}, which guarantees any martingale (with respect to the Brownian filtration) can be expressed as an It\^o integral with respect to Brownian motion.
+  Recall, we already know that It\^o integrals are martingales.
+  The martingale representation theorem is a partial converse.
 
-  Now we observe by~\eqref{e:4rnp} that
+  Now clearly the process $Y$ defined by
   \begin{equation*}
-    D(t) V(t) = \tilde\E \paren[\Big]{\exp\paren[\Big]{-\int_0^T R(s) \, ds} V(T) \given \mathcal F_t }\,,
+    Y(t) = \tilde\E \paren[\Big]{\exp\paren[\Big]{-\int_0^T R(s) \, ds} V(T) \given \mathcal F_t }\,,
   \end{equation*}
-  and hence $D(t) V(t)$ is a martingale.
+  is a martingale.
   Thus, the \emph{martingale representation theorem} can be used to express this as an It\^o integral (with respect to~$\tilde W$).
-  We can use this to show the existence of a replicating portfolio.
+  With a little algebraic manipulation one can show that $D(t)^{-1} Y(t)$ is the wealth of a self financing portfolio.
+  Since the terminal wealth is clearly $V(T)$, this must be a replicating portfolio.
 \end{remark}
 \begin{remark}
   If $V(T) = f(S(T))$ for some function $f$ and $R$ is not random, then the \emph{Markov Property} guarantees $V(t) = c(t, S(t))$ for some function $c$.
@@ -409,13 +412,13 @@ The risk neutral pricing formula says that the price of a European call is
 where $K$ is the strike price.
 Since
 \begin{equation*}
-  S(t) = \exp\paren[\Big]{ \paren[\Big]{ r - \frac{\sigma^2}{2}} t + \sigma \tilde W(t) }\,,
+  S(t) = S(0) \exp\paren[\Big]{ \paren[\Big]{ r - \frac{\sigma^2}{2}} t + \sigma \tilde W(t) }\,,
 \end{equation*}
 and $\tilde W$ is a Brownian motion under $\tilde\P$, we see
 \begin{align*}
-  c(t, S(t)
+  c(t, S(t))
     &= e^{-r\tau} \tilde\E\paren[\Big]{\brak[\Big]{
-	\exp\paren[\Big]{ \paren[\Big]{ r - \frac{\sigma^2}{2} } T + \sigma \tilde W(T)} -K }^+
+	S(0) \exp\paren[\Big]{ \paren[\Big]{ r - \frac{\sigma^2}{2} } T + \sigma \tilde W(T)} -K }^+
       \given \mathcal F_t }
   \\
     &= e^{-r\tau} \tilde\E\paren[\Big]{
@@ -457,4 +460,124 @@ Observe
 	- e^{-r\tau} K N(d_-)\,,
 \end{align*}
 which is precisely the Black-Scholes formula.
+
+\section{Review Problems}
+
+\begin{problem}
+  Let $f$ be a deterministic function, and define
+  \begin{equation*}
+    X(t) \defeq \int_0^t f(s) W(s) \, ds\,.
+  \end{equation*}
+  Find the distribution of $X$.
+\end{problem}
+
+\begin{problem}
+  Suppose $\sigma, \tau, \rho$ are two deterministic functions and $M$ and $N$ are two martingales with respect to a common filtration $\set{\mathcal F_t}$ such that  $M(0) = N(0) = 0$, and
+  \begin{equation*}
+    d\qv{M}(t) = \sigma(t) \, dt\,,
+    \quad
+    d\qv{N}(t) = \tau(t) \, dt\,,
+    \qquad\text{and}\qquad
+    d\jqv{M,N}(t) = \rho \, dt\,.
+  \end{equation*}
+  \vspace{-\baselineskip}
+  \begin{parts}
+    \item
+      Compute the joint moment generating function $\E \exp\paren{\lambda M(t) + \mu N(t)}$.
+    \item
+      \emph{(L\'evy's criterion)}
+      If $\sigma = \tau = 1$ and $\rho = 0$, show that $(M, N)$ is a two dimensional Brownian motion.
+  \end{parts}
+\end{problem}
+
+\begin{problem}
+  Consider a financial market consisting of a risky asset and a money market account.
+  Suppose the return rate on the money market account is $r$, and the price of the risky asset, denoted by $S$, is a geometric Brownian motion with mean return rate $\alpha$ and volatility $\sigma$.
+  Here $r, \alpha$ and $\sigma$ are all deterministic constants.
+  Compute the arbitrage free price of derivative security that pays
+  \begin{equation*}
+    V(T) = \frac{1}{T} \int_0^T S(t) \, dt\,
+  \end{equation*}
+  at maturity $T$.
+  Also compute the trading strategy in the replicating portfolio.
+\end{problem}
+
+\begin{problem}
+  Let $X \sim N(0, 1)$, and $a, \alpha, \beta \in \R$.
+  Define a new measure $\tilde\P$ by
+  \begin{equation*}
+    d\tilde\P = \exp\paren[\big]{ \alpha X + \beta } \, d\P\,.
+  \end{equation*}
+  Find $\alpha,\beta$ such that $X + a \sim N(0, 1)$ under $\tilde\P$.
+\end{problem}
+
+\begin{problem}
+  Let $x_0, \mu, \theta, \sigma \in \R$, and suppose $X$ is an It\^o process that satisfies
+  \begin{equation*}
+    dX(t) = \theta( \mu - X(t)) \, dt + \sigma \, dW(t)\,,
+  \end{equation*}
+  with $X(0) = x_0$.
+  \begin{parts}
+    \item 
+      Find functions $f = f(t)$ and $g = g(s, t)$ such that
+      \begin{equation*}
+	X(t) = f(t) + \int_0^t g(s, t) \, dW(s)\,.
+      \end{equation*}
+      The functions $f, g$ may depend on the parameters $x_0, \theta, \mu$ and $\sigma$, but should not depend on $X$.
+    \item
+      Compute $\E X(t)$ and $\operatorname{cov}(X(s), X(t))$ explicitly.
+  \end{parts}
+\end{problem}
+
+\begin{problem}
+  Let $M$ be a martingale, and $\varphi$ be a convex function.
+  Must the process $\varphi(M)$ be a martingale, sub-martingale, or a super-martingale?
+  If yes, explain why.
+  If no, find a counter example.
+\end{problem}
+
+\begin{problem}
+  Let $\theta \in \R$ and define
+  \begin{equation*}
+    Z(t) = \exp\paren[\Big]{ \theta W(t) - \frac{\theta^2 t}{2}}\,.
+  \end{equation*}
+  Given $0 \leq s < t$, and a function $f$, find a function such that
+  \begin{equation*}
+    \E\paren[\big]{ f(Z(t)) \given \mathcal F_s } = g(Z(s))\,.
+  \end{equation*}
+  Your formula for the function $g$ can involve $f$, $s$, $t$ and integrals, but not the process $Z$ or expectations.
+\end{problem}
+
+\begin{problem}
+  Let $W$ be a Brownian motion, and define
+  \begin{equation*}
+    B(t) = \int_0^t \sign(W(s)) \, dW(s)\,.
+  \end{equation*}
+  \begin{parts}
+    \item
+      Show that $B$ is a Brownian motion.
+    \item
+      Are $B$ and $W$ uncorrelated?
+      Are they independent?
+      Justify.
+      (Hint: Compute $\E B(t) W(t)^2$.)
+    \item
+      Compute the joint quadratic variation $\jqv{B, W}$.
+
+    \item
+      Is there an adapted process $\sigma$ such that
+      \begin{equation*}
+	W(t) = \int_0^t \sigma(s) \, dB(s)\,?
+      \end{equation*}
+      If yes, find it.
+      If no, explain why.
+  \end{parts}
+\end{problem}
+
+
+\iffalse
+\begin{problem}
+  Kolmogorov forward equation.
+\end{problem}
+\fi
 \end{document}

@@ -1291,19 +1291,7 @@ Using this and the properties we already know about quadratic variation, we can 
   we obtain~\eqref{e:3prod} as desired.
 \end{proof}
 
-For integrals with respect to It\^o processes, we can compute the joint quadratic variation explicitly.
-\begin{proposition}
-  Let $X_1, X_2$ be two It\^o processes, $\Delta_1$, $\Delta_2$ be two adapted processes and let $I_j$ be the integral defined by $I_j(t) = \int_0^t \Delta_j(s) \, d X_i(s)$ for $j \in \set{1, 2}$.
-  Then
-  \begin{equation*}
-    \jqv{I_1, I_2}(t) = \int_0^t \Delta_1(s) \Delta_2(s) \, d\jqv{X_1, X_2}(s) \,.
-  \end{equation*}
-\end{proposition}
-\begin{proof}
-  This follows immediately from~\eqref{e:3plgm}.
-\end{proof}
-
-Finally, as with quadratic variation, processes of finite variation do not affect the joint quadratic variation.
+As with quadratic variation, processes of finite variation do not affect the joint quadratic variation.
 \begin{proposition}
   If $X$ is and It\^o process, and $B$ is a continuous adapted process with finite variation, then $\jqv{X,B} = 0$.
 \end{proposition}
@@ -1422,6 +1410,60 @@ A similar result holds for the joint quadratic variation.
   \end{equation*}
   The second part follows from the first part and uniqueness of the semi-martingale decomposition (Proposition~\ref{p:3smuniq}).
 \end{proof}
+\begin{proposition}[Bi-linearity]
+  If $X, Y, Z$ are three It\^o processes and $\alpha \in \R$ is a (non-random) constant, then
+  \begin{equation}\label{e:3bilin}
+    \jqv{X, Y + \alpha Z} = \jqv{X,Y} + \alpha \jqv{X, Z}\,.
+  \end{equation}
+\end{proposition}
+\begin{proof}
+  Let $L, M$ and $N$ be the martingale part in the It\^o decomposition of $X, Y$ and $Z$ respectively.
+  Clearly
+  \begin{equation*}
+    L(M + \alpha N) - \paren[\big]{ \jqv{L, M} + \alpha \jqv{L,N} }
+      = \paren[\big]{LM - \jqv{L,M}} + \alpha \paren[\big]{ L N - \jqv{L,N}}\,,
+  \end{equation*}
+  which is a martingale.
+  Thus, since $\jqv{L, M} + \alpha \jqv{L,N}$ is also continuous adapted and increasing, by Proposition~\ref{p:3jqv} we must have $\jqv{L, M + \alpha N} = \jqv{L, M} + \alpha \jqv{L,N}$.
+  Since the joint quadratic variation of It\^o processes can be computed in terms of their martingale parts alone, we obtain~\eqref{e:3bilin} as desired.
+\end{proof}
+
+For integrals with respect to It\^o processes, we can compute the joint quadratic variation explicitly.
+\begin{proposition}
+  Let $X_1, X_2$ be two It\^o processes, $\sigma_1$, $\sigma_2$ be two adapted processes and let $I_j$ be the integral defined by $I_j(t) = \int_0^t \sigma_j(s) \, d X_i(s)$ for $j \in \set{1, 2}$.
+  Then
+  \begin{equation*}
+    \jqv{I_1, I_2}(t) = \int_0^t \sigma_1(s) \sigma_2(s) \, d\jqv{X_1, X_2}(s) \,.
+  \end{equation*}
+\end{proposition}
+\begin{proof}
+  Let $P$ be a partition and, as above, let $\Delta_i X = X(t_{i+1}) - X(t_i)$ denote the increment of a process~$X$.
+  Since
+  \begin{equation*}
+    I_j(T) = \lim_{\norm{P} \to 0} \sum_{i=0}^{n-1}
+      \sigma_j(t_i) \Delta_i X_j\,,
+    \quad\text{and}\quad
+    \jqv{X_1, X_2} = \lim_{\norm{P} \to 0} \sum_{i=0}^{n-1}
+      \Delta_i X_1\, \Delta_i X_2\,,
+  \end{equation*}
+  we expect that $\sigma_j(t_i) \Delta_i(X_j)$ is a good approximation for $\Delta_i I_j$,
+  and $\Delta_i X_1 \, \Delta_i X_2$ is a good approximation for $\Delta_i \jqv{X_1, X_2}$.
+  Consequently, we expect
+  \begin{multline*}
+    \jqv{I_i, I_j}(T)
+      = \lim_{\norm{P} \to 0} \sum_{i=0}^{n-1} \Delta_i I_1 \, \Delta_i I_2
+      = \lim_{\norm{P} \to 0}
+	  \sum_{i=0}^{n-1} \sigma_1(t_i) \Delta_i X_1 \, \sigma_2(t_i) \Delta_i X_2
+    \\
+      = \lim_{\norm{P} \to 0}
+	  \sum_{i=0}^{n-1}
+	    \sigma_1(t_i) \, \sigma_2(t_i)
+	    \Delta_i \jqv{X_1, X_2}
+      = \int_0^T \sigma_1(t) \sigma_2(t) \, d\jqv{X_1, X_2}(t) \,,
+  \end{multline*}
+  as desired.
+\end{proof}
+
 \begin{proposition}
   Let $M, N$ be two continuous martingales with respect to a common filtration~$\set{\mathcal F_t}$ such that $\E M(t)^2 < \infty$ and $\E N(t)^2 < \infty$.
   If $M,N$ are independent, then $\jqv{M,N} = 0$.
