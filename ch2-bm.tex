@@ -501,13 +501,13 @@ Our aim is now to generalize this to a non-discrete scenario.
 The problem with the above identities is that if either $R$ or $B$ had probability~$0$, then the above would become meaningless.
 However, clearing out denominators yields
 \begin{equation*}
-  \int_R \P( H \given \mathcal C) = \P( H \cap R )
+  \int_R \P( H \given \mathcal C) \, d\P = \P( H \cap R )
   \quad\text{and}\quad
-  \int_B \P( H \given \mathcal C) = \P( H \cap B )\,.
+  \int_B \P( H \given \mathcal C) \, d\P = \P( H \cap B )\,.
 \end{equation*}
 This suggests that the defining property of $\P( H \given \mathcal C)$ should be the identity
 \begin{equation}\label{e:cProb1}
-  \int_C \P( H \given \mathcal C) = \P( H \cap C )
+  \int_C \P( H \given \mathcal C) \, d\P = \P( H \cap C )
 \end{equation}
 for every event $C \in \mathcal C$.
 Note $\mathcal C = \set{ \emptyset, R, B, \Omega }$ and we have only checked~\eqref{e:cProb1} for $C = R$ and $C = B$.
@@ -517,7 +517,7 @@ However, for $C = \emptyset$ and $C = \Omega$, \eqref{e:cProb1} is immediate.
   Let $(\Omega, \mathcal G, \P)$ be a probability space, and $\mathcal F \subseteq \mathcal G$ be a $\sigma$-algebra.
   Given $A \in \mathcal G$, we define the conditional probability of $A$ given $\mathcal F$, denoted by $\P( A \given \mathcal F)$ to be an $\mathcal F$-measurable random variable that satisfies 
   \begin{equation}\label{e:cProb}
-    \int_F \P( H \given \mathcal F) = \P( H \cap F )
+    \int_F \P( H \given \mathcal F) \, d\P = \P( H \cap F )
     \quad\text{ for every } F \in \mathcal F.
   \end{equation}
 \end{definition}

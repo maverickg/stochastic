@@ -1071,7 +1071,7 @@ Now the arbitrage free price is precisely the value of this portfolio.
 
   Finally if $S(t_0) = 0$ at one particular time, then we must have $S(t) = 0$ at all times, otherwise we would have an arbitrage opportunity.
   (This can be checked directly from the formula~\eqref{e:3gbmFor} of course.)
-  Consequently the fair price of the option when $S = 0$ is $0$, giving the \emph{boundary condition}~\eqref{e:3cBC}.
+  Consequently the arbitrage free price of the option when $S = 0$ is $0$, giving the \emph{boundary condition}~\eqref{e:3cBC}.
   Hence~\eqref{e:3BS}--\eqref{e:3TC} are all satisfied, finishing the proof.
 \end{proof}
 \begin{proof}[Proof of Theorem~\ref{t:3bsm} part~\ref{p:3bsm2}]
@@ -1095,13 +1095,13 @@ Now the arbitrage free price is precisely the value of this portfolio.
   \begin{equation*}
     d \paren[\big]{ e^{-rt} c(t, S(t)) }
       = e^{-rt} \paren[\Big]{-r c + \partial_t c + \alpha S \partial_x c + \frac{1}{2} \sigma^2 S^2 \partial_x^2 c} \, dt
-	+ \partial_x c\, \sigma S \, dW(t)\,.
+	+ e^{-rt} \partial_x c\, \sigma S \, dW(t)\,.
   \end{equation*}
   Using~\eqref{e:3BS} this gives
   \begin{equation*}
     d \paren[\big]{ e^{-rt} c(t, S(t)) }
       = e^{-rt} (\alpha - r) S \partial_x c \, dt
-	+ \partial_x c\, \sigma S \, dW(t)
+	+ e^{-rt} \partial_x c\, \sigma S \, dW(t)
       = dY(t)\,,
   \end{equation*}
   since $\Delta(t) = \partial_x c(t, S(t))$ by choice.
@@ -1335,7 +1335,7 @@ Like the one dimensional It\^o formula, this is a generalization of the chain ru
     d\paren[\big]{ f(t, X(t)}
       = \partial_t f \, dt 
 	+ \sum_{i=1}^{n} \partial_i f \, dX_i(t)
-	+ \frac{1}{2} \partial_i \partial_j f \, d\jqv{X_i, X_j}(t)\,.
+	+ \frac{1}{2} \sum_{i,j=1}^{n}\partial_i \partial_j f \, d\jqv{X_i, X_j}(t)\,.
   \end{equation*}
 \end{remark}
 \begin{remark}
@@ -1381,7 +1381,7 @@ Like the one dimensional It\^o formula, this is a generalization of the chain ru
       &\quad\mathbin + \text{higher order terms.}
   \end{align*}
   Here $\Delta_i X = X(t_{i+1}) - X(t_i)$ and $\Delta_i Y = Y(t_{i+1}) - Y(t_i)$.
-  Summing over $i$, the first two terms converge to $\int_0^T f(t) \, dX(t)$ and $\int_0^T f(t) \, dY(t)$ respectively.
+  Summing over $i$, the first two terms converge to $\int_0^T \partial_x f(t) \, dX(t)$ and $\int_0^T \partial_y f(t) \, dY(t)$ respectively.
   The terms involving $(\Delta_i X)^2$ should to $\int_0^T \partial_x^2 f \, d\qv{X}$ as we had with the one dimensional It\^o formula.
   Similarly, the terms involving $(\Delta_i Y)^2$ should to $\int_0^T \partial_y^2 f \, d\qv{Y}$ as we had with the one dimensional It\^o formula.
   For the cross term, we can use the identity~\eqref{e:3plgm} and quickly check that it converges to $\int_0^T \partial_x \partial_y f \, d\jqv{X, Y}$.

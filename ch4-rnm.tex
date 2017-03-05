@@ -94,7 +94,7 @@ The main goal of this section is to prove the Girsanov theorem.
 \begin{remark}
   Above
   \begin{equation*}
-    \int_0^t b(s) \cdot dW(s) \defeq \sum_{i=1}^{d} b_i(s) dW_i(s)
+    b(s) \cdot dW(s) \defeq \sum_{i=1}^{d} b_i(s) \, dW_i(s)
     \qquad\text{and}\qquad
     \abs{b(s)}^2 = \sum_{i=1}^{d} b_i(s)^2\,.
   \end{equation*}
@@ -193,7 +193,7 @@ We now develop the tools required to check when processes are martingales under 
   Then
   \begin{equation*}
     \tilde\E( M(t) \given \mathcal F_s )
-      = \frac{1}{Z(s)} \tilde\E( Z(t) M(t) \given \mathcal F_s )
+      = \frac{1}{Z(s)} \E( Z(t) M(t) \given \mathcal F_s )
       = \frac{1}{Z(s)} Z(s) M(s) = M(s)\,,
   \end{equation*}
   showing $M$ is a martingale with respect to $\P$.
@@ -390,9 +390,11 @@ The fact that $S$ and the money market account have exactly the same mean return
 \begin{remark}
   If $V(T) = f(S(T))$ for some function $f$ and $R$ is not random, then the \emph{Markov Property} guarantees $V(t) = c(t, S(t))$ for some function $c$.
   Equating $c(t, S(t)) = X(t)$, the wealth of a replicating portfolio and using It\^o's formula, we immediately obtain the \emph{Delta hedging rule}
-  \begin{equation*}
+  \begin{equation}\label{e:4DeltaHedge}
     \Delta(t) = \partial_x c(t, S(t))\,.
-  \end{equation*}
+  \end{equation}
+  If, however, that if $V$ is not of the form $f(S(T))$ for some function $f$, then the option price will in general depend on the \emph{entire history} of the stock price, and not only the spot price $S(t)$.
+  In this case we will not (in general) have the delta hedging rule~\eqref{e:4DeltaHedge}.
 \end{remark}
 \section{The Black-Scholes formula}
 
@@ -556,13 +558,6 @@ which is precisely the Black-Scholes formula.
   \begin{parts}
     \item
       Show that $B$ is a Brownian motion.
-    \item
-      Are $B$ and $W$ uncorrelated?
-      Are they independent?
-      Justify.
-      (Hint: Compute $\E B(t) W(t)^2$.)
-    \item
-      Compute the joint quadratic variation $\jqv{B, W}$.
 
     \item
       Is there an adapted process $\sigma$ such that
@@ -571,7 +566,28 @@ which is precisely the Black-Scholes formula.
       \end{equation*}
       If yes, find it.
       If no, explain why.
+
+    \item
+      Compute the joint quadratic variation $\jqv{B, W}$.
+
+    \item
+      Are $B$ and $W$ uncorrelated?
+      Are they independent?
+      Justify.
+      %(Hint: Compute $\E B(t) W(t)^2$.)
   \end{parts}
+\end{problem}
+
+\begin{problem}
+  Let $W$ be a Brownian motion.
+  Does there exist an equivalent measure $\tilde\P$ under which the process $t W(t)$ is a Brownian motion?
+  Prove it.
+\end{problem}
+
+\begin{problem}
+  Suppose $M$ is a continuous process such that both $M$ and $M^2$ are martingales.
+  Must $M$ be constant in time?
+  Prove it, or find a counter example.
 \end{problem}
 
 
