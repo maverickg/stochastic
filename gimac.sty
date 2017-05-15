@@ -1,6 +1,6 @@
 \ProvidesPackage{gimac}
 % Misc. macros for Gautam Iyer.
-% Last modified: Sat 04 Mar 2017 02:44:49 PM EST
+% Last modified: Mon 15 May 2017 03:51:06 PM EDT
 
 \newif\ifGI@exam
 \@ifclassloaded{exam}{\GI@examtrue}{\GI@examfalse}
@@ -210,7 +210,6 @@
 \DeclareMathOperator{\trace}{tr}
 \DeclareMathOperator{\Lip}{Lip}
 \DeclareMathOperator{\supp}{supp}
-\DeclareMathOperator{\tr}{tr}
 
 \renewcommand{\epsilon}{\varepsilon}
 \renewcommand{\leq}{\leqslant}
@@ -237,28 +236,114 @@
 %
 % Norms and parenthesis
 %
-\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
-\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+% Macros defined with DeclarePairedDelimiter call a \mathclose at the end.
+% This has the unwanted side effect of making sub/superscripts a bit
+% higher/lower than normal. \newdelim and \newdelimX are wrapppers around
+% \DeclarePairedDelimiter that cancels this effect. (This will mess up if you
+% use '(' as the right delimiter however.)
+
+% Work around mathtools bug that should be fixed in later versions.
+% https://tex.stackexchange.com/questions/366665/missing-middle-delimiters-when-redeclarepaireddelimiterinnerwrapper-is-used
+\newif\ifGI@NeedsMathToolsFix
+\@ifpackagelater{mathtools}{2015/11/13}{\GI@NeedsMathToolsFixfalse}{\GI@NeedsMathToolsFixtrue}
+\ifGI@NeedsMathToolsFix
+  \MHInternalSyntaxOn
+  \def\MHempty{}
+  \def\DeclarePairedDelimiterX#1[#2]#3#4#5{%
+    \@ifdefinable{#1}{
+      \MT_paired_delimx_arg_test:n{#2}
+      \MT_delim_default_inner_wrappers:n{#1}
+      \@xp\@xp\@xp
+	\newcommand
+	  \@xp\csname MT_delim_\MH_cs_to_str:N #1 _star:\endcsname
+	  [#2]
+	  {
+	    \begingroup
+	      \def\delimsize{\middle}
+	      %\mathopen{}\mathclose\bgroup\left#3 #5 \aftergroup\egroup\right#4
+	      \@nameuse{MT_delim_\MH_cs_to_str:N #1 _star_wrapper:nnn}
+		{\left#3}{#5}{\right#4}
+	    \endgroup
+	  }
+      \@xp\@xp\@xp
+	\newcommand
+	  \@xp\csname MT_delim_\MH_cs_to_str:N #1 _nostar:\endcsname
+	  [1][\MHempty]
+	{
+	  \begingroup
+	  \def\delimsize{##1}
+	  \@nameuse{MT_delim_\MH_cs_to_str:N #1 _nostar_inner:}
+	}
+      \@xp\@xp\@xp
+	\newcommand
+	  \@xp\csname MT_delim_\MH_cs_to_str:N #1 _nostar_inner:\endcsname
+	  [#2]
+	  {
+	    %\mathopen{%
+	    %  \let\MHempty\@gobble
+	    %  \@xp\@xp\@xp\csname\@xp\MH_cs_to_str:N \delimsize l\endcsname #3}
+	    %#5
+	    %\mathclose{%
+	    %  \let\MHempty\@gobble
+	    %  \@xp\@xp\@xp\csname\@xp\MH_cs_to_str:N \delimsize r\endcsname #4}
+	    \@nameuse{MT_delim_\MH_cs_to_str:N #1 _nostar_wrapper:nnn}
+	    {
+	      \let\MHempty\@gobble
+	      \@xp\@xp\@xp\csname\@xp\MH_cs_to_str:N \delimsize l\endcsname #3
+	      \def\MHempty{}
+	    }
+	    {#5}
+	    {
+	      \let\MHempty\@gobble
+	      \@xp\@xp\@xp\csname\@xp\MH_cs_to_str:N \delimsize r\endcsname #4
+	      \def\MHempty{}
+	    }
+	    \endgroup
+	  }
+      \DeclareRobustCommand{#1}{
+	\@ifstar
+	  {\@nameuse{MT_delim_\MH_cs_to_str:N #1 _star:}}
+	  {\@nameuse{MT_delim_\MH_cs_to_str:N #1 _nostar:}}
+      }
+    }
+  }
+  \MHInternalSyntaxOff
+\fi
+
+\newcommand{\FixDelimSubscripts}[1]{%
+  \reDeclarePairedDelimiterInnerWrapper{#1}{nostar}{##1##2##3}
+}
+\newcommand{\newdelim}[3]{%
+  \DeclarePairedDelimiter{#1}{#2}{#3}
+  \FixDelimSubscripts{#1}
+}
+\def\newdelimX#1[#2]#3#4#5{
+  \DeclarePairedDelimiterX#1[#2]{#3}{#4}{#5}
+  \FixDelimSubscripts{#1}
+}
+
+\newdelim{\floor}{\lfloor}{\rfloor}
+\newdelim{\ceil}{\lceil}{\rceil}
 
 \newcommand{\GI@given}[1]{\nonscript\:\mathopen{}#1\vert\nonscript\:\mathopen{}}
 \newcommand{\given}[1][]{\GI@given{#1}}
-\DeclarePairedDelimiterX\paren[1]{(}{)}{%
+\newdelimX\paren[1]{(}{)}{%
   \renewcommand{\given}{\GI@given{\delimsize}}#1%
 }
-\DeclarePairedDelimiterX\brak[1]{[}{]}{%
+\newdelimX\brak[1]{[}{]}{%
   \renewcommand{\given}{\GI@given{\delimsize}}#1%
 }
 
 \newcommand{\GI@st}[1]{\nonscript\:#1\vert\nonscript\:\mathopen{}\allowbreak}
 \newcommand{\st}[1][]{\GI@st{#1}}
-\DeclarePairedDelimiterX\set[1]\{\}{%
+\newdelimX\set[1]\{\}{%
   \renewcommand{\st}{\GI@st{\delimsize}}#1%
 }
 
-\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
-%\DeclarePairedDelimiter{\qv}{[}{]}
-\DeclarePairedDelimiter{\av}{\langle}{\rangle}
+\newdelim{\abs}{\lvert}{\rvert}
+\newdelim{\norm}{\lVert}{\rVert}
+%\newdelim{\qv}{[}{]}
+\newdelim{\av}{\langle}{\rangle}
 
 %\newcommand{\ip}[3][]{\av[#1]{#2,#3}}
 %\WithSuffix\newcommand\ip*[2]{\av{#1,#2}}

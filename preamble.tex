@@ -1,11 +1,40 @@
-\documentclass[openany,oneside]{amsbook}
+\documentclass[openany]{amsbook}
 \usepackage[draft]{marktext}
-\usepackage[draft]{gimac}
+\usepackage{gimac}
+
+% Options for book printing
+% Specs (blurb.com):
+% 6x9 inches (15x23 cm)
+% Softcover
+% Economy Trade B&W Paper, matte finish
+% 56 pages
+%
+% Page Specifications						    Points
+% Final, exported PDF should measure (w x h)			    441 x 666
+% Page size / trim line (w x h)					    432 x 648
+% Bleed (top, bottom, and outside edges)			    9
+% Inset for Margins / Safe boundary (Top, Bottom, Outside Edge)	    18
+% Inset for Margins / Safe boundary (Binding Edge)		    45
+%
+% Cover Specifications						    Points
+% Final, exported PDF should measure (w x h)			    891 x 666
+% Total Page size / trim line (w x h)				    873 x 648
+% Bleed (all edges)						    9
+% Flaps (w x h, measured from trim edge to fold)		    none
+% Gutter / Spine (w x h)					    9 x 666
+% Inset for Margins / Safe boundary (from edge of trim)		    18
+\iftrue
+  \RequirePackage{geometry}
+  \geometry{twoside,paperheight=666pt,paperwidth=441pt,left=47pt,right=34pt,top=27pt,bottom=27pt,includehead,includefoot,headsep=18pt,footskip=27pt}
+  \hypersetup{allcolors=black}
+\fi
+
 \usepackage{subfiles,xr}
 \externaldocument[1]{ch1-intro}
 \externaldocument[2]{ch2-bm}
 \externaldocument[3]{ch3-int}
 \externaldocument[4]{ch4-rnm}
+
 
 % Stochastic calc specific macros
 \DeclarePairedDelimiterX\jqv[1]{[}{]}{#1}
