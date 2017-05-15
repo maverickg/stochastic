@@ -1,0 +1,1 @@
+bookcover/bookcover.cls
